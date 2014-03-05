@@ -1,0 +1,204 @@
+/*==========================================================================================
+	
+Media CSS File
+This file contains all styles for responsive layout
+
+==========================================================================================*/
+
+
+/*----------------------------------------------------*/
+/*	1.	More than 1041px
+/*----------------------------------------------------*/
+@media only screen and (max-width: 1041px) {
+	
+	.prev {left:20px;}
+	.next {right:20px;}
+	
+	#header.sticky .after {display:none;}
+	
+	#header li.center {display:none;}
+	
+	#core .core-values li .core {background-color:#f9f9f9!important;}
+	#core .core-values li .fa {color:#000!important;}
+	
+	.review .left {width:100%;margin:0;}
+	.review .right {width:100%;margin:0;}
+	
+	.wrap-project {padding:0 4%;}
+	
+	#mobile {display:block;float:left;color:#fff;font-family: 'Ubuntu', sans-serif;margin:11px 0 0 11px;}
+	
+	#services .testimonial {padding-left:5%;padding-right:5%;width:90%;}
+	
+	#portfolio li {width:50%;}
+	
+	#header{background-color:#252525;}
+	.wrap {width:100%;}
+	
+	#contacts .get-in-touch {width:323px;}
+	#contacts .text {width:350px;margin-left:-350px;top:70px;}
+	
+	.smart-wrap {width:570px;}
+	
+	/* mobile navigation menu */
+	#navigation {left:100%;position:fixed;width:100%;top:60px;background-color:#252525;}
+	#navigation.visible {left:0;}
+	#navigation li {width:100%;float:left;}
+	#navigation li a {padding:10px;text-align:center;color:#fff!important;}
+	#navigation li.parent {display:none;}
+	
+	#nav-mobile {display:block;float:right;width:60px;height:60px;background: #252525 url(../img/sprite.png) no-repeat 21px -245px;cursor:pointer;}
+	#nav-mobile:hover {background-color:#252525;}
+	
+	#core .core-values li {width:50%;}
+	#core .core-values li .fa {left:44%;top:45px;}
+	
+	.references {padding-bottom:30px;}
+	.chart {margin:0 20px 25px 20px!important;}
+	
+	.title-contact-mobile {display:inline-block;margin:50px 0;}
+	
+	#contacts .contacts-mobile-over {display:block;}
+	
+	#contacts .get-in-touch {width:100%;top:10px;left:auto;padding:0 20px;}
+	#contacts .get-in-touch input, #contacts .get-in-touch textarea, #zoomout, #zoomin, #contacts .get-in-touch button {
+		box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none;
+	}
+	
+	#footer .bottom {display:none;}
+	
+	.post .vimeo-frame {height:250px;}
+	
+	#navigation li a.active {background-color:#535353;color:#fff;}
+	#navigation li a.active:hover {background-color:#fff;color:#000;}
+	#navigation li a span.border {display:none!important;}
+	#navigation li a:hover {background-color:#000!important;}
+	
+	.smart-slide {margin-bottom:10px;}
+	
+	.laptop-over {left:120px;top:787px;}
+	
+	#about .present .image a.button {padding:10px 0px;}
+	
+	.cr-video-content {width:500px;margin-left:-250px;}
+	.cr-video-content {font-size:2em;}
+	.cr-video-content a {padding:7px 30px;border:4px solid #fff;}
+	
+	.pies li p {height:100px;}
+	
+	#phone .left {display:none;}
+	#phone .right {width:100%;}
+	
+	.capture-img {height:auto;width:100%;}
+	
+	.wrap.youtube-wrap {margin-left:-384px;}
+	
+}
+
+/*----------------------------------------------------*/
+/*	1.	Between 1041px and 800px
+/*----------------------------------------------------*/
+@media only screen and (max-width: 800px) {
+	
+	.page-title {font-size:35px;}
+	.page-subtitle {font-size:15px;}
+	
+	.screens .center {width:100%;float:left;left:auto;margin-left:auto;text-align:center;}
+	.screens .center img {max-width:100%;}
+	
+	#portfolio .client {display:none!important;}
+	
+	.big-text {font-size:30px;margin-top:-40px;}
+	.small-text {font-size:15px;margin-top:14px;}
+	
+	.screens .left, .screens .right {display:none;}
+	
+	#about .facts li {width:40%;margin-bottom:45px;}
+	#about .facts li.break {display:none;}
+	
+	.customers li {width:25%;}
+	
+	#core .core-values li .fa {left:46.2%;top:50px;}
+	
+	#carousel .center-holder .right {display:none;}
+	#carousel .center {}
+	#carousel .center {position:absolute;left:0;margin-left:0;}
+	
+	#contacts .get-in-touch {width:100%;top:10px;}
+	#contacts .text {width:350px;margin-left:-350px;top:70px;}
+	
+	.smart-wrap {width:190px;}
+	
+	.pies li {max-width:49%;height: 400px;}
+	.pies li p {padding: 0 20px;height: 130px;}
+	
+	#core .core-values li {width:100%;}
+	
+	#footer {min-height:130px;}
+	#footer .wrap {width:100%;padding:0 20px;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;}
+	#footer .hide-mobile {display:none;}
+	
+	#map {height:540px;}
+	
+	.post .vimeo-frame {height:175px;}
+	
+	.article-nav .to_date, .article-nav .fa {display:none;}
+	.article-nav .prev a {padding-left:10px;}
+	.article-nav .next a {padding-right:10px;}
+	
+	.comment-list ul {margin-left:40px;}
+	
+	.tabs-holder .tabs li a {padding:7px;}
+	
+	.column {margin-bottom:20px;}
+	.column-1, .column-2, .column-3 {width:100%;}
+	
+	.space {padding:5px 0;margin:0;}
+	
+	#skills {margin-bottom:30px;}
+	
+	.laptop-over {display:none;}
+	.laptop {width:400px;height:232px;background-size:cover;-moz-background-size:cover;-webkit-background-size:cover;}
+	
+	#about .present .image a.button {display:none;}
+	
+	.cr-video-content {width:320px;margin-left:-160px;}
+	.cr-video-content {font-size:1.5em;}
+	.cr-video-content a {padding:5px 25px;border:3px solid #fff;}
+	
+	.wrap.youtube-wrap {margin-left:-200px;}
+	
+	.youtube-wrap {display:none;}
+}
+
+@media only screen and (max-width: 600px) {
+	#portfolio li {width:100%;}
+}
+
+/*----------------------------------------------------*/
+/*	1.	Between 800px and 400px
+/*----------------------------------------------------*/
+@media only screen and (max-width: 400px) {
+	
+	.page-title {font-size:25px;}
+	.page-subtitle {font-size:15px;}
+	
+	.customers li {width:33%;}
+	
+	.prev {top:117px;left:30px;}
+	.next {top:117px;right:30px;}
+	
+	.pies li {max-width:100%;height: 343px;}
+	
+	.post .vimeo-frame {height:130px;}
+	
+	.post {padding-left:0;}
+	
+	.tabs-holder .tabs li a {font-size:0.8em;}
+	
+	.laptop {width:320px;height:185px;}
+	
+	.wrap.youtube-wrap {display:none;left:0;bottom:0;top:auto;margin:0;}
+	#youtube-controls h2, #youtube-controls h3 {display:none;}
+	#youtube-controls {margin:0;}
+}
