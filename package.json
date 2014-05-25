@@ -11,5 +11,8 @@
     "stylus": "*",
     "mongoose":"*",
     "config": "*"
+  },
+  "engines": {
+    "node": "0.10.25"
   }
 }

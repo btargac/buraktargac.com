@@ -1,3 +1,9 @@
 {
-    
+    "db": {
+        "USER": "btargac",
+        "PASS": "784951623",
+        "HOST": "ds027749.mongolab.com",
+        "PORT": "27749",
+        "DATABASE": "buraktargac"
+    }
 }
