@@ -7,7 +7,8 @@ FormSubmitter = function (app) {
         var data = req.body;
         //validation must be improved
         if(data.name && data.email && data.message && data.captcha && (data.captcha == data.hiddencaptcha) ){
-            res.send({success: true, returndata: data});    
+            //node mailer should be included here
+            res.send({success: true, returndata: data}); 
         }
         else{
             res.send({success: false, returndata: data});

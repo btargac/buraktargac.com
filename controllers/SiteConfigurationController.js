@@ -7,7 +7,6 @@ SiteController = function (app, mongoose, config) {
 
     app.get("/", function(req, res, next) {
         SiteConfiguration.findOne({}, function(err, data) {
-            console.log(data);
             res.render("index", {
                 //these parameters can vary accourding to your sites needs
                 title: data.title,
@@ -16,6 +15,7 @@ SiteController = function (app, mongoose, config) {
                 gplink: data.gplink,
                 lilink: data.lilink,
                 ytlink: data.ytlink,
+                portfolios: data.portfolios,
                 testimonials: data.testimonials
             });
         });   

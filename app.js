@@ -9,9 +9,7 @@ var express = require('express'),
 	mongoose = require('mongoose'),
 	config = require('config'),
 	utils = require('./lib/utils'),
-	passport = require('passport'),
-	LocalStrategy = require('passport-local').Strategy,
-	ENV = process.env.NODE_ENV || 'development';
+  ENV = process.env.NODE_ENV || 'development';
 
 // Database
 var mongoose = utils.connectToDatabase(mongoose, config.db);
@@ -32,7 +30,6 @@ app.use(express.session());
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(passport.session());
 
 
 // development only
@@ -44,28 +41,9 @@ if ('development' == app.get('env')) {
 require('./models/SiteConfiguration')(mongoose);
 require('./models/User')(mongoose);
 
-//defining authentication for admin page
-
-var User = mongoose.model('User');
-
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
-
 // Defining Controllers
-['SiteConfiguration', 'Admin','FormSubmit'].forEach(function (controller) {
-    require('./controllers/' + controller + 'Controller')(app, mongoose, config, passport);
+['SiteConfiguration', 'Admin','FormSubmit','AdminLoggedIn'].forEach(function (controller) {
+    require('./controllers/' + controller + 'Controller')(app, mongoose, config);
 });
 
 http.createServer(app).listen(app.get('port'), function(){

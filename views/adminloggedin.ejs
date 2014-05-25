@@ -1,0 +1,388 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	
+	<meta charset="utf-8">
+	
+	<title>Administration Page</title>
+	
+	<!-- meta -->
+	<meta name="author" content="Burak Targaç">
+	<meta name="description" content="Frontend Developer">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
+	
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="stylesheets/normalize.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/media.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/fonts.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/jquery.modal/jquery.modal.css">
+	
+	<!-- load modernizer -->
+	<script type="text/javascript" src="javascripts/modernizr/modernizr-2.7.1.js"></script>
+	
+	<!-- google fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Raleway:400,800,500,300,700|Open+Sans:400,700|Ubuntu:400,700' rel='stylesheet' type='text/css'>
+	
+</head>
+
+<body>
+	
+	<div id="wrapper">
+	<!-- Inline modal windows for user interaction for confirmation or such things -->
+	<div id="updateConfigModal" class="modal">
+		<p>Confirm changes ?</p>
+		<a href="javascript:void(0);" class="btn anchor cancel negative" rel="modal:close">Cancel</a>
+		<a href="javascript:void(0);" class="btn anchor confirm" rel="modal:close">Confirm</a>
+	</div>
+
+	<div id="NotificationModal" class="modal">
+		<p id="notificationText"></p>
+	</div>
+
+	<div id="addTestimonialModal" class="modal">
+		<p>Add a testimonial</p>
+		<form action="#" id="testimonialForm">
+			<input type="text" name="author" placeholder="Author">
+			<textarea name="text" cols="30" rows="10" placeholder="Testimonial Text"></textarea>
+		</form>
+		<a href="javascript:void(0);" class="btn anchor cancel negative" rel="modal:close">Cancel</a>
+		<a href="javascript:void(0);" class="btn anchor confirm" rel="modal:close">Confirm</a>
+	</div>
+
+	<div id="removeTestimonialModal" class="modal">
+		<p class="confirmationText"></p>
+		<a href="javascript:void(0);" class="btn anchor cancel negative" rel="modal:close">Cancel</a>
+		<a href="javascript:void(0);" class="btn anchor confirm" rel="modal:close">Confirm</a>
+	</div>
+
+	<div id="updateTestimonialModal" class="modal">
+		<p class="confirmationText"></p>
+		<a href="javascript:void(0);" class="btn anchor cancel negative" rel="modal:close">Cancel</a>
+		<a href="javascript:void(0);" class="btn anchor confirm" rel="modal:close">Confirm</a>
+	</div>
+
+
+	<div id="addPortfolioModal" class="modal">
+		<p>Add a portfolio</p>
+		<form action="#" id="portfolioForm">
+			<input type="text" name="company" placeholder="Company">
+			<textarea name="definition" cols="30" rows="10" placeholder="Portfolio Definition"></textarea>
+			<input type="file" id="imgInput">
+		</form>
+		<a href="javascript:void(0);" class="btn anchor cancel negative" rel="modal:close">Cancel</a>
+		<a href="javascript:void(0);" class="btn anchor confirm" rel="modal:close">Confirm</a>
+	</div>
+
+	<div id="removePortfolioModal" class="modal">
+		<p class="confirmationText"></p>
+		<a href="javascript:void(0);" class="btn anchor cancel negative" rel="modal:close">Cancel</a>
+		<a href="javascript:void(0);" class="btn anchor confirm" rel="modal:close">Confirm</a>
+	</div>
+
+	<div id="updatePortfolioModal" class="modal">
+		<p class="confirmationText"></p>
+		<a href="javascript:void(0);" class="btn anchor cancel negative" rel="modal:close">Cancel</a>
+		<a href="javascript:void(0);" class="btn anchor confirm" rel="modal:close">Confirm</a>
+	</div>
+		
+		
+		<section id="admin">
+
+			
+			<div id="adminpage">
+			
+				<h1>Site configurations</h1>
+				To update a value of an item click on it's value, then click update.
+				<hr>
+				<form action="#" id="configForm">
+					<div class="item">
+						<span class="item_title">Title</span> : <span data-type="text" data-elemName="title"><%= data.title %></span> 
+					</div>
+					<div class="item">
+						<span class="item_title">Facebook link</span> : <span data-type="text" data-elemName="fblink"><%= data.fblink %></span>
+					</div>
+					<div class="item">
+						<span class="item_title">Twitter link</span> : <span data-type="text" data-elemName="twlink"><%= data.twlink %></span>
+					</div>
+					<div class="item">
+						<span class="item_title">Google Plus link</span> : <span data-type="text" data-elemName="gplink"><%= data.gplink %></span>
+					</div>
+					<div class="item">
+						<span class="item_title">LinkedIn link</span> : <span data-type="text" data-elemName="lilink"><%= data.lilink %></span>
+					</div>
+					<div class="item">
+						<span class="item_title">Youtube link</span> : <span data-type="text" data-elemName="ytlink"><%= data.ytlink %></span>
+					</div>
+				</form>
+				<br>
+				<a class="btn anchor updateConfig" href="#updateConfigModal">Update</a>
+				
+				<h1>Testimonials</h1>
+				<hr>
+				<% data.testimonials.forEach(function(testimonial){ %>
+						<div class="item">
+							<span data-type="text" data-elemName="author"><%= testimonial.author %></span> : 
+							<span data-type="text" data-elemName="text"><%= testimonial.text %></span>
+							<a class="remove" data-id="<%= testimonial._id %>" href="#removeTestimonialModal" data-confirm-message="Do you want to remove this testimonial ?">Remove</a>
+							<a class="update" data-id="<%= testimonial._id %>" href="#updateTestimonialModal" data-confirm-message="Do you want to update this testimonial ?">Update</a>
+						</div>
+				<% }); %>
+				<br>
+				<a class="btn anchor addTestimonial" href="#addTestimonialModal">Add</a>
+
+				<h1>Portfolios</h1>
+				<hr>
+				<% data.portfolios.forEach(function(portfolio){ %>
+						<div class="item">
+							<span data-type="text" data-elemName="company"><%= portfolio.company %></span> : 
+							<span data-type="text" data-elemName="definition"><%= portfolio.definition %></span>
+							<a class="remove" data-id="<%= portfolio._id %>" href="#removePortfolioModal" data-confirm-message="Do you want to remove this portfolio ?">Remove</a>
+							<a class="update" data-id="<%= portfolio._id %>" href="#updatePortfolioModal" data-confirm-message="Do you want to update this portfolio ?">Update</a>
+						</div>
+				<% }); %>
+				<br>
+				<a class="btn anchor addTestimonial" href="#addPortfolioModal">Add</a>
+
+			</div>
+			
+		</section>
+		
+		
+	</div>
+
+	<!-- js -->
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script type="text/javascript" src="javascripts/admin/jQuery.makeEditable.js"></script>
+	<script type="text/javascript" src="javascripts/jquery.modal/jquery.modal.js"></script>
+
+	<script type="text/javascript">
+
+	$(document).ready(function() {
+		$('span[data-type]').makeEditable();
+
+		//update siteconfigurations ajax
+		$('#updateConfigModal .confirm').on('click',function(){
+			var data = $('#configForm').serializeArray();
+			data.push({
+				name: '_id',
+	    		value: '<%= data._id %>'
+			});
+			var values = $.param(data);
+			// Use AJAX to post the object to our adduser service
+			$.ajax({
+				type: 'POST',
+				encoding:'utf-8',
+				data: values,
+				url: '/siteconf/update',
+				dataType: 'JSON'
+			}).done(function( response ) {
+
+			// If ajax request is successfull
+			//show a notification to user that the save process is successfull
+				$('#notificationText').text(response.message);
+				$('#NotificationModal').modal({
+				fadeDuration: 600,
+				fadeDelay: 0.30
+				});
+
+			});
+
+		});
+
+		//add testimonial ajax
+		$('#addTestimonialModal .confirm').on('click',function(){
+			var data = $('#testimonialForm').serializeArray();
+			data.push({
+				name: '_id',
+	    		value: '<%= data._id %>'
+			});
+			var values = $.param(data);
+			// Use AJAX to post the object to our adduser service
+			$.ajax({
+				type: 'POST',
+				encoding:'utf-8',
+				data: values,
+				url: '/siteconf/addTestimonial',
+				dataType: 'JSON'
+			}).done(function( response ) {
+
+			// If ajax request is successfull
+			//show a notification to user that the save process is successfull
+				$('#notificationText').text(response.message);
+				$('#NotificationModal').modal({
+				fadeDuration: 600,
+				fadeDelay: 0.30
+				});
+
+			});
+
+		});
+
+		//remove testimonial ajax
+		$('#removeTestimonialModal .confirm').on('click',function(){
+			var id = $('a.remove.selected').data('id');
+			// Use AJAX to post the object to our adduser service
+			$.ajax({
+				type: 'POST',
+				encoding:'utf-8',
+				data: "_id=" + id,
+				url: '/siteconf/removeTestimonial',
+				dataType: 'JSON'
+			}).done(function( response ) {
+
+			// If ajax request is successfull
+			//show a notification to user that the save process is successfull
+				$('#notificationText').text(response.message);
+				$('#NotificationModal').modal({
+				fadeDuration: 600,
+				fadeDelay: 0.30
+				});
+
+			});
+
+		});
+
+		//update testimonial ajax
+		$('#updateTestimonialModal .confirm').on('click',function(){
+			var id = $('a.update.selected').data('id');
+			var item = $('a.update.selected').closest('.item'),
+				author = item.find('input[name="author"]').val(),
+				text = item.find('input[name="text"]').val();
+			// Use AJAX to post the object to our adduser service
+			$.ajax({
+				type: 'POST',
+				encoding:'utf-8',
+				data: "_id=" + id + "&author=" + author + "&text=" + text, // we need to add some more data about the testimonial
+				url: '/siteconf/updateTestimonial',
+				dataType: 'JSON'
+			}).done(function( response ) {
+			// If ajax request is successfull
+			//show a notification to user that the save process is successfull
+				$('#notificationText').text(response.message);
+				$('#NotificationModal').modal({
+				fadeDuration: 600,
+				fadeDelay: 0.30
+				});
+
+			});
+
+		});
+
+
+		//add portfolio ajax
+		$('#addPortfolioModal .confirm').on('click',function(){
+			var data = $('#portfolioForm').serializeArray();
+			data.push(
+				{
+					name: '_id',
+		    		value: '<%= data._id %>'
+				},
+				{
+					name: 'imgUrl',
+		    		value: $('#imgInput').val()
+				}
+			);
+			var values = $.param(data);
+			// Use AJAX to post the object to our addportfolio service
+			$.ajax({
+				type: 'POST',
+				encoding:'utf-8',
+				data: values,
+				url: '/siteconf/addPortfolio',
+				dataType: 'JSON'
+			}).done(function( response ) {
+
+			// If ajax request is successfull
+			//show a notification to user that the save process is successfull
+				$('#notificationText').text(response.message);
+				$('#NotificationModal').modal({
+				fadeDuration: 600,
+				fadeDelay: 0.30
+				});
+
+			});
+
+		});
+
+		//remove portfolio ajax
+		$('#removePortfolioModal .confirm').on('click',function(){
+			var id = $('a.remove.selected').data('id');
+			// Use AJAX to post the object to our removeportfolio service
+			$.ajax({
+				type: 'POST',
+				encoding:'utf-8',
+				data: "_id=" + id,
+				url: '/siteconf/removePortfolio',
+				dataType: 'JSON'
+			}).done(function( response ) {
+
+			// If ajax request is successfull
+			//show a notification to user that the save process is successfull
+				$('#notificationText').text(response.message);
+				$('#NotificationModal').modal({
+				fadeDuration: 600,
+				fadeDelay: 0.30
+				});
+
+			});
+
+		});
+
+		//update portfolio ajax
+		$('#updatePortfolioModal .confirm').on('click',function(){
+			var id = $('a.update.selected').data('id');
+			var item = $('a.update.selected').closest('.item'),
+				company = item.find('input[name="company"]').val(),
+				definiton = item.find('input[name="definiton"]').val();
+			// Use AJAX to post the object to our adduser service
+			$.ajax({
+				type: 'POST',
+				encoding:'utf-8',
+				data: "_id=" + id + "&company=" + company + "&definition=" + definition, // we need to add some more data about the portfolio especiall an image
+				url: '/siteconf/updatePortfolio',
+				dataType: 'JSON'
+			}).done(function( response ) {
+			// If ajax request is successfull
+			//show a notification to user that the save process is successfull
+				$('#notificationText').text(response.message);
+				$('#NotificationModal').modal({
+				fadeDuration: 600,
+				fadeDelay: 0.30
+				});
+
+			});
+
+		});
+
+
+		$('a.remove').on('click',function () {
+			$('a.remove').removeClass('selected');
+			$(this).addClass('selected');
+			$('.modal#removeTestimonialModal p.confirmationText').text($(this).data('confirm-message'));
+		});
+
+		$('a.update').on('click',function () {
+			$('a.update').removeClass('selected');
+			$(this).addClass('selected');
+			$('.modal#updateTestimonialModal p.confirmationText').text($(this).data('confirm-message'));
+		});
+
+
+		//confirmation modal is opened 
+		$('a.updateConfig,a.addTestimonial,a.remove,a.update').click(function(event) {
+			event.preventDefault();
+			$(this).modal({
+			fadeDuration: 600,
+			fadeDelay: 0.30
+			});
+		});
+
+	});
+
+</script>
+
+</body>
+</html>

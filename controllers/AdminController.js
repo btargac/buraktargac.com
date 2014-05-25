@@ -2,61 +2,42 @@ var SiteConfiguration = require('../models/SiteConfiguration'),
     User = require('../models/User');
 
 
-AdminController = function (app, mongoose, config, passport) {
+AdminController = function (app, mongoose, config) {
 
-    var SiteConfiguration = mongoose.model('SiteConfiguration'),
-        User = mongoose.model('User');
+    var SiteConfiguration = mongoose.model('SiteConfiguration');
+    var User = mongoose.model('User');
 
     app.get("/admin", function(req, res, next) {
-        res.render("admin");   
+        res.render("admin", {
+                        title: 'Login Page'
+                    });   
     });
 
-    app.post('/login',
-        passport.authenticate('local', { successRedirect: '/adminloginned',
-                                            failureRedirect: '/admin',
-                                            failureFlash: false
-                                        })
-    );
+    app.post("/login", function(req, res, next) {
+        var username = req.body.username;
+        var password = req.body.password;
 
-    app.post("/siteconf/create", function(req, res, next) {
-        var siteConfiguration = new SiteConfiguration(req.body);
-        siteConfiguration.save(function(err) {
-        	if (err) {
-        		res.json({result: false, message: "Error occured: " + err});
-        	} else {
-        		res.json({result: true, message: "Successfully created!"});
-        	}
-        }); 
-    });
-
-    app.post("/siteconf/update", function(req, res, next) {
-        
-        var id = req.body._id;
-        SiteConfiguration.findOne({_id: id}, function(err, data) {
-        		
-        	if (err) {
-        		res.json({result: false, message: "Error occured: " + err});
-        	} else {
-        		data.title = req.body.title;
-        		data.fblink = req.body.fblink;
-        		data.twlink = req.body.twlink;
-                data.gplink = req.body.gplink;
-                data.lilink = req.body.lilink;
-                data.ytlink = req.body.ytlink;
-                data.testimonial = req.body.testimonial;
-
-        		data.save(function(err) {
-	        		if (err) {
-	        		res.json({result: false, message: "Error occured: " + err});
-	        		} 
-	        		else {
-        			res.json({result: true, message: "Successfully created!"});
-        			}
-        		});
-
-        	}
+        User.findOne({username: username, password: password}, function(err, userInfo) {
+            if (err) {
+                res.status(500);
+                res.send('500', {
+                    err: err,
+                    url: req.url
+                });
+            } else {
+                if (userInfo) {
+                    req.session.user = userInfo;
+                    res.redirect('/adminloggedin');
+                } else {
+                    res.render('admin', {
+                        title: 'Login failed'
+                    });
+                }
+            }
         });
+
     });
+
 }
 
 module.exports = AdminController;

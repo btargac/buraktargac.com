@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "buraktargac",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,8 +10,6 @@
     "ejs": "*",
     "stylus": "*",
     "mongoose":"*",
-    "config": "*",
-    "passport":"*",
-    "passport-local":"*"
+    "config": "*"
   }
 }

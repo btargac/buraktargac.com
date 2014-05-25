@@ -1042,6 +1042,13 @@ section.page {
   -moz-box-shadow: 0 3px 0 #ca4641;
   -webkit-box-shadow: 0 3px 0 #ca4641;
 }
+.btn.negative {
+  color: #666;
+  background-color: #ddd;
+  box-shadow: 0 4px 0 #666;
+  -moz-box-shadow: 0 4px 0 #666;
+  -webkit-box-shadow: 0 4px 0 #666;
+}
 #map {
   width: 100%;
   height: 640px;
@@ -1458,6 +1465,67 @@ section.page {
 }
 #footer .technologies {
   color: #ef6661;
+}
+#adminpage .item,
+.modal .item {
+  line-height: 41px;
+  position: relative;
+}
+#adminpage .item .remove,
+.modal .item .remove {
+  font-size: 0;
+  text-indent: -9999px;
+  background: transparent url("../img/admin/remove.png") 0 0 no-repeat;
+  display: block;
+  position: absolute;
+  right: -31px;
+  top: 7px;
+  width: 30px;
+  height: 30px;
+}
+#adminpage .item .update,
+.modal .item .update {
+  font-size: 0;
+  text-indent: -9999px;
+  background: transparent url("../img/admin/update.png") 0 0 no-repeat;
+  display: block;
+  position: absolute;
+  right: -61px;
+  top: 7px;
+  width: 30px;
+  height: 30px;
+}
+#adminpage input,
+.modal input,
+#adminpage textarea,
+.modal textarea,
+#adminpage button,
+.modal button {
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 300px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+#adminpage .item_title,
+.modal .item_title {
+  color: #f46f6a;
+  font-weight: bold;
+  display: inline-block;
+  min-width: 115px;
+}
+#adminpage .item_title + span,
+.modal .item_title + span {
+  padding-left: 11px;
+}
+#adminpage [data-elemName="text"],
+.modal [data-elemName="text"] {
+  padding-left: 11px;
+}
+#adminpage textarea,
+.modal textarea {
+  margin: 8px 0;
 }
 @-moz-keyframes rotateplane {
   0% {

@@ -1,8 +1,25 @@
 module.exports = function (mongoose) {
             var Schema = mongoose.Schema,
-                SiteConfiguration, Testimonial;
+                SiteConfiguration,
+                PortfolioSchema,
+                TestimonialSchema;
 
-    Testimonial = new Schema({
+    PortfolioSchema = new Schema({
+        company:{
+            type:String,
+            required:true
+        },
+        definition:{
+            type:String,
+            required:true
+        },
+        imgUrl:{
+            type:String,
+            required:true
+        }    
+    });
+
+    TestimonialSchema = new Schema({
         author:{
             type:String,
             required:true
@@ -42,8 +59,11 @@ module.exports = function (mongoose) {
             type:String,
             required:true
         },
-        testimonials: [Testimonial]
+        portfolios: [PortfolioSchema],
+        testimonials: [TestimonialSchema]
     });
-    var TestimonialModel = mongoose.model('Testimonial', Testimonial);
+    
+    var TestimonialModel = mongoose.model('Testimonial', TestimonialSchema),
+        PortfolioModel = mongoose.model('Portfolio', PortfolioSchema);
     return mongoose.model('SiteConfiguration', SiteConfiguration);
 }

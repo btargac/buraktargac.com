@@ -110,117 +110,22 @@
 			<div class="inner">
 				<ul id="rb-grid" class="list rb-grid">
 					
+					<% portfolios.forEach(function(portfolio){ %>
 					<li>
 						<a class="item" href="#">
-							<img src="img/portfolio/item-1.jpg" alt="">
+							<img src="img/portfolio/<%= portfolio.imgUrl %>" alt="">
 							<div class="over">
-								<h2 class="page-title">We Create Stars<span class="border"></span></h2>
+								<h2 class="page-title"><%= portfolio.company %><span class="border"></span></h2>
 								<h3 class="page-subtitle">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-									Etiam orci nibh, malesuada at nisl a, dapibus dignissim libero.
-								</h3>
-								<img class="client" src="img/portfolio-clients/1w.png" alt="">
-							</div>
-						</a>
-					</li>
-					
-					<li>
-						<a class="item" href="#">
-							<img src="img/portfolio/item-2.jpg" alt="">
-							<div class="over">
-								<h2 class="page-title">We Create Stars<span class="border"></span></h2>
-								<h3 class="page-subtitle">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-									Etiam orci nibh, malesuada at nisl a, dapibus dignissim libero.
+									<%= portfolio.definition %>
 								</h3>
 								<img class="client" src="img/portfolio-clients/2w.png" alt="">
 							</div>
 						</a>
 					</li>
+
+					<% }); %>
 					
-					<li>
-						<a class="item" href="#">
-							<img src="img/portfolio/item-3.jpg" alt="">
-							<div class="over">
-								<h2 class="page-title">We Create Stars<span class="border"></span></h2>
-								<h3 class="page-subtitle">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-									Etiam orci nibh, malesuada at nisl a, dapibus dignissim libero.
-								</h3>
-								<img class="client" src="img/portfolio-clients/3w.png" alt="">
-							</div>
-						</a>
-					</li>
-					
-					<li>
-						<a class="item" href="#">
-							<img src="img/portfolio/item-4.jpg" alt="">
-							<div class="over">
-								<h2 class="page-title">We Create Stars<span class="border"></span></h2>
-								<h3 class="page-subtitle">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-									Etiam orci nibh, malesuada at nisl a, dapibus dignissim libero.
-								</h3>
-								<img class="client" src="img/portfolio-clients/4w.png" alt="">
-							</div>
-						</a>
-					</li>
-					
-					<li>
-						<a class="item" href="#">
-							<img src="img/portfolio/item-5.jpg" alt="">
-							<div class="over">
-								<h2 class="page-title">We Create Stars<span class="border"></span></h2>
-								<h3 class="page-subtitle">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-									Etiam orci nibh, malesuada at nisl a, dapibus dignissim libero.
-								</h3>
-								<img class="client" src="img/portfolio-clients/1w.png" alt="">
-							</div>
-						</a>
-					</li>
-					
-					<li>
-						<a class="item" href="#">
-							<img src="img/portfolio/item-6.jpg" alt="">
-							<div class="over">
-								<h2 class="page-title">We Create Stars<span class="border"></span></h2>
-								<h3 class="page-subtitle">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-									Etiam orci nibh, malesuada at nisl a, dapibus dignissim libero.
-								</h3>
-								<img class="client" src="img/portfolio-clients/2w.png" alt="">
-							</div>
-						</a>
-					</li>
-					
-					<li>
-						<a class="item" href="#">
-							<img src="img/portfolio/item-7.jpg" alt="">
-							<div class="over">
-								<h2 class="page-title">We Create Stars<span class="border"></span></h2>
-								<h3 class="page-subtitle">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-									Etiam orci nibh, malesuada at nisl a, dapibus dignissim libero.
-								</h3>
-								<img class="client" src="img/portfolio-clients/3w.png" alt="">
-							</div>
-						</a>
-					</li>
-					
-					<li>
-						<a class="item" href="#">
-							<img src="img/portfolio/item-8.jpg" alt="">
-							<div class="over">
-								<h2 class="page-title">We Create Stars<span class="border"></span></h2>
-								<h3 class="page-subtitle">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-									Etiam orci nibh, malesuada at nisl a, dapibus dignissim libero.
-								</h3>
-								<img class="client" src="img/portfolio-clients/4w.png" alt="">
-							</div>
-						</a>
-					</li>
 				
 				</ul>
 				
@@ -234,7 +139,7 @@
 				
 				<div class="wrap">
 					
-					<h2 class="page-title">About us<span class="border"></span></h2>
+					<h2 class="page-title">About me<span class="border"></span></h2>
 					<h3 class="page-subtitle">I bring your product to the next level.<br>Proin nibh vel velit auctor aliquet.</h3>
 					
 					<div class="screens">
@@ -494,33 +399,14 @@
 					<h2 class="page-title">What do people say about me?<span class="border"></span></h2>
 					
 					<div class="owl">
+						<% testimonials.forEach(function(testimonial){ %>
 						<div>
 							<strong>
-								Vestibulum feugiat nulla congue, feugiat dolor et, placerat libero.
-								Suspendisse facilisis auctor nisl, nec pharetra tellus dictum id. Etiam hendrerit ligula enim, id commodo ante pharetra in.
-								Donec nunc nisl, fermentum sit amet dui congue, mollis aliquet sem. Aenean ultricies, nulla eget consequat sollicitudin,
-								diam nulla feugiat nisi, aliquam varius.
+								<%= testimonial.text %>
 							</strong>
-							<em>`John Doe`</em>
+							<em>`<%= testimonial.author %>`</em>
 						</div>
-						<div>
-							<strong>
-								Vestibulum feugiat nulla congue, feugiat dolor et, placerat libero.
-								Suspendisse facilisis auctor nisl, nec pharetra tellus dictum id. Etiam hendrerit ligula enim, id commodo ante pharetra in.
-								Donec nunc nisl, fermentum sit amet dui congue, mollis aliquet sem. Aenean ultricies, nulla eget consequat sollicitudin,
-								diam nulla feugiat nisi, aliquam varius.
-							</strong>
-							<em>`John Doe`</em>
-						</div>
-						<div>
-							<strong>
-								Vestibulum feugiat nulla congue, feugiat dolor et, placerat libero.
-								Suspendisse facilisis auctor nisl, nec pharetra tellus dictum id. Etiam hendrerit ligula enim, id commodo ante pharetra in.
-								Donec nunc nisl, fermentum sit amet dui congue, mollis aliquet sem. Aenean ultricies, nulla eget consequat sollicitudin,
-								diam nulla feugiat nisi, aliquam varius.
-							</strong>
-							<em>`John Doe`</em>
-						</div>
+						<% }); %>
 					</div>
 				</div>
 				<span class="pattern"></span>

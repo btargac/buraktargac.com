@@ -906,6 +906,7 @@ section {
       &.page-subtitle {
         margin-top: 34px;
         color: #c3c3c3;
+
         &.white {
           color: #fff;
         }
@@ -931,6 +932,7 @@ section {
   position: relative;
   display: inline-block;
   margin: 0 20px 25px 20px;
+
   span {
     color: #fff;
     display: inline-block;
@@ -955,9 +957,11 @@ section {
   float: left;
   width: 100%;
   padding: 20px 0 50px 0;
+
   .members {
     font-size: 0;
     text-align: center;
+
     li {
       display: inline-block;
       width: 220px;
@@ -1076,6 +1080,7 @@ section {
 #services {
   float: left;
   width: 100%;
+
   .gray {
     float: left;
     width: 100%;
@@ -1086,6 +1091,7 @@ section {
 //core
 #core {
   padding: 20px 0 50px 0;
+
   .core-values {
     width: 100%;
     text-align: center;
@@ -1212,6 +1218,13 @@ section {
     -moz-box-shadow: 0 3px 0 #ca4641;
     -webkit-box-shadow: 0 3px 0 #ca4641;
   }
+  &.negative {
+    color: #666;
+    background-color: #ddd;
+    box-shadow: 0 4px 0 #666;
+    -moz-box-shadow: 0 4px 0 #666;
+    -webkit-box-shadow: 0 4px 0 #666;
+  }
 }
 
 
@@ -1237,7 +1250,7 @@ section {
 }
 
 #admin .login-form {
-  input,textarea,button{
+  input,textarea,button {
     display: block;
     width: 100%;
     border: 0;
@@ -1318,7 +1331,7 @@ section {
       width: 31.53333333333%;
       margin-left: 1.8003%;
       text-align: center;
-      &#captchaContainer{
+      &#captchaContainer {
         margin-top: 10px;
       }
     }
@@ -1369,8 +1382,8 @@ section {
   }
 }
 
-#contacts .get-in-touch{
-  input,textarea,button{
+#contacts .get-in-touch {
+  input,textarea,button {
     display: block;
     width: 100%;
     border: 0;
@@ -1391,8 +1404,8 @@ section {
 }
 
 #contacts .get-in-touch {
-  input,textarea{
-    &.error{
+  input,textarea {
+    &.error {
       background-color: #ef6661;
     }
   }
@@ -1406,6 +1419,7 @@ section {
   top: 0;
   width: 100%;
   height: 545px;
+
   .main-background {
     position: absolute;
     width: 100%;
@@ -1427,6 +1441,7 @@ section {
     width: 100%;
     text-align: center;
     z-index: 10;
+
     a {
       display: inline-block;
       background-color: #fff;
@@ -1436,6 +1451,7 @@ section {
       height: 20px;
       text-align: center;
       margin-bottom: 1px;
+
       &:hover {
         background-color: rgba(255,255,255,0.4);
       }
@@ -1451,9 +1467,11 @@ section {
 
 .project-inner {
   color: #777;
+
   .owl-inner {
     float: left;
     width: 100%;
+
     img {
       max-width: 980px;
     }
@@ -1463,6 +1481,7 @@ section {
     width: 100%;
     padding: 50px 0;
     background-color: #f9f9f9;
+
     .owl-prev {
       top: 50%;
       margin-top: -29px;
@@ -1503,9 +1522,11 @@ section {
   width: 100%;
   float: left;
   padding: 50px 0;
+
   .left {
     width: 50%;
     float: left;
+
     img {
       max-width: 100%;
     }
@@ -1520,8 +1541,10 @@ section {
 .bar {
   text-align: left;
   margin: 30px 0 0 0;
+
   li {
     list-style: none;
+
     &:last-child {
       span {
         margin-bottom: 0px;
@@ -1537,6 +1560,7 @@ section {
       display: block;
       position: relative;
       background-color: #51bcc6;
+
       strong {
         position: absolute;
         top: 10px;
@@ -1569,6 +1593,7 @@ section {
   background: #000 url(../img/sprite.png) no-repeat -101px 6px;
   cursor: pointer;
   z-index: 6;
+
   &.bottom {
     position: absolute;
     right: 0;
@@ -1646,7 +1671,70 @@ section {
       }
     }
   }
-  .technologies{
+  .technologies {
     color:#ef6661;
   }
+}
+
+//AdminPage
+
+#adminpage,.modal {
+
+  .item {
+    line-height: 41px;
+    position: relative;
+
+    .remove{
+      font-size: 0;
+      text-indent: -9999px;
+      background: transparent url(../img/admin/remove.png) 0 0 no-repeat;
+      display:block;
+      position: absolute;
+      right: -31px;
+      top: 7px;
+      width: 30px;
+      height: 30px;
+    }
+
+    .update{
+      font-size: 0;
+      text-indent: -9999px;
+      background: transparent url(../img/admin/update.png) 0 0 no-repeat;
+      display:block;
+      position: absolute;
+      right: -61px;
+      top: 7px;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  input,textarea,button {
+    border: 1px solid #CCC;
+    padding: 10px;
+    width: 300px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;  
+  }
+
+  .item_title {
+    color:#f46f6a;
+    font-weight: bold;
+    display: inline-block;
+    min-width: 115px;
+
+    & + span {
+      padding-left: 11px;
+    }
+  }
+
+  [data-elemName="text"] {
+    padding-left: 11px;
+  }
+
+  textarea {
+    margin: 8px 0;
+  }
+
 }
