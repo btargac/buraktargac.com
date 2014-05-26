@@ -1,5 +1,7 @@
 var SiteConfiguration = require('../models/SiteConfiguration'),
-    User = require('../models/User');
+    User = require('../models/User'),
+    path = require('path'),
+    fs = require('fs');
 
 
 AdminLoggedInController = function (app, mongoose, config) {
@@ -99,6 +101,25 @@ AdminLoggedInController = function (app, mongoose, config) {
     });
 
 
+    app.post("/siteconf/uploadImage", function(req, res, next) {
+        // get the temporary location of the file
+        var tmp_path = req.files.imgInput.path; 
+        // set where the file should actually exists - in this case it is in the "images" directory
+        var target_path = __dirname + '/../public/img/portfolio/' + req.files.imgInput.name;
+
+        fs.rename(tmp_path, target_path, function(err) {
+        if (err) throw err; 
+        // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files 
+            fs.unlink(tmp_path, function() {
+                if (err) throw err;
+            });
+        });
+
+        res.end();
+        
+        
+    });
+
     app.post("/siteconf/addPortfolio", function(req, res, next) {
 
         var id = req.body._id;
@@ -119,6 +140,7 @@ AdminLoggedInController = function (app, mongoose, config) {
                     res.json({error:true, result: false, message: "Error occured: " + err});
                     } 
                     else {
+
                     res.json({error:false, result: true, message: "Portfolio successfully added."});
                     }
                 });

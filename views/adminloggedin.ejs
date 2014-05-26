@@ -282,28 +282,59 @@
 				},
 				{
 					name: 'imgUrl',
-		    		value: $('#imgInput').val()
+		    		value: $('#imgInput')[0].files[0].name
 				}
 			);
 			var values = $.param(data);
-			// Use AJAX to post the object to our addportfolio service
-			$.ajax({
-				type: 'POST',
-				encoding:'utf-8',
-				data: values,
-				url: '/siteconf/addPortfolio',
-				dataType: 'JSON'
-			}).done(function( response ) {
 
-			// If ajax request is successfull
-			//show a notification to user that the save process is successfull
-				$('#notificationText').text(response.message);
+			// first we handle the file upload progress
+			var formData = new FormData();
+			var file = $('#imgInput')[0].files[0];
+			formData.append('imgInput', file);
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.open('post', '/siteconf/uploadImage', true);
+
+			xhr.upload.onprogress = function(e) {
+			  if (e.lengthComputable) {
+			    var percentage = (e.loaded / e.total) * 100;
+			    console.log(percentage + '%');
+			  }
+			};
+
+			xhr.onerror = function(e) {
+				$('#notificationText').text('An error occurred while submitting the form. Maybe your file is too big');
 				$('#NotificationModal').modal({
 				fadeDuration: 600,
 				fadeDelay: 0.30
 				});
+			};
 
-			});
+			xhr.onload = function(e) {
+
+				// Use AJAX to post the string object to our addportfolio service
+				$.ajax({
+					type: 'POST',
+					encoding:'utf-8',
+					data: values,
+					url: '/siteconf/addPortfolio',
+					dataType: 'JSON'
+				}).done(function( response ) {
+
+				// If ajax request is successfull
+				//show a notification to user that the save process is successfull
+					$('#notificationText').text(response.message);
+					$('#NotificationModal').modal({
+					fadeDuration: 600,
+					fadeDelay: 0.30
+					});
+
+				});
+
+			};
+
+			xhr.send(formData);
 
 		});
 

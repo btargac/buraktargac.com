@@ -1527,6 +1527,10 @@ section.page {
 .modal textarea {
   margin: 8px 0;
 }
+#adminpage #imgInput,
+.modal #imgInput {
+  margin: 0 0 8px 0;
+}
 @-moz-keyframes rotateplane {
   0% {
     transform: perspective(120px) rotateX(0deg) rotateY(0deg);
