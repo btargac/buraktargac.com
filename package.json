@@ -10,7 +10,8 @@
     "ejs": "*",
     "stylus": "*",
     "mongoose":"*",
-    "config": "*"
+    "config": "*",
+    "nodemailer":"*"
   },
   "engines": {
     "node": "0.10.25"
