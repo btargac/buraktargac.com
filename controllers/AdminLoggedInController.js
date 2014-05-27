@@ -1,6 +1,5 @@
 var SiteConfiguration = require('../models/SiteConfiguration'),
     User = require('../models/User'),
-    path = require('path'),
     fs = require('fs');
 
 

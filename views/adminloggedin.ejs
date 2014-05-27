@@ -126,8 +126,8 @@
 						<div class="item">
 							<span data-type="text" data-elemName="author"><%= testimonial.author %></span> : 
 							<span data-type="text" data-elemName="text"><%= testimonial.text %></span>
-							<a class="remove" data-id="<%= testimonial._id %>" href="#removeTestimonialModal" data-confirm-message="Do you want to remove this testimonial ?">Remove</a>
-							<a class="update" data-id="<%= testimonial._id %>" href="#updateTestimonialModal" data-confirm-message="Do you want to update this testimonial ?">Update</a>
+							<a class="remove" data-id="<%= testimonial._id %>" href="#removeTestimonialModal" data-confirm-message="Do you want to remove this testimonial ?" data-item-type="testimonial">Remove</a>
+							<a class="update" data-id="<%= testimonial._id %>" href="#updateTestimonialModal" data-confirm-message="Do you want to update this testimonial ?" data-item-type="testimonial">Update</a>
 						</div>
 				<% }); %>
 				<br>
@@ -139,8 +139,8 @@
 						<div class="item">
 							<span data-type="text" data-elemName="company"><%= portfolio.company %></span> : 
 							<span data-type="text" data-elemName="definition"><%= portfolio.definition %></span>
-							<a class="remove" data-id="<%= portfolio._id %>" href="#removePortfolioModal" data-confirm-message="Do you want to remove this portfolio ?">Remove</a>
-							<a class="update" data-id="<%= portfolio._id %>" href="#updatePortfolioModal" data-confirm-message="Do you want to update this portfolio ?">Update</a>
+							<a class="remove" data-id="<%= portfolio._id %>" href="#removePortfolioModal" data-confirm-message="Do you want to remove this portfolio ?" data-item-type="portfolio">Remove</a>
+							<a class="update" data-id="<%= portfolio._id %>" data-imgurl="<%= portfolio.imgUrl %>" href="#updatePortfolioModal" data-confirm-message="Do you want to update this portfolio ?" data-item-type="portfolio">Update</a>
 						</div>
 				<% }); %>
 				<br>
@@ -367,12 +367,13 @@
 			var id = $('a.update.selected').data('id');
 			var item = $('a.update.selected').closest('.item'),
 				company = item.find('input[name="company"]').val(),
-				definiton = item.find('input[name="definiton"]').val();
+				definition = item.find('input[name="definition"]').val(),
+				imgUrl = $('a.update.selected').data('imgurl');
 			// Use AJAX to post the object to our adduser service
 			$.ajax({
 				type: 'POST',
 				encoding:'utf-8',
-				data: "_id=" + id + "&company=" + company + "&definition=" + definition, // we need to add some more data about the portfolio especiall an image
+				data: "_id=" + id + "&company=" + company + "&definition=" + definition + "&imgUrl=" + imgUrl,
 				url: '/siteconf/updatePortfolio',
 				dataType: 'JSON'
 			}).done(function( response ) {
@@ -392,13 +393,15 @@
 		$('a.remove').on('click',function () {
 			$('a.remove').removeClass('selected');
 			$(this).addClass('selected');
-			$('.modal#removeTestimonialModal p.confirmationText').text($(this).data('confirm-message'));
+			($(this).data('item-type') === 'testimonial') && $('.modal#removeTestimonialModal p.confirmationText').text($(this).data('confirm-message'));
+			($(this).data('item-type') === 'portfolio') && $('.modal#removePortfolioModal p.confirmationText').text($(this).data('confirm-message'));
 		});
 
 		$('a.update').on('click',function () {
 			$('a.update').removeClass('selected');
 			$(this).addClass('selected');
-			$('.modal#updateTestimonialModal p.confirmationText').text($(this).data('confirm-message'));
+			($(this).data('item-type') === 'testimonial') && $('.modal#updateTestimonialModal p.confirmationText').text($(this).data('confirm-message'));
+			($(this).data('item-type') === 'portfolio') && $('.modal#updatePortfolioModal p.confirmationText').text($(this).data('confirm-message'));
 		});
 
 
