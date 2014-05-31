@@ -117,11 +117,13 @@ AdminLoggedInController = function (app, mongoose, config) {
             if (!error && response.statusCode == 200) {
                 imagedata = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
                 
+                res.json({'data':imagedata, 'type': true});
+
                 fs.unlink(target_path, function(err) {
+                    res.json({'data':'base 64 failed because of unlinking the old image', 'type': false, 'error': err});
                     if (err) throw err;
                 });
 
-                res.json({'data':imagedata, 'type': true});
             }
             else {
               res.json({'data':'base 64 failed', 'type': false, 'error': error});
