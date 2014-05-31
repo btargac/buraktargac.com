@@ -11,7 +11,13 @@
     "stylus": "*",
     "mongoose":"*",
     "config": "*",
-    "nodemailer":"*"
+    "nodemailer": "*",
+    "request": "*"
+  },
+  "author": {
+    "name": "Burak Targaç",
+    "email": "btargac@gmail.com",
+    "twitter": "burkitargino"
   },
   "engines": {
     "node": "0.10.25"

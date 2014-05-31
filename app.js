@@ -24,8 +24,8 @@ app.use(express.favicon(path.join(__dirname, 'public/img/favicon.png')));
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(express.bodyParser({ 
-    keepExtensions: true, 
+app.use(express.bodyParser({
+    keepExtensions: true,
     uploadDir: __dirname + '/public/img/portfolio',
     limit: '2mb'
   }));

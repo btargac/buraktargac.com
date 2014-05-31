@@ -279,10 +279,6 @@
 				{
 					name: '_id',
 		    		value: '<%= data._id %>'
-				},
-				{
-					name: 'imgUrl',
-		    		value: $('#imgInput')[0].files[0].name
 				}
 			);
 			var values = $.param(data);
@@ -312,12 +308,12 @@
 			};
 
 			xhr.onload = function(e) {
-
+				var base64data = JSON.parse(e.target.response);
 				// Use AJAX to post the string object to our addportfolio service
 				$.ajax({
 					type: 'POST',
 					encoding:'utf-8',
-					data: values,
+					data: values+'&imgdata='+encodeURIComponent(base64data.data),
 					url: '/siteconf/addPortfolio',
 					dataType: 'JSON'
 				}).done(function( response ) {

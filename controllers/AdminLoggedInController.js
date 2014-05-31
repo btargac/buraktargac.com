@@ -1,12 +1,14 @@
 var SiteConfiguration = require('../models/SiteConfiguration'),
     User = require('../models/User'),
-    fs = require('fs');
+    fs = require('fs'),
+    request = require('request').defaults({ encoding: null });
 
 
 AdminLoggedInController = function (app, mongoose, config) {
 
     var SiteConfiguration = mongoose.model('SiteConfiguration'),
-        User = mongoose.model('User');
+        User = mongoose.model('User'),
+        imagedata;
 
         
     app.get("/adminloggedin", function(req, res, next) {
@@ -105,23 +107,33 @@ AdminLoggedInController = function (app, mongoose, config) {
         var tmp_path = req.files.imgInput.path; 
         // set where the file should actually exists - in this case it is in the "images" directory
         var target_path = __dirname + '/../public/img/portfolio/' + req.files.imgInput.name;
-
+        
         fs.rename(tmp_path, target_path, function(err) {
-        if (err) throw err; 
-        // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files 
-            fs.unlink(tmp_path, function() {
-                if (err) throw err;
-            });
+            if (err) throw err; 
         });
 
-        res.end();
-        
-        
+        //we take the uploaded image and convert it to base64
+        request.get(req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+req.files.imgInput.name, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                imagedata = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
+                
+                fs.unlink(target_path, function(err) {
+                    if (err) throw err;
+                });
+
+                res.json({'data':imagedata, 'type': true});
+            }
+            else {
+              res.json({'data':'base 64 failed', 'type': false, 'error': error});
+            }
+        });
+
     });
 
     app.post("/siteconf/addPortfolio", function(req, res, next) {
 
         var id = req.body._id;
+        
         SiteConfiguration.findOne({_id: id}, function(err, data) {
                 
             if (err) {
@@ -130,7 +142,7 @@ AdminLoggedInController = function (app, mongoose, config) {
                 data.portfolios.push({
                     company: req.body.company,
                     definition: req.body.definition,
-                    imgUrl: req.body.imgUrl
+                    imgUrl: req.body.imgdata
                 });
 
 
