@@ -109,6 +109,7 @@ AdminLoggedInController = function (app, mongoose, config) {
         var target_path = __dirname + '/../public/img/portfolio/' + req.files.imgInput.name;
         
         fs.rename(tmp_path, target_path, function(err) {
+            res.json({'data':'base 64 failed because of renaming the image', 'type': false, 'error': err});
             if (err) throw err; 
         });
 
