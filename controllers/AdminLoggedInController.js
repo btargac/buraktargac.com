@@ -104,25 +104,30 @@ AdminLoggedInController = function (app, mongoose, config) {
 
     app.post("/siteconf/uploadImage", function(req, res, next) {
         // get the temporary location of the file
-        var tmp_path = req.files.imgInput.path; 
+        var tmp_path = req.files.imgInput.path;
+        var originalFilename = req.files.imgInput.originalFilename;
         // set where the file should actually exists - in this case it is in the "images" directory
-        var target_path = __dirname + '/../public/img/portfolio/' + req.files.imgInput.name;
+         var target_path = __dirname + '/../public/img/portfolio/' + originalFilename;
         
         fs.rename(tmp_path, target_path, function(err) {
-            res.json({'data':'base 64 failed because of renaming the image', 'type': false, 'error': err});
-            if (err) throw err; 
+            if (err) {
+                res.json({'data':'base 64 failed because of renaming the image', 'type': false, 'error': err});
+                throw err;
+            }
         });
 
         //we take the uploaded image and convert it to base64
-        request.get(req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+req.files.imgInput.name, function (error, response, body) {
+        request.get(req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+originalFilename, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 imagedata = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
                 
                 res.json({'data':imagedata, 'type': true});
 
-                fs.unlink(target_path, function(err) {
-                    res.json({'data':'base 64 failed because of unlinking the old image', 'type': false, 'error': err});
-                    if (err) throw err;
+                fs.unlink(target_path, function(error) {
+                    if (error) {
+                        res.json({'data':'base 64 failed because of unlinking the old image', 'type': false, 'error': error});
+                        throw error;
+                    }
                 });
 
             }
