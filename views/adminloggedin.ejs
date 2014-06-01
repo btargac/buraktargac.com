@@ -274,19 +274,7 @@
 
 		//add portfolio ajax
 		$('#addPortfolioModal .confirm').on('click',function(){
-			var data = $('#portfolioForm').serializeArray();
-			data.push(
-				{
-					name: '_id',
-		    		value: '<%= data._id %>'
-				},
-				{
-					name: 'imgUrl',
-		    		value: $('#imgInput')[0].files[0].name
-				}
-			);
-			var values = $.param(data);
-
+			
 			// first we handle the file upload progress
 			var formData = new FormData();
 			var file = $('#imgInput')[0].files[0];
@@ -314,28 +302,45 @@
 			xhr.onload = function(e) {
 				var uploadimagestatus = JSON.parse(e.target.response);
 				if (encodeURIComponent(uploadimagestatus.error) === 'false') {
-					// Use AJAX to post the string object to our addportfolio service
-					$.ajax({
-						type: 'POST',
-						encoding:'utf-8',
-						data: values,
-						url: '/siteconf/addPortfolio',
-						dataType: 'JSON'
-					}).done(function( response ) {
-
-					// If ajax request is successfull
-					//show a notification to user that the save process is successfull
-						$('#notificationText').text(response.message);
-						$('#NotificationModal').modal({
-						fadeDuration: 600,
-						fadeDelay: 0.30
-						});
-
-					});
+					secondpart();
 				}
 			};
 
 			xhr.send(formData);
+
+			function secondpart () {
+
+				var data = $('#portfolioForm').serializeArray();
+				data.push(
+					{
+						name: '_id',
+			    		value: '<%= data._id %>'
+					},
+					{
+						name: 'imgUrl',
+			    		value: $('#imgInput')[0].files[0].name
+					}
+				);
+				var values = $.param(data);
+				// Use AJAX to post the string object to our addportfolio service
+				$.ajax({
+					type: 'POST',
+					encoding:'utf-8',
+					data: values,
+					url: '/siteconf/addPortfolio',
+					dataType: 'JSON'
+				}).done(function( response ) {
+
+				// If ajax request is successfull
+				//show a notification to user that the save process is successfull
+					$('#notificationText').text(response.message);
+					$('#NotificationModal').modal({
+					fadeDuration: 600,
+					fadeDelay: 0.30
+					});
+
+				});
+			 }
 
 		});
 
