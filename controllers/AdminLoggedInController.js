@@ -118,7 +118,7 @@ AdminLoggedInController = function (app, mongoose, config) {
             });
         });
 
-        res.end();
+        res.json({error:false, result: true, message: "Image successfully added."});
 
     });
 
@@ -140,7 +140,7 @@ AdminLoggedInController = function (app, mongoose, config) {
                         data.portfolios.push({
                             company: req.body.company,
                             definition: req.body.definition,
-                            imgUrl: imagedata
+                            imgUrl: 'imagedata'
                         });
 
                         // delete the uploaded file, so that upload dir does not get filled with unwanted files 
