@@ -111,10 +111,10 @@ AdminLoggedInController = function (app, mongoose, config) {
         //here we rename the temporary image file with the original file name just because there is no way of finding the new
         //generate file name
         fs.rename(tmp_path, target_path, function(err) {
-            if (err) throw err;
+            if (err) res.json({error:true, result: false, message: "Error occured @ renaming: " + err});
             // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files 
             fs.unlink(tmp_path, function() {
-                if (err) throw err;
+                if (err) res.json({error:true, result: false, message: "Error occured @unliking tmp_path: " + err});
             });
         });
 
@@ -143,11 +143,10 @@ AdminLoggedInController = function (app, mongoose, config) {
                             imgUrl: imagedata
                         });
 
-                        // This part is commented just beacuse there is an inconsistency @ __dirname or etc.
-                        // // delete the uploaded file, so that upload dir does not get filled with unwanted files 
-                        // fs.unlink( __dirname + '/../public/img/portfolio/' + req.body.imgUrl, function() {
-                        //     if (err) throw err;
-                        // });
+                        // delete the uploaded file, so that upload dir does not get filled with unwanted files 
+                        fs.unlink( __dirname + '/../public/img/portfolio/' + req.body.imgUrl, function() {
+                            if (err) res.json({error:true, result: false, message: "Error occured @ unliking uploaded image with the originalFilename: " + err});
+                        });
 
                         data.save(function(err) {
                             if (err) {
