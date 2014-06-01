@@ -274,7 +274,19 @@
 
 		//add portfolio ajax
 		$('#addPortfolioModal .confirm').on('click',function(){
-			
+			var data = $('#portfolioForm').serializeArray();
+			data.push(
+				{
+					name: '_id',
+		    		value: '<%= data._id %>'
+				},
+				{
+					name: 'imgUrl',
+		    		value: $('#imgInput')[0].files[0].name
+				}
+			);
+			var values = $.param(data);
+
 			// first we handle the file upload progress
 			var formData = new FormData();
 			var file = $('#imgInput')[0].files[0];
@@ -300,28 +312,7 @@
 			};
 
 			xhr.onload = function(e) {
-				var uploadimagestatus = JSON.parse(e.target.response);
-				if (encodeURIComponent(uploadimagestatus.error) === 'false') {
-					secondpart();
-				}
-			};
-
-			xhr.send(formData);
-
-			function secondpart () {
-
-				var data = $('#portfolioForm').serializeArray();
-				data.push(
-					{
-						name: '_id',
-			    		value: '<%= data._id %>'
-					},
-					{
-						name: 'imgUrl',
-			    		value: $('#imgInput')[0].files[0].name
-					}
-				);
-				var values = $.param(data);
+				console.log(e);
 				// Use AJAX to post the string object to our addportfolio service
 				$.ajax({
 					type: 'POST',
@@ -340,7 +331,9 @@
 					});
 
 				});
-			 }
+			};
+
+			xhr.send(formData);
 
 		});
 
