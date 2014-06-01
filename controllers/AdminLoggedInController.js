@@ -118,7 +118,7 @@ AdminLoggedInController = function (app, mongoose, config) {
             });
         });
 
-        res.json({error:false, result: true, message: "Image successfully added."});
+        res.send({error:false, result: true, message: "Image successfully added."});
 
     });
 
