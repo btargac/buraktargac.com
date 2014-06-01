@@ -496,7 +496,7 @@ var App = {
 						
 						$('input, textarea', $getInTouch).removeClass('error').val('');
 						//resetting Captcha validation
-						$('#captchaContainer').text(getRandomInt(0,10)+'+'+getRandomInt(0,10));
+						$('#captchaContainer').text(getRandomInt(0,10)+'+'+getRandomInt(0,10)+' is equal to?');
 						$('#hiddencaptcha').val(calculatecaptcha());
 					}else{
 						$('input, textarea', $getInTouch).removeClass('error');
