@@ -104,37 +104,21 @@ AdminLoggedInController = function (app, mongoose, config) {
 
     app.post("/siteconf/uploadImage", function(req, res, next) {
         // get the temporary location of the file
-        var tmp_path = req.files.imgInput.path;
-        var originalFilename = req.files.imgInput.originalFilename;
-        // set where the file should actually exists - in this case it is in the "images" directory
-         var target_path = __dirname + '/../public/img/portfolio/' + originalFilename;
+        var tmp_path = req.files.imgInput.path,
+            originalFilename = req.files.imgInput.originalFilename,
+            target_path = __dirname + '/../public/img/portfolio/' + originalFilename;
         
+        //here we rename the temporary image file with the original file name just because there is no way of finding the new
+        //generate file name
         fs.rename(tmp_path, target_path, function(err) {
-            if (err) {
-                res.json({'data':'base 64 failed because of renaming the image', 'type': false, 'error': err});
-                throw err;
-            }
+            if (err) throw err;
+            // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files 
+            fs.unlink(tmp_path, function() {
+                if (err) throw err;
+            });
         });
 
-        //we take the uploaded image and convert it to base64
-        request.get(req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+originalFilename, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                imagedata = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
-                
-                res.json({'data':imagedata, 'type': true});
-
-                fs.unlink(target_path, function(error) {
-                    if (error) {
-                        res.json({'data':'base 64 failed because of unlinking the old image', 'type': false, 'error': error});
-                        throw error;
-                    }
-                });
-
-            }
-            else {
-              res.json({'data':'base 64 failed', 'type': false, 'error': error});
-            }
-        });
+        res.json({error:false, result: true, message: "Image successfully added."});
 
     });
 
@@ -146,21 +130,35 @@ AdminLoggedInController = function (app, mongoose, config) {
                 
             if (err) {
                 res.json({error:true, result: false, message: "Error occured: " + err});
-            } else {
-                data.portfolios.push({
-                    company: req.body.company,
-                    definition: req.body.definition,
-                    imgUrl: req.body.imgdata
-                });
+            } 
+            else {
 
+                //we take the uploaded image and convert it to base64
+                request.get(req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+req.body.imgUrl, function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        imagedata = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
+                        data.portfolios.push({
+                            company: req.body.company,
+                            definition: req.body.definition,
+                            imgUrl: imagedata
+                        });
 
-                data.save(function(err) {
-                    if (err) {
-                    res.json({error:true, result: false, message: "Error occured: " + err});
-                    } 
+                        // delete the uploaded file, so that upload dir does not get filled with unwanted files 
+                        fs.unlink( __dirname + '/../public/img/portfolio/' + req.body.imgUrl, function() {
+                            if (err) throw err;
+                        });
+
+                        data.save(function(err) {
+                            if (err) {
+                                res.json({error:true, result: false, message: "Error occured: " + err});
+                            } 
+                            else {
+                                res.json({error:false, result: true, message: "Portfolio successfully added."});
+                            }
+                        });
+                    }
                     else {
-
-                    res.json({error:false, result: true, message: "Portfolio successfully added."});
+                        res.json({'data':'base 64 failed', 'type': false, 'error': error});
                     }
                 });
 
