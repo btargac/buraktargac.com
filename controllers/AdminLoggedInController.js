@@ -138,8 +138,7 @@ AdminLoggedInController = function (app, mongoose, config) {
                 request.get(
                     //check if it's local or heroku
                     ( app.get('port') === 3000 ) ?  req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+req.body.imgUrl :
-                                                    req.protocol+'://'+buraktargac.herokuapp.com+'/img/portfolio/'+req.body.imgUrl
-                                                    , function (error, response, body) {
+                                                    req.protocol+'://'+buraktargac.herokuapp.com+'/img/portfolio/'+req.body.imgUrl , function (error, response, body) {
                     
                     if (!error && response.statusCode == 200) {
                         imagedata = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
