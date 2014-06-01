@@ -132,35 +132,49 @@ AdminLoggedInController = function (app, mongoose, config) {
                 res.json({error:true, result: false, message: "Error occured: " + err});
             } 
             else {
+                    data.portfolios.push({
+                        company: req.body.company,
+                        definition: req.body.definition,
+                        imgUrl: 'imagedata'
+                    });
 
-                //we take the uploaded image and convert it to base64
-                request.get(req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+req.body.imgUrl, function (error, response, body) {
-                    if (!error && response.statusCode == 200) {
-                        imagedata = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
-                        data.portfolios.push({
-                            company: req.body.company,
-                            definition: req.body.definition,
-                            imgUrl: 'imagedata'
-                        });
+                    data.save(function(err) {
+                        if (err) {
+                            res.json({error:true, result: false, message: "Error occured: " + err});
+                        } 
+                        else {
+                            res.json({error:false, result: true, message: "Portfolio successfully added."});
+                        }
+                    });
+                    
+                // //we take the uploaded image and convert it to base64
+                // request.get(req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+req.body.imgUrl, function (error, response, body) {
+                //     if (!error && response.statusCode == 200) {
+                //         imagedata = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
+                //         data.portfolios.push({
+                //             company: req.body.company,
+                //             definition: req.body.definition,
+                //             imgUrl: 'imagedata'
+                //         });
 
-                        // delete the uploaded file, so that upload dir does not get filled with unwanted files 
-                        fs.unlink( __dirname + '/../public/img/portfolio/' + req.body.imgUrl, function() {
-                            if (err) res.json({error:true, result: false, message: "Error occured @ unliking uploaded image with the originalFilename: " + err});
-                        });
+                //         // delete the uploaded file, so that upload dir does not get filled with unwanted files 
+                //         fs.unlink( __dirname + '/../public/img/portfolio/' + req.body.imgUrl, function() {
+                //             if (err) res.json({error:true, result: false, message: "Error occured @ unliking uploaded image with the originalFilename: " + err});
+                //         });
 
-                        data.save(function(err) {
-                            if (err) {
-                                res.json({error:true, result: false, message: "Error occured: " + err});
-                            } 
-                            else {
-                                res.json({error:false, result: true, message: "Portfolio successfully added."});
-                            }
-                        });
-                    }
-                    else {
-                        res.json({'data':'base 64 failed', 'type': false, 'error': error});
-                    }
-                });
+                //         data.save(function(err) {
+                //             if (err) {
+                //                 res.json({error:true, result: false, message: "Error occured: " + err});
+                //             } 
+                //             else {
+                //                 res.json({error:false, result: true, message: "Portfolio successfully added."});
+                //             }
+                //         });
+                //     }
+                //     else {
+                //         res.json({'data':'base 64 failed', 'type': false, 'error': error});
+                //     }
+                // });
 
             }
         });
