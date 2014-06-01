@@ -143,10 +143,11 @@ AdminLoggedInController = function (app, mongoose, config) {
                             imgUrl: imagedata
                         });
 
-                        // delete the uploaded file, so that upload dir does not get filled with unwanted files 
-                        fs.unlink( __dirname + '/../public/img/portfolio/' + req.body.imgUrl, function() {
-                            if (err) throw err;
-                        });
+                        // This part is commented just beacuse there is an inconsistency @ __dirname or etc.
+                        // // delete the uploaded file, so that upload dir does not get filled with unwanted files 
+                        // fs.unlink( __dirname + '/../public/img/portfolio/' + req.body.imgUrl, function() {
+                        //     if (err) throw err;
+                        // });
 
                         data.save(function(err) {
                             if (err) {
