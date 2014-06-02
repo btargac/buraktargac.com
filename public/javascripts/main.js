@@ -53,9 +53,10 @@ var App = {
 			App.screens();
 		}
 		
-		if($('.facts').is_on_screen()) {
-			App.facts();
-		}
+		// i don't need facts about me right now
+		// if($('.facts').is_on_screen()) {
+		// 	App.facts();
+		// }
 		
 	},
 	
