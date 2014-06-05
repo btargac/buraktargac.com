@@ -9,7 +9,8 @@ var express = require('express'),
 	mongoose = require('mongoose'),
 	config = require('config'),
 	utils = require('./lib/utils'),
-  ENV = process.env.NODE_ENV || 'development';
+  ENV = process.env.NODE_ENV || 'development',
+  sendgrid  = require('sendgrid')('btargac', '784951623sendgrid');
 
 // Database
 var mongoose = utils.connectToDatabase(mongoose, config.db);
@@ -47,7 +48,7 @@ require('./models/User')(mongoose);
 
 // Defining Controllers
 ['SiteConfiguration', 'Admin','FormSubmit','AdminLoggedIn'].forEach(function (controller) {
-    require('./controllers/' + controller + 'Controller')(app, mongoose, config);
+    require('./controllers/' + controller + 'Controller')(app, mongoose, config, sendgrid);
 });
 
 http.createServer(app).listen(app.get('port'), function(){

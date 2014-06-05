@@ -11,7 +11,7 @@
     "stylus": "*",
     "mongoose":"*",
     "config": "*",
-    "nodemailer": "*",
+    "sendgrid": "1.0.4",
     "request": "*"
   },
   "author": {

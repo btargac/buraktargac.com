@@ -459,12 +459,12 @@ var App = {
 			content: boxText,
 			disableAutoPan: true,
 			maxWidth: 0,
-			pixelOffset: new google.maps.Size(-25, -235),
+			pixelOffset: new google.maps.Size(-23, -161),
 			zIndex: null,
 			boxStyle: { 
 				background: "url('img/marker-label.png') no-repeat",
-				width: "400px",
-				height: "215px"
+				width: "340px",
+				height: "175px"
 			},
 			infoBoxClearance: new google.maps.Size(1, 1),
 			isHidden: false,
@@ -499,6 +499,9 @@ var App = {
 						//resetting Captcha validation
 						$('#captchaContainer').text(getRandomInt(0,10)+'+'+getRandomInt(0,10)+' is equal to?');
 						$('#hiddencaptcha').val(calculatecaptcha());
+						$getInTouch.slideUp(800,function () {
+							$getInTouch.html('<h2 class="page-title">Thank you</h2><br /><h2>I\'ll be dealing with your request asap.</h2>').slideDown(800)
+						});
 					}else{
 						$('input, textarea', $getInTouch).removeClass('error');
 						
