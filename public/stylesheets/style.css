@@ -1157,6 +1157,9 @@ section.page {
   background-color: #fff;
   color: #000;
 }
+#contacts .get-in-touch .sendgridError {
+  color: #ef6661;
+}
 #contacts .text {
   position: absolute;
   left: 50%;

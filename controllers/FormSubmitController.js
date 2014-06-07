@@ -34,8 +34,8 @@ FormSubmitter = function (app, mongoose, config, sendgrid) {
             var email = new sendgrid.Email(params);
 
             sendgrid.send(email, function(err, json) {
-              if (err) { return res.send({success: false, returndata: err}); }
-              res.send({success: true, returndata: json});
+              if (err) { return res.send({success: false, returndata: err, sendgridError: true}); }
+              res.send({success: true, returndata: json, sendgridError: false});
             });
  
         }

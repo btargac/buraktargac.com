@@ -496,9 +496,11 @@ var App = {
 						var $captchaImage = $('.captcha-img', $getInTouch);
 						
 						$('input, textarea', $getInTouch).removeClass('error').val('');
+						
 						//resetting Captcha validation
 						$('#captchaContainer').text(getRandomInt(0,10)+'+'+getRandomInt(0,10)+' is equal to?');
 						$('#hiddencaptcha').val(calculatecaptcha());
+
 						$getInTouch.slideUp(800,function () {
 							$getInTouch.html('<h2 class="page-title">Thank you</h2><br /><h2>I\'ll be dealing with your request asap.</h2>').slideDown(800)
 						});
@@ -509,14 +511,28 @@ var App = {
      						if (data.returndata[key] === null || data.returndata[key] === 'undefined' || data.returndata[key] === '')
      						{	
      							$('input[name="' + key + '"]:not("[name=company]"), textarea[name="' + key + '"]', $getInTouch ).addClass('error');
-     							//Highlighting the captcha if its wrong
-     							if (data.returndata.hiddencaptcha !== data.returndata.captcha)
-	     						{	
-	     							$('input[name="captcha"]', $getInTouch ).addClass('error');
-	     						}
      						}
      						else{}
     					}
+
+						//Highlighting the captcha if its wrong
+						if (data.returndata.hiddencaptcha !== data.returndata.captcha)
+ 						{	
+ 							//resetting Captcha validation
+							$('#captchaContainer').text(getRandomInt(0,10)+'+'+getRandomInt(0,10)+' is equal to?');
+							$('#hiddencaptcha').val(calculatecaptcha());
+							//highlighting the input for captcha
+ 							$('input[name="captcha"]', $getInTouch ).addClass('error').val('');
+ 						}
+
+ 						if ( data.sendgridError ) {
+ 							//check if there is already an error for sendgrid or not
+ 							( !$('.sendgridError', $getInTouch ).length ) && ( $getInTouch.append('<h2 class="sendgridError clear">Ooops, seems like there is an error with the app, please call me instead</h2>').find('.sendgridError').hide().slideDown(800) );
+ 						}
+ 						else if ( !data.sendgridError ) {
+ 							//check if there is already an error for sendgrid or not
+ 							( $('.sendgridError', $getInTouch ).length ) && ( $getInTouch.find('.sendgridError').remove() );
+ 						}
 
 					}
 				}
