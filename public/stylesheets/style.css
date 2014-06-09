@@ -1467,7 +1467,11 @@ section.page {
   color: #000;
 }
 #footer .technologies {
+  color: #929292;
+}
+#footer .technologies a {
   color: #ef6661;
+  font-weight: bold;
 }
 #adminpage .item,
 .modal .item {
