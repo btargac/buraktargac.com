@@ -502,7 +502,7 @@ var App = {
 						$('#hiddencaptcha').val(calculatecaptcha());
 
 						$getInTouch.slideUp(800,function () {
-							$getInTouch.html('<h2 class="page-title">Thank you</h2><br /><h2>I\'ll be dealing with your request asap.</h2>').slideDown(800)
+							$getInTouch.html('<h2 class="page-title">Thank you for your message</h2><br /><h2>I will send reply to your e-mail address as soon as I am online.</h2>').slideDown(800)
 						});
 					}else{
 						$('input, textarea', $getInTouch).removeClass('error');
