@@ -116,14 +116,13 @@
 					
 					<% portfolios.forEach(function(portfolio){ %>
 					<li>
-						<a class="item" href="#">
+						<a class="item" href="<%= portfolio.detailPageUrl %>">
 							<img src="<%= portfolio.imgUrl %>" alt="">
 							<div class="over">
 								<h2 class="page-title"><%= portfolio.company %><span class="border"></span></h2>
 								<h3 class="page-subtitle">
 									<%= portfolio.definition %>
 								</h3>
-								<img class="client" src="img/portfolio-clients/2w.png" alt="">
 							</div>
 						</a>
 					</li>

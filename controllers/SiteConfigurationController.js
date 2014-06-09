@@ -20,6 +20,10 @@ SiteController = function (app, mongoose, config) {
             });
         });   
     });
+
+    app.get("/portfolio:id", function(req, res, next) {
+        res.send('This is where is being developed right now, because all other parts are done.')   
+    });
 }
 
 module.exports = SiteController;

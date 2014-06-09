@@ -16,7 +16,11 @@ module.exports = function (mongoose) {
         imgUrl:{
             type:String,
             required:true
-        }    
+        },
+        detailPageUrl:{
+            type:String,
+            required:false
+        }
     });
 
     TestimonialSchema = new Schema({

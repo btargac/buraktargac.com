@@ -145,7 +145,8 @@ AdminLoggedInController = function (app, mongoose, config) {
                         data.portfolios.push({
                             company: req.body.company,
                             definition: req.body.definition,
-                            imgUrl: imagedata
+                            imgUrl: imagedata,
+                            detailPageUrl: req.body.detailPageUrl
                         });
 
                         // delete the uploaded file, so that upload dir does not get filled with unwanted files 
@@ -196,7 +197,8 @@ AdminLoggedInController = function (app, mongoose, config) {
             $set:{
                 'portfolios.$.company' : req.body.company,
                 'portfolios.$.definition' : req.body.definition,
-                'portfolios.$.imgUrl' : req.body.imgUrl
+                'portfolios.$.imgUrl' : req.body.imgUrl,
+                'portfolios.$.detailPageUrl' : req.body.detailPageUrl
             }
         },
         function(err) {

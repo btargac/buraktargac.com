@@ -1698,6 +1698,7 @@ section {
   .item {
     line-height: 41px;
     position: relative;
+    padding: 8px;
 
     .remove{
       font-size: 0;
@@ -1722,6 +1723,10 @@ section {
       width: 30px;
       height: 30px;
     }
+
+    &:nth-child(2n+1) {
+      background: whitesmoke;
+    }
   }
 
   input,textarea,button {
@@ -1744,7 +1749,12 @@ section {
     }
   }
 
-  [data-elemName="text"] {
+  [data-elemName="text"], 
+  [data-elemName="definition"], 
+  [data-elemName="detailPageUrl"], 
+  [data-elemName="company"],
+  [data-elemName="author"],
+  span#detailPageTitle {
     padding-left: 11px;
   }
 
@@ -1752,8 +1762,8 @@ section {
     margin: 8px 0;
   }
 
-  #imgInput{
-    margin: 0 0 8px 0;
+  #imgInput {
+    margin: 8px 0 8px 0;
   }
 
 }

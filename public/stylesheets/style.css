@@ -1477,6 +1477,7 @@ section.page {
 .modal .item {
   line-height: 41px;
   position: relative;
+  padding: 8px;
 }
 #adminpage .item .remove,
 .modal .item .remove {
@@ -1501,6 +1502,10 @@ section.page {
   top: 7px;
   width: 30px;
   height: 30px;
+}
+#adminpage .item:nth-child(2n+1),
+.modal .item:nth-child(2n+1) {
+  background: #f5f5f5;
 }
 #adminpage input,
 .modal input,
@@ -1527,7 +1532,17 @@ section.page {
   padding-left: 11px;
 }
 #adminpage [data-elemName="text"],
-.modal [data-elemName="text"] {
+.modal [data-elemName="text"],
+#adminpage [data-elemName="definition"],
+.modal [data-elemName="definition"],
+#adminpage [data-elemName="detailPageUrl"],
+.modal [data-elemName="detailPageUrl"],
+#adminpage [data-elemName="company"],
+.modal [data-elemName="company"],
+#adminpage [data-elemName="author"],
+.modal [data-elemName="author"],
+#adminpage span#detailPageTitle,
+.modal span#detailPageTitle {
   padding-left: 11px;
 }
 #adminpage textarea,
@@ -1536,7 +1551,7 @@ section.page {
 }
 #adminpage #imgInput,
 .modal #imgInput {
-  margin: 0 0 8px 0;
+  margin: 8px 0 8px 0;
 }
 @-moz-keyframes rotateplane {
   0% {

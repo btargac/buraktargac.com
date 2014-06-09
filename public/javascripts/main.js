@@ -615,7 +615,6 @@ App.portfolio = {
 	},
 	
 	open: function(c) {
-		
 		$("html").css({
 			overflow : "hidden"
 		}).addClass("open");
@@ -671,7 +670,7 @@ App.portfolio = {
 						$('#portfolio-box').find('.spinner').css('opacity', 0);
 						
 						$.ajax({
-							url: 'html/_project.html',
+							url: '/portfolio:'+c.attr('href'),
 							context: document.body,
 							success: function(data) {
 								
