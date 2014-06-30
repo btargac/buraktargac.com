@@ -123,10 +123,10 @@ AdminLoggedInController = function (app, mongoose, config) {
             //generated file name
             fs.rename(tmp_path, target_path, function(err) {
                 if (err) res.json({error:true, result: false, message: "Error occured @ renaming: " + err});
-                // // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files 
-                // fs.unlink(tmp_path, function() {
-                //     if (err) res.json({error:true, result: false, message: "Error occured @unliking tmp_path: " + err});
-                // });
+                // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files 
+                fs.unlink(tmp_path, function() {
+                    if (err) res.json({error:true, result: false, message: "Error occured @unliking tmp_path: " + err});
+                });
             });
           }
         }
@@ -179,12 +179,12 @@ AdminLoggedInController = function (app, mongoose, config) {
                     }
                 });
 
-                // // delete the uploaded file with a 4 seconds delay, so that upload dir does not get filled with unwanted files
-                // setTimeout(function(){
-                //     fs.unlink( __dirname + '/../public/img/portfolio/' + result, function(err) {
-                //         if (err) res.json({error:true, result: false, message: "Error occured @ unliking uploaded detail image with the originalFilename: " + err});
-                //     });
-                // },4000);
+                // delete the uploaded file with a 4 seconds delay, so that upload dir does not get filled with unwanted files
+                setTimeout(function(){
+                    fs.unlink( __dirname + '/../public/img/portfolio/' + result, function(err) {
+                        if (err) res.json({error:true, result: false, message: "Error occured @ unliking uploaded detail image with the originalFilename: " + err});
+                    });
+                },4000);
 
               return series(items.shift());
             });
