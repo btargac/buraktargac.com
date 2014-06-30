@@ -114,8 +114,8 @@
 			<div class="inner">
 				<ul id="rb-grid" class="list rb-grid">
 					
-					<% portfolios.forEach(function(portfolio){ %>
-					<li>
+					<% portfolios.forEach(function(portfolio,index){ %>
+					<li class="<%= ( index < 4 ) ? '' : 'hidden' %>">
 						<a class="item" href="<%= portfolio.detailPageUrl %>">
 							<img src="<%= portfolio.imgUrl %>" alt="">
 							<div class="over">
