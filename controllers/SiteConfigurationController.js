@@ -21,8 +21,28 @@ SiteController = function (app, mongoose, config) {
         });   
     });
 
-    app.get("/portfolio:id", function(req, res, next) {
-        res.send('This is where is being developed right now, because all other parts are done.')   
+    app.get("/portfolio/:id", function(req, res, next) {
+        
+        var id = req.params.id;
+        
+        SiteConfiguration.findOne({'portfolios.detailPageUrl': id}, function(err, data) {
+                
+            if (err) {
+                res.send({error:true, result: false, message: "Error occured: " + err});
+            } else {
+                var result = data.portfolios.map(function(portfolio) {
+                    if (portfolio.detailPageUrl == id) {
+                        //render the portfolio template with the required data coming from the mapped results
+                        res.render("portfolio", {
+                            portfolio: portfolio
+                        });
+
+                    }                 
+                });
+                
+            }
+        });
+  
     });
 }
 

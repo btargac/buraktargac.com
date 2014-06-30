@@ -8,7 +8,7 @@ AdminLoggedInController = function (app, mongoose, config) {
 
     var SiteConfiguration = mongoose.model('SiteConfiguration'),
         User = mongoose.model('User'),
-        imagedata;
+        base64data = [];
 
         
     app.get("/adminloggedin", function(req, res, next) {
@@ -103,22 +103,96 @@ AdminLoggedInController = function (app, mongoose, config) {
 
 
     app.post("/siteconf/uploadImage", function(req, res, next) {
-        // get the temporary location of the file
-        var tmp_path = req.files.imgInput.path,
-            originalFilename = req.files.imgInput.originalFilename,
-            target_path = __dirname + '/../public/img/portfolio/' + originalFilename;
         
-        //here we rename the temporary image file with the original file name just because there is no way of finding the new
-        //generate file name
-        fs.rename(tmp_path, target_path, function(err) {
-            if (err) res.json({error:true, result: false, message: "Error occured @ renaming: " + err});
-            // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files 
-            fs.unlink(tmp_path, function() {
-                if (err) res.json({error:true, result: false, message: "Error occured @unliking tmp_path: " + err});
-            });
-        });
+        var tmp_path,
+            originalFilename,
+            target_path,
+            key,
+            file;
 
-        res.json({error:false, result: true, message: "Image successfully added."});
+        //we loop the incoming files and rename each one with the arriving order
+        for(key in req.files) {
+          if(req.files.hasOwnProperty(key)) {
+            
+            // get the temporary location of the file
+            tmp_path = req.files[key].path,
+            originalFilename = req.files[key].originalFilename,
+            target_path = __dirname + '/../public/img/portfolio/' + originalFilename;
+            
+            //here we rename the temporary image file with the original file name just because there is no way of finding the new
+            //generated file name
+            fs.rename(tmp_path, target_path, function(err) {
+                if (err) res.json({error:true, result: false, message: "Error occured @ renaming: " + err});
+                // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files 
+                fs.unlink(tmp_path, function() {
+                    if (err) res.json({error:true, result: false, message: "Error occured @unliking tmp_path: " + err});
+                });
+            });
+          }
+        }
+
+
+        // Async task (for converting the uploaded images to base 64 and after deleting them all)
+        function async(arg, callback) {
+          setTimeout(function() {
+                callback(arg); 
+            }, 1000);
+        }
+        // Final task (same in all the examples)
+        function final() { 
+            //we return the answer as a json to the client side with a delay of 2 sec
+            setTimeout(function () {
+                res.json({error:false, result: true, message: "Image successfully added."});
+            },2500);
+        }
+
+        var items = [];
+
+        //empty the array before pushing new base64 datas
+        base64data = [];
+
+        //we loop the incoming files and push each one with the arriving order to the items array
+        for(file in req.files) {
+          if(req.files.hasOwnProperty(file)) {
+            
+            // get the temporary location of the file
+            originalFilename = req.files[file].originalFilename;
+            items.push(originalFilename);
+          }
+        }
+
+        function series(item) {
+          if(item) {
+            async( item, function(result) {
+                
+                // get the base64 encoded version of images
+                request.get(
+                    //check if it's local or heroku
+                    ( app.get('port') === 3000 ) ?  req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+result :
+                                                    req.protocol+'://'+'buraktargac.herokuapp.com'+'/img/portfolio/'+result
+                    , function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        base64data.push( "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64') );
+                    }
+                    else {
+                        res.json({error:true, result: false, message: "Image could not be added or not found at the folder."});
+                    }
+                });
+
+                // delete the uploaded file with a 4 seconds delay, so that upload dir does not get filled with unwanted files
+                setTimeout(function(){
+                    fs.unlink( __dirname + '/../public/img/portfolio/' + result, function(err) {
+                        if (err) res.json({error:true, result: false, message: "Error occured @ unliking uploaded detail image with the originalFilename: " + err});
+                    });
+                },4000);
+
+              return series(items.shift());
+            });
+          } else {
+            return final();
+          }
+        }
+        series(items.shift());
 
     });
 
@@ -132,41 +206,24 @@ AdminLoggedInController = function (app, mongoose, config) {
                 res.json({error:true, result: false, message: "Error occured: " + err});
             } 
             else {
+                
+            data.portfolios.push({
+                company: req.body.company,
+                definition: req.body.definition,
+                imgUrl: base64data[0],
+                detailPageUrl: req.body.detailPageUrl,
+                detailPageImages: base64data
+            });
 
-                //we take the uploaded image and convert it to base64
-                request.get(
-                    //check if it's local or heroku
-                    ( app.get('port') === 3000 ) ?  req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+req.body.imgUrl :
-                                                    req.protocol+'://'+'buraktargac.herokuapp.com'+'/img/portfolio/'+req.body.imgUrl
-                    , function (error, response, body) {
-                    
-                    if (!error && response.statusCode == 200) {
-                        imagedata = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
-                        data.portfolios.push({
-                            company: req.body.company,
-                            definition: req.body.definition,
-                            imgUrl: imagedata,
-                            detailPageUrl: req.body.detailPageUrl
-                        });
-
-                        // delete the uploaded file, so that upload dir does not get filled with unwanted files 
-                        fs.unlink( __dirname + '/../public/img/portfolio/' + req.body.imgUrl, function() {
-                            if (err) res.json({error:true, result: false, message: "Error occured @ unliking uploaded image with the originalFilename: " + err});
-                        });
-
-                        data.save(function(err) {
-                            if (err) {
-                                res.json({error:true, result: false, message: "Error occured: " + err});
-                            } 
-                            else {
-                                res.json({error:false, result: true, message: "Portfolio successfully added."});
-                            }
-                        });
-                    }
-                    else {
-                        res.json({'data':'base 64 failed', 'type': false, 'error': error});
-                    }
-                });
+            data.save(function(err) {
+                if (err) {
+                    res.json({error:true, result: false, message: "Error occured: " + err});
+                } 
+                else {
+                    //adding detail images
+                    res.json({error:false, result: true, message: "Portfolio successfully added."});
+                }
+            });
 
             }
         });

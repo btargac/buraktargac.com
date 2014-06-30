@@ -20,7 +20,8 @@ module.exports = function (mongoose) {
         detailPageUrl:{
             type:String,
             required:false
-        }
+        },
+        detailPageImages:[String]
     });
 
     TestimonialSchema = new Schema({

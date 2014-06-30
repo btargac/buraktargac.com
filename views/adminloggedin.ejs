@@ -71,7 +71,9 @@
 			<input type="text" name="company" placeholder="Company">
 			<textarea name="definition" cols="30" rows="10" placeholder="Portfolio Definition"></textarea>
 			<input type="text" name="detailPageUrl" placeholder="Url for detail page">
-			<input type="file" id="imgInput">
+			<input type="file" class="detailPageimgInput" id="detailPageimgInput1">
+			<input type="file" class="detailPageimgInput" id="detailPageimgInput2">
+			<input type="file" class="detailPageimgInput" id="detailPageimgInput3">
 		</form>
 		<a href="javascript:void(0);" class="btn anchor cancel negative" rel="modal:close">Cancel</a>
 		<a href="javascript:void(0);" class="btn anchor confirm" rel="modal:close">Confirm</a>
@@ -143,6 +145,11 @@
 							<br>
 							<span id="detailPageTitle">Detail page Url : </span>
 							<span data-type="text" data-elemName="detailPageUrl"><%= portfolio.detailPageUrl %></span>
+							<div>
+								<% portfolio.detailPageImages.forEach(function(image){ %>
+									<img src="<%= image %>" alt="" width="100">
+								<% }); %>
+							</div>
 							<a class="remove" data-id="<%= portfolio._id %>" href="#removePortfolioModal" data-confirm-message="Do you want to remove this portfolio ?" data-item-type="portfolio">Remove</a>
 							<a class="update" data-id="<%= portfolio._id %>" data-imgurl="<%= portfolio.imgUrl %>" href="#updatePortfolioModal" data-confirm-message="Do you want to update this portfolio ?" data-item-type="portfolio">Update</a>
 						</div>
@@ -283,19 +290,20 @@
 				{
 					name: '_id',
 		    		value: '<%= data._id %>'
-				},
-				{
-					name: 'imgUrl',
-		    		value: $('#imgInput')[0].files[0].name
 				}
 			);
-			var values = $.param(data);
 
+			var detailImages = $('input.detailPageimgInput');
+			
+			var values = $.param(data);
+			
 			// first we handle the file upload progress
 			var formData = new FormData();
-			var file = $('#imgInput')[0].files[0];
-			formData.append('imgInput', file);
 
+			detailImages.each( function (i) {
+				formData.append('detailImage'+i, $(this)[0].files[0]);
+			});
+			
 			var xhr = new XMLHttpRequest();
 
 			xhr.open('post', '/siteconf/uploadImage', true);

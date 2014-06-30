@@ -1,0 +1,46 @@
+<div class="wrap-project">
+	<div id="project">
+		<div class="main-background" style="background-image:url('<%= portfolio.imgUrl %>')">
+			<div class="project-header">
+				<h2 class="page-title"><%= portfolio.company %></h2>
+				<h3 class="page-subtitle">Project Details</h3>
+			</div>
+			<div class="nav-controls">
+				<a href="#" class="prev-project"><i class="fa fa-arrow-left"></i></a>
+				<a href="#" class="close-project"><i class="fa fa-times"></i></a>
+				<a href="#" class="next-project"><i class="fa fa-arrow-right"></i></a>
+			</div>
+		</div>
+	</div>
+
+	<div class="wrap project-inner">
+		
+		<div class="review">
+			<div class="left">
+				<img src="<%= portfolio.imgUrl %>" alt="">
+			</div>
+			
+			<div class="right">
+				<p>
+				<%= portfolio.definition %>
+				</p>
+			</div>
+		</div>
+		
+	</div>
+
+	<div class="wrap project-inner gallery">
+		<div class="wrap">
+			<div class="owl-inner">
+				<% portfolio.detailPageImages.forEach(function(image){ %>
+				
+					<div>
+						<img src="<%= image %>" alt="">
+					</div>
+
+				<% }); %>
+			</div>
+		</div>
+	</div>
+
+</div>

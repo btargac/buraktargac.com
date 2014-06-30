@@ -309,43 +309,46 @@ var App = {
 			$portfolio.removeClass('animate').removeClass('ajaxed');
 		}, 1500);
 		
-		if(!$portfolio.hasClass('animate')) {
+		if( !$portfolio.hasClass('animate') && ( $('li.hidden', $portfolio).length >=1 ) ) {
 			
 			$portfolio.addClass('animate');
 			
-			$.ajax({
-				url: 'html/_portfolio.html',
-				context: document.body,
-				success: function(data) {
-					
-					$("html, body").animate({
-						scrollTop: $portfolio.offset().top + $portfolio.outerHeight(true) - 150
-					}, 500, function() {
+			$("html, body").animate({
+				scrollTop: $portfolio.offset().top + $portfolio.outerHeight(true) - 150
+			}, 500, function() {
+				
+				if(!$portfolio.hasClass('ajaxed')) {
+	
+					$portfolio.addClass('ajaxed');
+				
+					$('.inner', $portfolio).animate({'height': $portfolio.height() + $('.item', $portfolio).height()}, 900, 'easeInOutQuint', function() {
+						//$('li.hidden', $portfolio).slideDown('400');
+						$portfolio.height('auto');
 						
-						if(!$portfolio.hasClass('ajaxed')) {
-			
-							$portfolio.addClass('ajaxed');
+						$('li.hidden', $portfolio).each(function(index) {
+							var $this = $(this);
+							setTimeout(function() {
+								$this.slideDown('400').removeClass('hidden');
+							}, 150 * (index+1));
+						});
 						
-							$('.inner', $portfolio).animate({'height': $portfolio.height() + $('.item', $portfolio).height()}, 900, 'easeInOutQuint', function() {
-								$('ul', $portfolio).append(data);
-								$portfolio.height('auto');
-								
-								$('.item.ajax', $portfolio).each(function(index) {
-									var $this = $(this);
-									setTimeout(function() {
-										$this.removeClass('ajax');
-									}, 150 * (index+1));
-								});
-								
-								setTimeout(function() {
-									$portfolio.removeClass('animate').removeClass('ajaxed');
-								}, 600);
-							});
-						}
+						setTimeout(function() {
+							$portfolio.removeClass('animate').removeClass('ajaxed');
+						}, 600);
 					});
-					
 				}
 			});
+
+			// $.ajax({
+			// 	url: 'html/_portfolio.html',
+			// 	context: document.body,
+			// 	success: function(data) {
+					
+			// 		//the events were here before i editted the code, but we don't need to get the data via ajax anymore
+			// 		//because its already in the dom but just hidden with a hidden class.
+					
+			// 	}
+			// });
 		}
 	},
 	
@@ -601,15 +604,26 @@ App.portfolio = {
 	bind: function() {
 		
 		$("#portfolio").on("click", '.item', function() {
-      if($("html").hasClass("open") || App.portfolio.open($(this))) {
-      return true;  
-      }else{
-			return false;
-      }
+			if($("html").hasClass("open") || App.portfolio.open($(this))) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		});
 		
 		$(document).on("click", ".close-project", function() {
 			App.portfolio.close();
+		});
+
+		$(document).on("click", ".next-project,.prev-project", function() {
+			App.portfolio.close();
+			$this=$(this);
+			$portfolioSwitcher = $('.activeItem');
+			setTimeout(function() {
+				($this.hasClass('prev-project')) && $portfolioSwitcher.closest('li').prev('li').find('a.item').trigger('click');
+				($this.hasClass('next-project')) && $portfolioSwitcher.closest('li').next('li').find('a.item').trigger('click');
+			}, 2000);
 		});
 		
 	},
@@ -645,6 +659,7 @@ App.portfolio = {
 			duration : 300,
 			complete : function() {
 				c.parent().removeClass("animando");
+				c.addClass('activeItem');
 				
 				g.to(e, 0.5, {
 					x : a.puloLeft,
@@ -670,7 +685,7 @@ App.portfolio = {
 						$('#portfolio-box').find('.spinner').css('opacity', 0);
 						
 						$.ajax({
-							url: '/portfolio:'+c.attr('href'),
+							url: '/portfolio/'+c.attr('href'),
 							context: document.body,
 							success: function(data) {
 								
@@ -721,7 +736,7 @@ App.portfolio = {
 					y : a.puloTop,
 					ease : "Circ.easeInOut"
 				});
-				f.children(".aberto").removeClass("aberto").delay(600).animate({
+				f.children(".aberto").removeClass("aberto activeItem").delay(600).animate({
 					opacity : 1
 				}, {
 					duration : 300
@@ -732,7 +747,6 @@ App.portfolio = {
 					ease : "Circ.easeInOut",
 					delay : 0.1,
 					onComplete : function() {
-						
 						f.removeClass("animando").removeClass("projetoAberto");
 						$("html").removeClass("open");
 						c.removeClass('visible');

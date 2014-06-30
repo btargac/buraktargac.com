@@ -74,6 +74,9 @@ section.page {
   margin: 0 !important;
   padding: 0 !important;
 }
+.hidden {
+  display: none;
+}
 .page-title {
   position: relative;
   width: 100%;
@@ -609,6 +612,9 @@ section.page {
 }
 #portfolio li:nth-child(4n + 4) .item {
   z-index: 1;
+}
+#portfolio li.hidden {
+  display: none;
 }
 #portfolio .item {
   float: left;
@@ -1549,8 +1555,8 @@ section.page {
 .modal textarea {
   margin: 8px 0;
 }
-#adminpage #imgInput,
-.modal #imgInput {
+#adminpage .detailPageimgInput,
+.modal .detailPageimgInput {
   margin: 8px 0 8px 0;
 }
 @-moz-keyframes rotateplane {
