@@ -1,5 +1,6 @@
 var SiteConfiguration = require('../models/SiteConfiguration'),
     User = require('../models/User'),
+    path = require('path'),
     fs = require('fs'),
     request = require('request').defaults({ encoding: null });
 
@@ -117,7 +118,7 @@ AdminLoggedInController = function (app, mongoose, config) {
             // get the temporary location of the file
             tmp_path = req.files[key].path,
             originalFilename = req.files[key].originalFilename,
-            target_path = __dirname + '/../public/img/portfolio/' + originalFilename;
+            target_path = path.join(__dirname, "/../public/img/portfolio/", originalFilename);
             
             //here we rename the temporary image file with the original file name just because there is no way of finding the new
             //generated file name
