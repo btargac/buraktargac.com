@@ -387,7 +387,7 @@
 			$.ajax({
 				type: 'POST',
 				encoding:'utf-8',
-				data: "_id=" + id + "&company=" + company + "&definition=" + definition + "&detailPageUrl=" + detailPageUrl + "&imgUrl=" + encodeURIComponent(imgUrl),
+				data: "_id=" + id + "&company=" + encodeURIComponent(company) + "&definition=" + encodeURIComponent(definition) + "&detailPageUrl=" + detailPageUrl + "&imgUrl=" + encodeURIComponent(imgUrl),
 				url: '/siteconf/updatePortfolio',
 				dataType: 'JSON'
 			}).done(function( response ) {

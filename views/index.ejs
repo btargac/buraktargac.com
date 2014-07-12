@@ -59,7 +59,7 @@
 						<li class="parent">
 							<a href="#">Download<span class="arrow">&nbsp;&nbsp;»</span><span class="border"></span></a>
 							<ul>
-								<li><a href="resume.pdf" target="_blank">Resume (PDF)</a></li>
+								<li><a href="https://dl.dropboxusercontent.com/u/69237251/Burak%20Targa%C3%A7.pdf" target="_blank">Resume (PDF)</a></li>
 								<!-- <li>
 									<a href="#">Element 2<span class="arrow">&nbsp;&nbsp;»</span></a>
 									<ul>
@@ -121,7 +121,7 @@
 							<div class="over">
 								<h2 class="page-title"><%= portfolio.company %><span class="border"></span></h2>
 								<h3 class="page-subtitle">
-									<%= portfolio.definition %>
+									<%-: portfolio.definition | replace:'<new line>','<br><br>' | truncate_words:18 | append:'...' %>
 								</h3>
 							</div>
 						</a>
@@ -270,7 +270,7 @@
 				<div class="wrap">
 					
 					<h2 class="page-title">What I do?<span class="border"></span></h2>
-					<h3 class="page-subtitle">#Design #HTML #CSS #Javascript #jQuery #Node.js #Express.js #mongoDB #Grunt.js #HTML5 #CSS3 #SASS #COMPASS #STYLUS #Canvas-Graph works</h3>
+					<h3 class="page-subtitle">#Design #HTML #CSS #Javascript #jQuery #Node.js #Express.js #mongoDB #Grunt.js #Require.js #HTML5 #CSS3 #SASS #LESS #COMPASS #STYLUS #Canvas-Graph works #Bootstrap #MVC & #MVVM based projects #AMD based JS optimizations #Grunt.js #gzip compression #CSS & JS minification for faster experiences</h3>
 					
 					<div id="core">
 						
@@ -278,50 +278,38 @@
 							<li>
 								<div class="core rotate"></div>
 								<i class="fa fa-html5"></i>
-								<h4>Html 5 &amp; Css 3</h4>
-								<p>Responsive design & mobile-first principles
-								Standards-compliant, semantic HTML5
-								Well-organized CSS3
-								Preprocessing with Sass & Compass
-								Graceful degradation & progressive enhancement
-								Grids, layout, typography, & color theory
-								Image editing & graphic design
-								Source versioning with Git
-								Understanding of usability testing
-								Cross-browser compatibility
-								Design HTML email campaigns
-								Google Analytics implementation
-								Copywriting & content strategy</p>
+								<h4>Html 5 &amp; Css 3 & Modernizr Combination</h4>
+								<p>I always try to use the newest technologies, besides that I also have to think of the fallbacks for the old browsers which doesn't support a feature, I mean pollyfills such as css pie and many more. Especially the old versions of IE, and some inconsistencies between other browsers really need them. Modernizr is a good solution to see if your target browser supports a feature or not.</p>
 							</li>
 							<li>
 								<div class="core rotate"></div>
 									<i class="fa fa-laptop"></i>
-								<h4>Responsive layout</h4>
-								<p>Cras sagittis elit vitae lacus consequat, hendrerit imperdiet mi interdum. Nulla a porta quam. Phasellus in lorem.</p>
+								<h4>Responsive design & Mobile-first principles</h4>
+								<p>Nowadays the web pages or apps look the same on different devices right? So my pages should also give the same usage experience with an independent concept of device or resolution. So the stylesheets should be independent of device types but resolution spesific with some mediaqueries, that I add to my styleshhets to meet the needs of your page.</p>
 							</li>
 							<li>
 								<div class="core rotate"></div>
 								<i class="fa fa-unlock-alt"></i>
-								<h4>Working captcha &amp; form validation</h4>
-								<p>Cras sagittis elit vitae lacus consequat, hendrerit imperdiet mi interdum. Nulla a porta quam. Phasellus in lorem.</p>
+								<h4>Standards-compliant, semantic HTML5</h4>
+								<p>The web become a place that not only humans read and understand a page but also some crawlers and bots read and understand what the page or content is about. So the tags or contents should be well organised not to suprise the machines. We are going to build a world where all the machines will have access to internet , I mean M2M technologies. So we should prepare the web for them.</p>
 							</li>
 							<li>
 								<div class="core rotate"></div>
 								<i class="fa fa-cloud-download"></i>
-								<h4>Ajax portfolio</h4>
-								<p>Cras sagittis elit vitae lacus consequat, hendrerit imperdiet mi interdum. Nulla a porta quam. Phasellus in lorem.</p>
+								<h4>Preprocessing with Sass & Compass, Less or Stylus and versioning</h4>
+								<p>As a front-end developer I should generate my css files faster and more robust. So thats a goodway to use a preprocessor that makes us able to write with the concept of DRY(Don't repeat yourself). And keeping the changes in a repository will make the team much more productive while merging the codes after developing different parts of the project. Thats what I'm used to.</p>
 							</li>
 							<li>
 								<div class="core rotate"></div>
 								<i class="fa fa-heart"></i>
-								<h4>Attractive design &amp; parallax effects</h4>
-								<p>Cras sagittis elit vitae lacus consequat, hendrerit imperdiet mi interdum. Nulla a porta quam. Phasellus in lorem.</p>
+								<h4>Grids, layout, typography, & color theory & Source maps</h4>
+								<p>I like to use bootstrap grid system on my projects, because it gives me a very good flexibility and responsive layouts that act different on different resolutions. "Flat design", "Long Shadow" and many more design trends can be seen on various projects, but the important thing is to beware of what is new and trending. Also having a source map file for the processed JS or CSS helps a lot to develop faster.</p>
 							</li>
 							<li>
 								<div class="core rotate"></div>
 								<i class="fa fa-search-plus"></i>
-								<h4>Amazing portfolio gallery</h4>
-								<p>Cras sagittis elit vitae lacus consequat, hendrerit imperdiet mi interdum. Nulla a porta quam. Phasellus in lorem.</p>
+								<h4>Understanding of usability testing</h4>
+								<p>Nowadays the web pages consist of many modules that interact with each other, and can act different which may cause an inconsistency for the user experience if a new feature is wrongly added or implemented. So the project should be TDD (test driven developed) to handle these possibilities before the users experience it. Karma, mocha and Qunit tests are some of these test frameworks that i used before.</p>
 							</li>
 						</ul>
 						
@@ -381,7 +369,7 @@
 			</div>
 			<div class="text">
 				<h2 class="page-title">Where am I?<span class="border"></span></h2>
-				<p class="page-subtitle">Generally you don't need to come to see me if it's not a big job, but in such cases we may need to talk bussiness somewhere around.</p>
+				<p class="page-subtitle">If it's a big or an urgent job, we may need to talk somewhere around.</p>
 			</div>
 		</section>
 		

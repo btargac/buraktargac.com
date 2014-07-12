@@ -22,7 +22,7 @@
 			
 			<div class="right">
 				<p>
-				<%= portfolio.definition %>
+				<%-: portfolio.definition | replace:'<new line>','<br><br>' %>
 				</p>
 			</div>
 		</div>
@@ -32,11 +32,15 @@
 	<div class="wrap project-inner gallery">
 		<div class="wrap">
 			<div class="owl-inner">
-				<% portfolio.detailPageImages.forEach(function(image){ %>
+				<% portfolio.detailPageImages.forEach(function(image,index){ %>
 				
-					<div>
-						<img src="<%= image %>" alt="">
-					</div>
+					<% if ( index !== 0 ) { %>
+
+						<div>
+							<img src="<%= image %>" alt="">
+						</div>
+
+					<% } %>
 
 				<% }); %>
 			</div>

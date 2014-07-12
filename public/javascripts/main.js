@@ -327,13 +327,19 @@ var App = {
 						
 						$('li.hidden', $portfolio).each(function(index) {
 							var $this = $(this);
-							setTimeout(function() {
-								$this.slideDown('400').removeClass('hidden');
-							}, 150 * (index+1));
+							if(index<=3) {
+								setTimeout(function() {
+									$this.slideDown('400').removeClass('hidden');
+								}, 150 * (index+1));
+							}
+							
 						});
 						
 						setTimeout(function() {
 							$portfolio.removeClass('animate').removeClass('ajaxed');
+							if( !$('li.hidden', $portfolio).length ) {
+								$('.more', $portfolio).slideUp(400);
+							}
 						}, 600);
 					});
 				}
@@ -349,6 +355,9 @@ var App = {
 					
 			// 	}
 			// });
+		}
+		else{
+			$('.more', $portfolio).hide();
 		}
 	},
 	
@@ -449,11 +458,10 @@ var App = {
 		/*jshint multistr: true*/
 		boxText.innerHTML = "\
 			<div class='marker-label'>\
-				Kılavuzçayırı Avenue<br>\
+				Somewhere around<br>\
 				Altıntepe<br>\
 				Küçükyalı<br>\
 				Turkey <br>\
-				+90 535 326 98 22<br>\
 				btargac@gmail.com<br>\
 				</div>\
 			";

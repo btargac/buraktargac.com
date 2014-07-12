@@ -943,7 +943,7 @@ section.page {
   position: relative;
   display: inline-block;
   width: 33%;
-  height: 290px;
+  height: 445px;
   margin: 15px 0;
 }
 #core .core-values li .core {
@@ -1277,6 +1277,7 @@ section.page {
   margin: 0;
   color: #fff;
   font-family: 'Raleway', sans-serif;
+  text-shadow: 1px 1px 10px #333;
 }
 .project-inner {
   color: #777;
