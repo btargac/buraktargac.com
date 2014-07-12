@@ -1070,6 +1070,7 @@ section.page {
   width: 500px;
   position: relative;
   margin: 30px auto;
+  padding: 0 80px;
 }
 #admin .login-form input,
 #admin .login-form textarea,

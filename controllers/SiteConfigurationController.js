@@ -29,7 +29,7 @@ SiteController = function (app, mongoose, config) {
                 
             if (err) {
                 res.send({error:true, result: false, message: "Error occured: " + err});
-            } else {
+            } else if (data) {
                 var result = data.portfolios.map(function(portfolio) {
                     if (portfolio.detailPageUrl == id) {
                         //render the portfolio template with the required data coming from the mapped results
@@ -40,6 +40,8 @@ SiteController = function (app, mongoose, config) {
                     }                 
                 });
                 
+            } else {
+                res.send({error:true, result: false, message: "Error occured: " + err});
             }
         });
   

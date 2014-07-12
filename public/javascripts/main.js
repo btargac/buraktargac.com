@@ -686,20 +686,28 @@ App.portfolio = {
 					ease : "Circ.easeInOut",
 					onComplete : function() {
 						
-						$('#portfolio-box .inner').fadeIn();
-						
-						$('#portfolio-box').css('overflow-y', 'scroll');
-						
-						$('#portfolio-box').find('.spinner').css('opacity', 0);
-						
 						$.ajax({
 							url: '/portfolio/'+c.attr('href'),
 							context: document.body,
 							success: function(data) {
 								
-								$('#portfolio-box .inner').empty().append(data);
+								if (!data.error) {
+
+									$('#portfolio-box .inner').empty().append(data);
 								
-								App.owlCarousel();
+									$('#portfolio-box .inner').fadeIn();
+
+									$('#portfolio-box').css('overflow-y', 'scroll');
+
+									$('#portfolio-box').find('.spinner').css('opacity', 0);
+
+									App.owlCarousel();	
+								}
+								else if (data.error) {
+									App.portfolio.close();
+								}
+
+								
 								
 							}
 						});

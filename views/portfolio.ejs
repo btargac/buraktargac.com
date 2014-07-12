@@ -22,7 +22,7 @@
 			
 			<div class="right">
 				<p>
-				<%-: portfolio.definition | replace:'<new line>','<br><br>' %>
+				<%-: portfolio.definition | replace:/<new line>/g,'<br><br>' %>
 				</p>
 			</div>
 		</div>
