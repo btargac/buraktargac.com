@@ -234,6 +234,8 @@ var App = {
 			if($('#portfolio-box.visible').length > 0) {
 				$('#portfolio-box.visible').height($(window).height()).width($(window).width());
 			}
+
+			$('.inner',$portfolio).removeAttr('style');
 			
 		});
 		

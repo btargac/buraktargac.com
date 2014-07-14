@@ -49,6 +49,18 @@ section.page {
   margin-top: 60px;
   padding: 40px 0;
 }
+.clearfix {
+  zoom: 1;
+}
+.clearfix:before {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 #wrapper {
   width: 100%;
   overflow: hidden;

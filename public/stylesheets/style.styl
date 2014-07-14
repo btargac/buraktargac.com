@@ -69,6 +69,19 @@ section {
   }
 }
 
+.clearfix {
+  &:before {
+    content: "";
+    display: table;
+  }
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  zoom: 1;
+}
+
 #wrapper {
   width: 100%;
   overflow: hidden;

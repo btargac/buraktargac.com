@@ -180,6 +180,8 @@ This file contains all styles for responsive layout
 /*----------------------------------------------------*/
 @media only screen and (max-width: 400px) {
 	
+	.main-text {font-size: 25px;}
+	.slide-text li {font-size: 18px;}
 	.page-title {font-size:25px;}
 	.page-subtitle {font-size:15px;}
 	
