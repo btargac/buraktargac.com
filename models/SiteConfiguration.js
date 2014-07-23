@@ -13,10 +13,6 @@ module.exports = function (mongoose) {
             type:String,
             required:true
         },
-        imgUrl:{
-            type:String,
-            required:true
-        },
         detailPageUrl:{
             type:String,
             required:false

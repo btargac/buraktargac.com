@@ -211,7 +211,6 @@ AdminLoggedInController = function (app, mongoose, config) {
             data.portfolios.push({
                 company: req.body.company,
                 definition: req.body.definition,
-                imgUrl: base64data[0],
                 detailPageUrl: req.body.detailPageUrl,
                 detailPageImages: base64data
             });
@@ -255,7 +254,6 @@ AdminLoggedInController = function (app, mongoose, config) {
             $set:{
                 'portfolios.$.company' : req.body.company,
                 'portfolios.$.definition' : req.body.definition,
-                'portfolios.$.imgUrl' : req.body.imgUrl,
                 'portfolios.$.detailPageUrl' : req.body.detailPageUrl
             }
         },

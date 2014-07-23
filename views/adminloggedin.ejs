@@ -151,7 +151,7 @@
 								<% }); %>
 							</div>
 							<a class="remove" data-id="<%= portfolio._id %>" href="#removePortfolioModal" data-confirm-message="Do you want to remove this portfolio ?" data-item-type="portfolio">Remove</a>
-							<a class="update" data-id="<%= portfolio._id %>" data-imgurl="<%= portfolio.imgUrl %>" href="#updatePortfolioModal" data-confirm-message="Do you want to update this portfolio ?" data-item-type="portfolio">Update</a>
+							<a class="update" data-id="<%= portfolio._id %>" href="#updatePortfolioModal" data-confirm-message="Do you want to update this portfolio ?" data-item-type="portfolio">Update</a>
 						</div>
 				<% }); %>
 				<br>
@@ -381,13 +381,12 @@
 			var item = $('a.update.selected').closest('.item'),
 				company = item.find('input[name="company"]').val(),
 				definition = item.find('input[name="definition"]').val(),
-				detailPageUrl = item.find('input[name="detailPageUrl"]').val(),
-				imgUrl = $('a.update.selected').data('imgurl');
+				detailPageUrl = item.find('input[name="detailPageUrl"]').val();
 			// Use AJAX to post the object to our addportfolio service
 			$.ajax({
 				type: 'POST',
 				encoding:'utf-8',
-				data: "_id=" + id + "&company=" + encodeURIComponent(company) + "&definition=" + encodeURIComponent(definition) + "&detailPageUrl=" + detailPageUrl + "&imgUrl=" + encodeURIComponent(imgUrl),
+				data: "_id=" + id + "&company=" + encodeURIComponent(company) + "&definition=" + encodeURIComponent(definition) + "&detailPageUrl=" + detailPageUrl,
 				url: '/siteconf/updatePortfolio',
 				dataType: 'JSON'
 			}).done(function( response ) {

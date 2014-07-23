@@ -117,7 +117,7 @@
 					<% portfolios.forEach(function(portfolio,index){ %>
 					<li class="<%= ( index < 4 ) ? '' : 'hidden' %>">
 						<a class="item" href="<%= portfolio.detailPageUrl %>">
-							<img src="<%= portfolio.imgUrl %>" alt="">
+							<img src="<%= portfolio.detailPageImages[0] %>" alt="">
 							<div class="over">
 								<h2 class="page-title"><%= portfolio.company %><span class="border"></span></h2>
 								<h3 class="page-subtitle">
