@@ -3,14 +3,24 @@
  * Module dependencies.
  */
 
-var express = require('express'),
-	http = require('http'),
-	path = require('path'),
-	mongoose = require('mongoose'),
-	config = require('config'),
-	utils = require('./lib/utils'),
-  ENV = process.env.NODE_ENV || 'development',
-  sendgrid  = require('sendgrid')('btargac', '784951623sendgrid');
+var fs = require('fs'),
+    express = require('express'),
+    compression = require('compression'),
+    cookieParser = require('cookie-parser'),
+    path = require('path'),
+    mongoose = require('mongoose'),
+    config = require('config'),
+    utils = require('./lib/utils'),
+    ENV = process.env.NODE_ENV || 'development',
+    sendgrid  = require('sendgrid')('btargac', '784951623sendgrid'),
+    bodyParser = require('body-parser'),
+    multer = require('multer'),
+    methodOverride = require('method-override'),
+    logger = require('morgan'),
+    favicon = require('serve-favicon'),
+    session = require('express-session'),
+    serveStatic = require('serve-static'),
+    errorHandler = require('errorhandler');
 
 // Database
 var mongoose = utils.connectToDatabase(mongoose, config.db);
@@ -21,37 +31,40 @@ var app = express();
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.favicon(path.join(__dirname, 'public/img/favicon.png')));
-app.use(express.compress());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.bodyParser({
+app.use(favicon(path.join(__dirname, 'public/img/favicon.png')));
+app.use(compression());
+app.use(logger('dev'));
+app.use(bodyParser.json({
+    extended: true,
     keepExtensions: true,
     uploadDir: __dirname + '/public/img/portfolio',
     limit: '2mb'
   }));
-app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
-app.use(express.session());
-app.use(app.router);
+app.use(methodOverride());
+app.use(cookieParser('your secret here'));
+app.use(session({
+    secret: 'buraktargac',
+    saveUninitialized: true,
+    resave: true
+}));
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(serveStatic(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+  app.use(errorHandler());
 }
 
 // Defining models
 require('./models/SiteConfiguration')(mongoose);
 require('./models/User')(mongoose);
 
-// Defining Controllers
-['SiteConfiguration', 'Admin','FormSubmit','AdminLoggedIn'].forEach(function (controller) {
-    require('./controllers/' + controller + 'Controller')(app, mongoose, config, sendgrid);
+// Register Controllers
+var controllerPath = __dirname + "/controllers";
+fs.readdirSync( controllerPath ).forEach( function ( file ) {
+    if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongoose, config, sendgrid );
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+app.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

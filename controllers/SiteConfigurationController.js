@@ -46,6 +46,6 @@ SiteController = function (app, mongoose, config) {
         });
   
     });
-}
+};
 
 module.exports = SiteController;

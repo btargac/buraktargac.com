@@ -2,6 +2,7 @@ var SiteConfiguration = require('../models/SiteConfiguration'),
     User = require('../models/User'),
     path = require('path'),
     fs = require('fs'),
+    formidable = require('formidable'),
     request = require('request').defaults({ encoding: null });
 
 
@@ -111,13 +112,22 @@ AdminLoggedInController = function (app, mongoose, config) {
             key,
             file;
 
+
+        var form = new formidable.IncomingForm(),
+            files;
+
+        form.parse(req, function(err, fields, files) {
+            files = files;
+        });
+
+
         //we loop the incoming files and rename each one with the arriving order
-        for(key in req.files) {
-          if(req.files.hasOwnProperty(key)) {
+        for(key in files) {
+          if(files.hasOwnProperty(key)) {
             
             // get the temporary location of the file
-            tmp_path = req.files[key].path,
-            originalFilename = req.files[key].originalFilename,
+            tmp_path = files[key].path,
+            originalFilename = files[key].originalFilename,
             target_path = path.join(__dirname, "/../public/img/portfolio/", originalFilename);
             
             //here we rename the temporary image file with the original file name just because there is no way of finding the new
@@ -153,11 +163,11 @@ AdminLoggedInController = function (app, mongoose, config) {
         base64data = [];
 
         //we loop the incoming files and push each one with the arriving order to the items array
-        for(file in req.files) {
-          if(req.files.hasOwnProperty(file)) {
+        for(file in files) {
+          if(files.hasOwnProperty(file)) {
             
             // get the temporary location of the file
-            originalFilename = req.files[file].originalFilename;
+            originalFilename = files[file].originalFilename;
             items.push(originalFilename);
           }
         }
@@ -199,105 +209,122 @@ AdminLoggedInController = function (app, mongoose, config) {
 
     app.post("/siteconf/addPortfolio", function(req, res, next) {
 
-        var id = req.body._id;
-        
-        SiteConfiguration.findOne({_id: id}, function(err, data) {
-                
-            if (err) {
-                res.json({error:true, result: false, message: "Error occured: " + err});
-            } 
-            else {
-                
-            data.portfolios.push({
-                company: req.body.company,
-                definition: req.body.definition,
-                detailPageUrl: req.body.detailPageUrl,
-                detailPageImages: base64data
-            });
+        var form = new formidable.IncomingForm();
 
-            data.save(function(err) {
+        form.parse(req, function(err, fields, files) {
+
+            SiteConfiguration.findOne({_id: fields._id}, function(err, data) {
+
                 if (err) {
                     res.json({error:true, result: false, message: "Error occured: " + err});
-                } 
+                }
                 else {
-                    //adding detail images
-                    res.json({error:false, result: true, message: "Portfolio successfully added."});
+
+                    data.portfolios.push({
+                        company: fields.company,
+                        definition: fields.definition,
+                        detailPageUrl: fields.detailPageUrl,
+                        detailPageImages: base64data
+                    });
+
+                    data.save(function(err) {
+                        if (err) {
+                            res.json({error:true, result: false, message: "Error occured: " + err});
+                        }
+                        else {
+                            //adding detail images
+                            res.json({error:false, result: true, message: "Portfolio successfully added."});
+                        }
+                    });
+
                 }
             });
-
-            }
         });
      
     });
 
     app.post("/siteconf/removePortfolio", function(req, res, next) {
 
-        var id = req.body._id;
+        var form = new formidable.IncomingForm();
 
-        SiteConfiguration.update({'portfolios._id': id}, {$pull: {'portfolios': {'_id': id}}}).exec(function(err){
-              if (err) {
-                res.json({error:true, result: false, message: "Error occured: " + err});
-              } else {
-                    
+        form.parse(req, function(err, fields, files) {
+
+            SiteConfiguration.update({'portfolios._id': fields._id}, {$pull: {'portfolios': {'_id': fields._id}}}).exec(function(err){
+                if (err) {
+                    res.json({error:true, result: false, message: "Error occured: " + err});
+                } else {
                     res.json({error:false, result: true, message: "Portfolio successfully removed."});
-             }  
+                }
+            });
+
         });
 
-     
     });
 
     app.post("/siteconf/updatePortfolio", function(req, res, next) {
 
-        var id = req.body._id;
-        SiteConfiguration.update({'portfolios._id': id},
-        {
-            $set:{
-                'portfolios.$.company' : req.body.company,
-                'portfolios.$.definition' : req.body.definition,
-                'portfolios.$.detailPageUrl' : req.body.detailPageUrl
-            }
-        },
-        function(err) {
-                
-            if (err) {
-                res.json({error:true, result: false, message: "Error occured: " + err});
-            } else {
-                
-                res.json({error:false, result: true, message: "Portfolio successfully updated."});
-            }
+        var form = new formidable.IncomingForm();
+
+        form.parse(req, function(err, fields, files) {
+
+            SiteConfiguration.update({'portfolios._id': fields._id},
+            {
+                $set:{
+                    'portfolios.$.company' : fields.company,
+                    'portfolios.$.definition' : fields.definition,
+                    'portfolios.$.detailPageUrl' : fields.detailPageUrl
+                }
+            },
+            function(err) {
+
+                if (err) {
+                    res.json({error:true, result: false, message: "Error occured: " + err});
+                } else {
+
+                    res.json({error:false, result: true, message: "Portfolio successfully updated."});
+                }
+            });
+
         });
      
     });
 
 
     app.post("/siteconf/update", function(req, res, next) {
-        var id = req.body._id;
-        SiteConfiguration.findOne({_id: id}, function(err, data) {
-        		
-        	if (err) {
-        		res.json({error:true, result: false, message: "Error occured: " + err});
-        	} else {
-        		data.title = req.body.title;
-        		data.fblink = req.body.fblink;
-        		data.twlink = req.body.twlink;
-                data.gplink = req.body.gplink;
-                data.lilink = req.body.lilink;
-                data.ytlink = req.body.ytlink;
-                data.portfolio = req.body.portfolio;
-                data.testimonial = req.body.testimonial;
 
-        		data.save(function(err) {
-	        		if (err) {
-	        		res.json({error:true, result: false, message: "Error occured: " + err});
-	        		} 
-	        		else {
-        			res.json({error:false, result: true, message: "Your configurations are successfully updated."});
-        			}
-        		});
+        var form = new formidable.IncomingForm();
 
-        	}
+        form.parse(req, function(err, fields, files) {
+
+            SiteConfiguration.findOne({_id: fields._id}, function(err, data) {
+
+                if (err) {
+                    res.json({error:true, result: false, message: "Error occured: " + err});
+                } else {
+                    data.title = fields.title;
+                    data.fblink = fields.fblink;
+                    data.twlink = fields.twlink;
+                    data.gplink = fields.gplink;
+                    data.lilink = fields.lilink;
+                    data.ytlink = fields.ytlink;
+                    data.portfolio = fields.portfolio;
+                    data.testimonial = fields.testimonial;
+
+                    data.save(function(err) {
+                        if (err) {
+                            res.json({error:true, result: false, message: "Error occured: " + err});
+                        }
+                        else {
+                            res.json({error:false, result: true, message: "Your configurations are successfully updated."});
+                        }
+                    });
+
+                }
+            });
+
         });
+
     });
-}
+};
 
 module.exports = AdminLoggedInController;
