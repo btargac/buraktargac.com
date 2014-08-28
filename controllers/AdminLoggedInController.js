@@ -113,97 +113,98 @@ AdminLoggedInController = function (app, mongoose, config) {
             file;
 
 
-        var form = new formidable.IncomingForm(),
-            files;
+        var form = new formidable.IncomingForm();
 
         form.parse(req, function(err, fields, files) {
-            files = files;
-        });
 
 
-        //we loop the incoming files and rename each one with the arriving order
-        for(key in files) {
-          if(files.hasOwnProperty(key)) {
-            
-            // get the temporary location of the file
-            tmp_path = files[key].path,
-            originalFilename = files[key].originalFilename,
-            target_path = path.join(__dirname, "/../public/img/portfolio/", originalFilename);
-            
-            //here we rename the temporary image file with the original file name just because there is no way of finding the new
-            //generated file name
-            fs.rename(tmp_path, target_path, function(err) {
-                if (err) res.json({error:true, result: false, message: "Error occured @ renaming: " + err});
-                // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files 
-                fs.unlink(tmp_path, function() {
-                    if (err) res.json({error:true, result: false, message: "Error occured @unliking tmp_path: " + err});
-                });
-            });
-          }
-        }
+            //we loop the incoming files and rename each one with the arriving order
+            for(key in files) {
+                if(files.hasOwnProperty(key)) {
 
+                    // get the temporary location of the file
+                    tmp_path = files[key].path,
+                    originalFilename = files[key].name,
+                    target_path = path.join(__dirname, "/../public/img/portfolio/"+originalFilename);
 
-        // Async task (for converting the uploaded images to base 64 and after deleting them all)
-        function async(arg, callback) {
-          setTimeout(function() {
-                callback(arg); 
-            }, 1000);
-        }
-        // Final task (same in all the examples)
-        function final() { 
-            //we return the answer as a json to the client side with a delay of 2 sec
-            setTimeout(function () {
-                res.json({error:false, result: true, message: "Image successfully added."});
-            },2500);
-        }
+                    console.log(target_path);
 
-        var items = [];
-
-        //empty the array before pushing new base64 datas
-        base64data = [];
-
-        //we loop the incoming files and push each one with the arriving order to the items array
-        for(file in files) {
-          if(files.hasOwnProperty(file)) {
-            
-            // get the temporary location of the file
-            originalFilename = files[file].originalFilename;
-            items.push(originalFilename);
-          }
-        }
-
-        function series(item) {
-          if(item) {
-            async( item, function(result) {
-                
-                // get the base64 encoded version of images
-                request.get(
-                    //check if it's local or heroku
-                    ( app.get('port') === 3000 ) ?  req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+result :
-                                                    req.protocol+'://'+'buraktargac.herokuapp.com'+'/img/portfolio/'+result
-                    , function (error, response, body) {
-                    if (!error && response.statusCode == 200) {
-                        base64data.push( "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64') );
-                    }
-                    else {
-                        res.json({error:true, result: false, message: "Image could not be added or not found at the folder."});
-                    }
-                });
-
-                // delete the uploaded file with a 4 seconds delay, so that upload dir does not get filled with unwanted files
-                setTimeout(function(){
-                    fs.unlink( __dirname + '/../public/img/portfolio/' + result, function(err) {
-                        if (err) res.json({error:true, result: false, message: "Error occured @ unliking uploaded detail image with the originalFilename: " + err});
+                    //here we rename the temporary image file with the original file name just because there is no way of finding the new
+                    //generated file name
+                    fs.rename(tmp_path, target_path, function(err) {
+                        if (err) res.json({error:true, result: false, message: "Error occured @ renaming: " + err});
+                        // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
+                        fs.unlink(tmp_path, function() {
+                            if (err) res.json({error:true, result: false, message: "Error occured @unliking tmp_path: " + err});
+                        });
                     });
-                },4000);
+                }
+            }
 
-              return series(items.shift());
-            });
-          } else {
-            return final();
-          }
-        }
-        series(items.shift());
+
+            // Async task (for converting the uploaded images to base 64 and after deleting them all)
+            function async(arg, callback) {
+                setTimeout(function() {
+                    callback(arg);
+                }, 1000);
+            }
+            // Final task (same in all the examples)
+            function final() {
+                //we return the answer as a json to the client side with a delay of 2 sec
+                setTimeout(function () {
+                    res.json({error:false, result: true, message: "Image successfully added."});
+                },2500);
+            }
+
+            var items = [];
+
+            //empty the array before pushing new base64 datas
+            base64data = [];
+
+            //we loop the incoming files and push each one with the arriving order to the items array
+            for(file in files) {
+                if(files.hasOwnProperty(file)) {
+
+                    // get the temporary location of the file
+                    originalFilename = files[file].name;
+                    items.push(originalFilename);
+                }
+            }
+
+            function series(item) {
+                if(item) {
+                    async( item, function(result) {
+
+                        // get the base64 encoded version of images
+                        request.get(
+                            //check if it's local or heroku
+                            ( app.get('port') === 3000 ) ?  req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+result :
+                                req.protocol+'://'+'buraktargac.herokuapp.com'+'/img/portfolio/'+result
+                            , function (error, response, body) {
+                                if (!error && response.statusCode == 200) {
+                                    base64data.push( "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64') );
+                                }
+                                else {
+                                    res.json({error:true, result: false, message: "Image could not be added or not found at the folder."});
+                                }
+                            });
+
+                        // delete the uploaded file with a 4 seconds delay, so that upload dir does not get filled with unwanted files
+                        setTimeout(function(){
+                            fs.unlink( __dirname + '/../public/img/portfolio/' + result, function(err) {
+                                if (err) res.json({error:true, result: false, message: "Error occured @ unliking uploaded detail image with the originalFilename: " + err});
+                            });
+                        },4000);
+
+                        return series(items.shift());
+                    });
+                } else {
+                    return final();
+                }
+            }
+            series(items.shift());
+
+        });
 
     });
 
