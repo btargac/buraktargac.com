@@ -26,14 +26,22 @@ AdminLoggedInController = function (app, mongoose, config) {
     });
 
     app.post("/siteconf/create", function(req, res, next) {
-        var siteConfiguration = new SiteConfiguration(req.body);
-        siteConfiguration.save(function(err) {
-        	if (err) {
-        		res.json({error:true, result: false, message: "Error occured: " + err});
-        	} else {
-        		res.json({error:false, result: true, message: "Successfully created!"});
-        	}
-        }); 
+
+        var form = new formidable.IncomingForm();
+
+        form.parse(req, function(err, fields, files) {
+
+            var siteConfiguration = new SiteConfiguration(fields);
+            siteConfiguration.save(function(err) {
+                if (err) {
+                    res.json({error:true, result: false, message: "Error occured: " + err});
+                } else {
+                    res.json({error:false, result: true, message: "Successfully created!"});
+                }
+            });
+
+        });
+
     });
 
     app.post("/siteconf/addTestimonial", function(req, res, next) {
