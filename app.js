@@ -37,7 +37,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json({
     extended: true,
     keepExtensions: true,
-    uploadDir: __dirname + '/public/img/portfolio',
+    uploadDir: path.join(__dirname, '/public/img/portfolio'),
     limit: '2mb'
   }));
 app.use(methodOverride());
@@ -60,7 +60,7 @@ require('./models/SiteConfiguration')(mongoose);
 require('./models/User')(mongoose);
 
 // Register Controllers
-var controllerPath = __dirname + "/controllers";
+var controllerPath = path.join(__dirname, '/controllers');
 fs.readdirSync( controllerPath ).forEach( function ( file ) {
     if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongoose, config, sendgrid );
 });

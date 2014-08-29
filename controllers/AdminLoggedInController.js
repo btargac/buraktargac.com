@@ -130,10 +130,10 @@ AdminLoggedInController = function (app, mongoose, config) {
                     //here we rename the temporary image file with the original file name just because there is no way of finding the new
                     //generated file name
                     fs.rename(tmp_path, target_path, function(err) {
-                        if (err) res.json({error:true, result: false, message: "Error occured @ renaming: " + err});
+                        if (err) res.json({error:true, result: false, message: "Error occured @ renaming: " + err + "tmp path: " + tmp_path + "target path: " +target_path});
                         // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
                         fs.unlink(tmp_path, function() {
-                            if (err) res.json({error:true, result: false, message: "Error occured @unliking tmp_path: " + err});
+                            if (err) res.json({error:true, result: false, message: "Error occured @unliking tmp_path: " + err + "tmp path: " + tmp_path });
                         });
                     });
                 }
