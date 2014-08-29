@@ -107,54 +107,13 @@ AdminLoggedInController = function (app, mongoose, config) {
     app.post("/siteconf/uploadImage", function(req, res, next) {
         
         var tmp_path,
-            originalFilename,
-            target_path,
-            key,
+            type,
             file;
 
 
         var form = new formidable.IncomingForm();
 
         form.parse(req, function(err, fields, files) {
-
-
-            //we loop the incoming files and rename each one with the arriving order
-            for(key in files) {
-                if(files.hasOwnProperty(key)) {
-
-                    // get the temporary location of the file
-                    tmp_path = files[key].path,
-                    originalFilename = files[key].name,
-                    target_path = path.join(__dirname, "/../public/img/portfolio/", originalFilename);
-
-                    //here we rename the temporary image file with the original file name just because there is no way of finding the new
-                    //generated file name
-                    fs.rename(tmp_path, target_path, function(err) {
-                        if (err) res.json({error:true, result: false, message: "Error occured @ renaming: " + err + "tmp path: " + tmp_path + "target path: " +target_path});
-                        // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
-                        fs.unlink(tmp_path, function() {
-                            if (err) res.json({error:true, result: false, message: "Error occured @unliking tmp_path: " + err + "tmp path: " + tmp_path });
-                        });
-                    });
-                }
-            }
-
-
-            // Async task (for converting the uploaded images to base 64 and after deleting them all)
-            function async(arg, callback) {
-                setTimeout(function() {
-                    callback(arg);
-                }, 1000);
-            }
-            // Final task (same in all the examples)
-            function final() {
-                //we return the answer as a json to the client side with a delay of 2 sec
-                setTimeout(function () {
-                    res.json({error:false, result: true, message: "Image successfully added."});
-                },2500);
-            }
-
-            var items = [];
 
             //empty the array before pushing new base64 datas
             base64data = [];
@@ -164,43 +123,19 @@ AdminLoggedInController = function (app, mongoose, config) {
                 if(files.hasOwnProperty(file)) {
 
                     // get the temporary location of the file
-                    originalFilename = files[file].name;
-                    items.push(originalFilename);
-                }
-            }
-
-            function series(item) {
-                if(item) {
-                    async( item, function(result) {
-
-                        // get the base64 encoded version of images
-                        request.get(
-                            //check if it's local or heroku
-                            ( app.get('port') === 3000 ) ?  req.protocol+'://'+req._remoteAddress+':'+app.get('port')+'/img/portfolio/'+result :
-                                req.protocol+'://'+'buraktargac.herokuapp.com'+'/img/portfolio/'+result
-                            , function (error, response, body) {
-                                if (!error && response.statusCode == 200) {
-                                    base64data.push( "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64') );
-                                }
-                                else {
-                                    res.json({error:true, result: false, message: "Image could not be added or not found at the folder."});
-                                }
-                            });
-
-                        // delete the uploaded file with a 4 seconds delay, so that upload dir does not get filled with unwanted files
-                        setTimeout(function(){
-                            fs.unlink( __dirname + '/../public/img/portfolio/' + result, function(err) {
-                                if (err) res.json({error:true, result: false, message: "Error occured @ unliking uploaded detail image with the originalFilename: " + err});
-                            });
-                        },4000);
-
-                        return series(items.shift());
+                    tmp_path = files[file].path;
+                    type = files[file].type;
+                    //read the file and convert it to base64 encoded string value
+                    fs.readFile(tmp_path, function(err, original_data){
+                        if (err) res.json({error:true, result: false, message: "Error occured @converting tmp_path to base64: " + err });
+                        var base64Image = new Buffer(original_data, 'binary').toString('base64');
+                        base64data.push( "data:" + type + ";base64," + base64Image );
                     });
-                } else {
-                    return final();
+
                 }
             }
-            series(items.shift());
+
+            res.json({error:false, result: true, message: "Image successfully added."});
 
         });
 
