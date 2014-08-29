@@ -125,9 +125,7 @@ AdminLoggedInController = function (app, mongoose, config) {
                     // get the temporary location of the file
                     tmp_path = files[key].path,
                     originalFilename = files[key].name,
-                    target_path = path.join(__dirname, "/../public/img/portfolio/"+originalFilename);
-
-                    console.log(target_path);
+                    target_path = path.join(__dirname, "/../public/img/portfolio/", originalFilename);
 
                     //here we rename the temporary image file with the original file name just because there is no way of finding the new
                     //generated file name
