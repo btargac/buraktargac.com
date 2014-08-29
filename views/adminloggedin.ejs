@@ -266,7 +266,7 @@
 			$.ajax({
 				type: 'POST',
 				encoding:'utf-8',
-				data: "_id=" + id + "&author=" + author + "&text=" + text, // we need to add some more data about the testimonial
+				data: "_id=" + id + "&author=" + encodeURIComponent(author) + "&text=" + encodeURIComponent(text), // we need to add some more data about the testimonial
 				url: '/siteconf/updateTestimonial',
 				dataType: 'JSON'
 			}).done(function( response ) {
