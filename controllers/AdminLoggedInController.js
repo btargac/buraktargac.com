@@ -38,67 +38,80 @@ AdminLoggedInController = function (app, mongoose, config) {
 
     app.post("/siteconf/addTestimonial", function(req, res, next) {
 
-        var id = req.body._id;
-        SiteConfiguration.findOne({_id: id}, function(err, data) {
-                
-            if (err) {
-                res.json({error:true, result: false, message: "Error occured: " + err});
-            } else {
-                
-                data.testimonials.push({
-                    author: req.body.author,
-                    text: req.body.text
-                });
+        var form = new formidable.IncomingForm();
 
+        form.parse(req, function(err, fields, files) {
 
-                data.save(function(err) {
-                    if (err) {
+            SiteConfiguration.findOne({_id: fields._id}, function(err, data) {
+
+                if (err) {
                     res.json({error:true, result: false, message: "Error occured: " + err});
-                    } 
-                    else {
-                    res.json({error:false, result: true, message: "Testimonial successfully added."});
-                    }
-                });
+                } else {
 
-            }
+                    data.testimonials.push({
+                        author: fields.author,
+                        text: fields.text
+                    });
+
+
+                    data.save(function(err) {
+                        if (err) {
+                            res.json({error:true, result: false, message: "Error occured: " + err});
+                        }
+                        else {
+                            res.json({error:false, result: true, message: "Testimonial successfully added."});
+                        }
+                    });
+
+                }
+            });
+
         });
      
     });
 
     app.post("/siteconf/removeTestimonial", function(req, res, next) {
 
-        var id = req.body._id;
+        var form = new formidable.IncomingForm();
 
-        SiteConfiguration.update({'testimonials._id': id}, {$pull: {'testimonials': {'_id': id}}}).exec(function(err){
-              if (err) {
-                res.json({error:true, result: false, message: "Error occured: " + err});
-              } else {
-                    
+        form.parse(req, function(err, fields, files) {
+
+            SiteConfiguration.update({'testimonials._id': fields._id}, {$pull: {'testimonials': {'_id': id}}}).exec(function(err){
+                if (err) {
+                    res.json({error:true, result: false, message: "Error occured: " + err});
+                } else {
+
                     res.json({error:false, result: true, message: "Testimonial successfully removed."});
-             }  
-        });
+                }
+            });
 
+        });
      
     });
 
     app.post("/siteconf/updateTestimonial", function(req, res, next) {
 
-        var id = req.body._id;
-        SiteConfiguration.update({'testimonials._id': id},
-        {
-            $set:{
-                'testimonials.$.author' : req.body.author,
-                'testimonials.$.text' : req.body.text
-            }
-        },
-        function(err) {
-                
-            if (err) {
-                res.json({error:true, result: false, message: "Error occured: " + err});
-            } else {
-                
-                res.json({error:false, result: true, message: "Testimonial successfully updated."});
-            }
+        var form = new formidable.IncomingForm();
+
+        form.parse(req, function(err, fields, files) {
+
+            SiteConfiguration.update({'testimonials._id': fields._id},
+                {
+                    $set:{
+                        'testimonials.$.author' : fields.author,
+                        'testimonials.$.text' : fields.text
+                    }
+                },
+                function(err) {
+
+                    if (err) {
+                        res.json({error:true, result: false, message: "Error occured: " + err});
+                    } else {
+
+                        res.json({error:false, result: true, message: "Testimonial successfully updated."});
+                    }
+                });
+
         });
      
     });
