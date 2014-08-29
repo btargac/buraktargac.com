@@ -76,7 +76,7 @@ AdminLoggedInController = function (app, mongoose, config) {
 
         form.parse(req, function(err, fields, files) {
 
-            SiteConfiguration.update({'testimonials._id': fields._id}, {$pull: {'testimonials': {'_id': id}}}).exec(function(err){
+            SiteConfiguration.update({'testimonials._id': fields._id}, {$pull: {'testimonials': {'_id': fields._id}}}).exec(function(err){
                 if (err) {
                     res.json({error:true, result: false, message: "Error occured: " + err});
                 } else {
@@ -107,7 +107,6 @@ AdminLoggedInController = function (app, mongoose, config) {
                     if (err) {
                         res.json({error:true, result: false, message: "Error occured: " + err});
                     } else {
-
                         res.json({error:false, result: true, message: "Testimonial successfully updated."});
                     }
                 });
