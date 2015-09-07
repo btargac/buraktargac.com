@@ -2,8 +2,7 @@ var SiteConfiguration = require('../models/SiteConfiguration'),
     User = require('../models/User'),
     path = require('path'),
     fs = require('fs'),
-    formidable = require('formidable'),
-    request = require('request').defaults({ encoding: null });
+    formidable = require('formidable');
 
 
 AdminLoggedInController = function (app, mongoose, config) {
