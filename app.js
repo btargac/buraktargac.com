@@ -35,7 +35,6 @@ app.use(bodyParser.json({
     uploadDir: path.join(__dirname, '/public/img/portfolio'),
     limit: '2mb'
   }));
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('buraktargac'));
 app.use(session({
     secret: 'buraktargac',
