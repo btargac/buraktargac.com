@@ -5,7 +5,7 @@ var SiteConfiguration = require('../models/SiteConfiguration'),
     formidable = require('formidable');
 
 
-AdminLoggedInController = function (app, mongoose, config) {
+AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha) {
 
     var SiteConfiguration = mongoose.model('SiteConfiguration'),
         User = mongoose.model('User'),

@@ -1,6 +1,6 @@
 var formidable = require('formidable');
 
-FormSubmitter = function (app, mongoose, config, sendgrid) {
+FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
 
     var params = {
       to:       'btargac@gmail.com',
@@ -10,47 +10,59 @@ FormSubmitter = function (app, mongoose, config, sendgrid) {
       subject:  'Buraktargac.com Web Form Message'
     };
 
-    app.post("/submitform", function(req, res, next) {
+    app.post("/submitform", recaptcha.middleware.verify, function(req, res, next) {
         
-        var form = new formidable.IncomingForm(),
+        if (!req.recaptcha.error) {
+            // reCaptch successfull
+
+            var form = new formidable.IncomingForm(),
             data ;
 
-        form.parse(req, function(err, fields, files) {
-            data = fields;
+            form.parse(req, function(err, fields, files) {
+                data = fields;
 
-            //validation must be improved
-            if(data.name && data.email && data.message && data.captcha && (data.captcha == data.hiddencaptcha) ){
+                //validation must be improved
+                if(data.name && data.email && data.message && data.captcha && (data.captcha == data.hiddencaptcha) ){
 
-                //sendgrid integration
-                params.text = data.name + '\n\n' + data.email + '\n\n' + data.company + '\n\n' + data.message;
-                params.html = '<html><head><title></title></head><body>'+
-                    '<p><span style="font-family:verdana,geneva,sans-serif;">Hello <strong>Burak</strong>,</span></p>'+
-                    '<p><span style="font-family:verdana,geneva,sans-serif;">This message is sent to you from buraktargac.com, it seems that someone is interested in your contact form.</span></p>'+
-                    '<p><span style="font-family:verdana,geneva,sans-serif;">Here are the details of incoming message.</span></p>'+
-                    '<p><span style="font-family:verdana,geneva,sans-serif;"></span></p>'+
-                    '<p><span style="font-family:verdana,geneva,sans-serif;">Name: '+data.name+'</span></p>'+
-                    '<p><span style="font-family:verdana,geneva,sans-serif;">Email: '+data.email+'</span></p>'+
-                    '<p><span style="font-family:verdana,geneva,sans-serif;">Company: '+data.company+'</span></p>'+
-                    '<p><span style="font-family:verdana,geneva,sans-serif;">Message: '+data.message+'</span></p>'+
-                    '<p><em><span style="font-family:verdana,geneva,sans-serif;">Kindly Regards.</span></em></p>'+
-                    '<hr /><p><span style="font-family:verdana,geneva,sans-serif;">Burak Targaç</span></p>'+
-                    '<p><span style="font-family:verdana,geneva,sans-serif;"><a href="http://www.buraktargac.com" target="_blank" style="text-decoration:none;"><span style="color:#FF8C00;">www.buraktargac.com</span></a></span></p>'+
-                    '</body></html>';
+                    //sendgrid integration
+                    params.text = data.name + '\n\n' + data.email + '\n\n' + data.company + '\n\n' + data.message;
+                    params.html = '<html><head><title></title></head><body>'+
+                        '<p><span style="font-family:verdana,geneva,sans-serif;">Hello <strong>Burak</strong>,</span></p>'+
+                        '<p><span style="font-family:verdana,geneva,sans-serif;">This message is sent to you from buraktargac.com, it seems that someone is interested in your contact form.</span></p>'+
+                        '<p><span style="font-family:verdana,geneva,sans-serif;">Here are the details of incoming message.</span></p>'+
+                        '<p><span style="font-family:verdana,geneva,sans-serif;"></span></p>'+
+                        '<p><span style="font-family:verdana,geneva,sans-serif;">Name: '+data.name+'</span></p>'+
+                        '<p><span style="font-family:verdana,geneva,sans-serif;">Email: '+data.email+'</span></p>'+
+                        '<p><span style="font-family:verdana,geneva,sans-serif;">Company: '+data.company+'</span></p>'+
+                        '<p><span style="font-family:verdana,geneva,sans-serif;">Message: '+data.message+'</span></p>'+
+                        '<p><em><span style="font-family:verdana,geneva,sans-serif;">Kindly Regards.</span></em></p>'+
+                        '<hr /><p><span style="font-family:verdana,geneva,sans-serif;">Burak Targaç</span></p>'+
+                        '<p><span style="font-family:verdana,geneva,sans-serif;"><a href="http://www.buraktargac.com" target="_blank" style="text-decoration:none;"><span style="color:#FF8C00;">www.buraktargac.com</span></a></span></p>'+
+                        '</body></html>';
 
-                var email = new sendgrid.Email(params);
+                    var email = new sendgrid.Email(params);
 
-                sendgrid.send(email, function(err, json) {
-                    if (err) { return res.send({success: false, returndata: err, sendgridError: true}); }
-                    res.send({success: true, returndata: json, sendgridError: false});
-                });
+                    sendgrid.send(email, function(err, json) {
+                        if (err) { return res.send({success: false, returndata: err, sendgridError: true}); }
+                        res.send({success: true, returndata: json, sendgridError: false});
+                    });
 
-            }
-            else{
-                res.send({success: false, returndata: data});
-            }
+                }
 
-        });
-        
+                else{
+                    res.send({success: false, returndata: data});
+                }
+
+            });
+        }
+
+        else {
+            // reCaptcha error
+            res.send({success: false, returndata: {
+                reCaptcha: 'error',
+                err: req.recaptcha.error
+            }});
+        }
 
     });
 

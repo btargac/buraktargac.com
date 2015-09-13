@@ -1170,7 +1170,11 @@ section.page {
   text-align: center;
 }
 #contacts .get-in-touch .col#captchaContainer {
-  margin-top: 10px;
+  margin-left: 0;
+  width: auto;
+}
+#contacts .get-in-touch .col.right {
+  float: right;
 }
 #contacts .get-in-touch button:hover {
   background-color: #fff;

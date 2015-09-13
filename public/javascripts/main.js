@@ -509,10 +509,6 @@ var App = {
 						var $captchaImage = $('.captcha-img', $getInTouch);
 						
 						$('input, textarea', $getInTouch).removeClass('error').val('');
-						
-						//resetting Captcha validation
-						$('#captchaContainer').text(getRandomInt(0,10)+'+'+getRandomInt(0,10)+' is equal to?');
-						$('#hiddencaptcha').val(calculatecaptcha());
 
 						$getInTouch.slideUp(800,function () {
 							$getInTouch.html('<h2 class="page-title">Thank you for your message</h2><br /><h2>I will send reply to your e-mail address as soon as I am online.</h2>').slideDown(800)
@@ -528,20 +524,17 @@ var App = {
      						else{}
     					}
 
-						//Highlighting the captcha if its wrong
-						if (data.returndata.hiddencaptcha !== data.returndata.captcha)
- 						{	
+						// highlighting the reCaptcha area
+						if (data.returndata.reCaptcha === 'error') {
  							//resetting Captcha validation
-							$('#captchaContainer').text(getRandomInt(0,10)+'+'+getRandomInt(0,10)+' is equal to?');
-							$('#hiddencaptcha').val(calculatecaptcha());
-							//highlighting the input for captcha
- 							$('input[name="captcha"]', $getInTouch ).addClass('error').val('');
+							$('#captchaContainer').addClass('error');
  						}
 
  						if ( data.sendgridError ) {
  							//check if there is already an error for sendgrid or not
- 							( !$('.sendgridError', $getInTouch ).length ) && ( $getInTouch.append('<h2 class="sendgridError clear">Ooops, seems like there is an error with the app, please call me instead</h2>').find('.sendgridError').hide().slideDown(800) );
+ 							( !$('.sendgridError', $getInTouch ).length ) && ( $getInTouch.append('<h2 class="sendgridError clear">Ooops, seems like there is an error with the Sendgrid API, please call me instead</h2>').find('.sendgridError').hide().slideDown(800) );
  						}
+ 						// maybe Sendgrid was returnin an error but now it's ok so we neew to remove the error div that we appended before
  						else if ( !data.sendgridError ) {
  							//check if there is already an error for sendgrid or not
  							( $('.sendgridError', $getInTouch ).length ) && ( $getInTouch.find('.sendgridError').remove() );
@@ -551,21 +544,6 @@ var App = {
 				}
 			});
 		});
-
-		function calculatecaptcha() {
-  			var elem = $('#captchaContainer'),
-  				text = elem.text(),
-  				numbers = text.split('+'),
-  				sum = parseInt(numbers[0])+parseInt(numbers[1]);
-  			return sum;
-		}
-
-		function getRandomInt(min, max) {
-  			return Math.floor(Math.random() * (max - min + 1)) + min;
-		}
-
-		$('#captchaContainer').text(getRandomInt(0,10)+'+'+getRandomInt(0,10)+' is equal to?');
-		$('#hiddencaptcha').val(calculatecaptcha());
 
 		$('input,textarea').on('keyup paste textchange',function () {
 			($(this).hasClass('error')) && ($(this).removeClass('error'))

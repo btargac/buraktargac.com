@@ -361,10 +361,11 @@
 					<input type="text" name="email" value="" placeholder="Email *" spellcheck="false">
 					<input type="text" name="company" value="" placeholder="Company" spellcheck="false">
 					<textarea name="message" placeholder="Message *" spellcheck="false"></textarea>
-						<div class="col" id="captchaContainer"></div>
-						<input type="hidden" id="hiddencaptcha" name="hiddencaptcha" value="">
-						<div class="col"><input type="text" name="captcha" value="" placeholder="Security code *"></div>
-						<div class="col"><button type="submit">Send</button></div>
+					<div class="col" id="captchaContainer">
+						<!-- google reCAPTCHA will be loaded here from the router by the middleware-->
+						<%- captcha %>
+					</div>
+					<div class="col right"><button type="submit">Send</button></div>
 				</form>
 			</div>
 			<div class="text">

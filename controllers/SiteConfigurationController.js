@@ -1,11 +1,11 @@
 var SiteConfiguration = require('../models/SiteConfiguration');
 
 
-SiteController = function (app, mongoose, config) {
+SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
 
     var SiteConfiguration = mongoose.model('SiteConfiguration');
 
-    app.get("/", function(req, res, next) {
+    app.get("/", recaptcha.middleware.render, function(req, res, next) {
         SiteConfiguration.findOne({}, function(err, data) {
             res.render("index", {
                 //these parameters can vary accourding to your sites needs
@@ -16,7 +16,8 @@ SiteController = function (app, mongoose, config) {
                 lilink: data.lilink,
                 ytlink: data.ytlink,
                 portfolios: data.portfolios,
-                testimonials: data.testimonials
+                testimonials: data.testimonials,
+                captcha: req.recaptcha
             });
         });   
     });

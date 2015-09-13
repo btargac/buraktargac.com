@@ -17,7 +17,14 @@ var fs = require('fs'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
+    recaptcha = require('express-recaptcha'),
     mongoose = require('mongoose');
+
+// init reCAPTCHA
+recaptcha.init(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA_SECRET, {
+  theme: 'dark',
+  hl: 'en'
+});
 
 // Database
 var mongoose = utils.connectToDatabase(mongoose, config.db);
@@ -51,7 +58,7 @@ require('./models/User')(mongoose);
 // Register Controllers and routes
 var controllerPath = path.join(__dirname, '/controllers');
 fs.readdirSync( controllerPath ).forEach( function ( file ) {
-    if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongoose, config, sendgrid );
+    if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongoose, config, sendgrid, recaptcha );
 });
 
 // catch 404 and forward to error handler
