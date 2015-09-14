@@ -173,10 +173,16 @@ This file contains all styles for responsive layout
 
 @media only screen and (max-width: 600px) {
 	#portfolio li {width:100%;}
+
+	#contacts .get-in-touch .col.right {
+		clear: both;
+		float: left;
+		margin-left: 0;
+	}
 }
 
 /*----------------------------------------------------*/
-/*	1.	Between 800px and 400px
+/*	1.	Between 0 and 400px
 /*----------------------------------------------------*/
 @media only screen and (max-width: 400px) {
 	
@@ -200,7 +206,21 @@ This file contains all styles for responsive layout
 	
 	.laptop {width:320px;height:185px;}
 	
-	.wrap.youtube-wrap {display:none;left:0;bottom:0;top:auto;margin:0;}
+	.wrap.youtube-wrap {
+		display: none;
+		left: 0;
+		bottom: 0;
+		top: auto;
+		margin: 0;
+	}
+	
 	#youtube-controls h2, #youtube-controls h3 {display:none;}
+	
 	#youtube-controls {margin:0;}
+
+	#contacts .get-in-touch .col.right {
+		clear: both;
+		float: left;
+		margin-left: 0;
+	}
 }

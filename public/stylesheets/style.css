@@ -1172,6 +1172,7 @@ section.page {
 #contacts .get-in-touch .col#captchaContainer {
   margin-left: 0;
   width: auto;
+  max-width: 66%;
 }
 #contacts .get-in-touch .col.right {
   float: right;

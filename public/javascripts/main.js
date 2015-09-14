@@ -527,6 +527,7 @@ var App = {
 						// highlighting the reCaptcha area
 						if (data.returndata.reCaptcha === 'error') {
  							//resetting Captcha validation
+ 							grecaptcha.reset();
 							$('#captchaContainer').addClass('error');
  						}
 
