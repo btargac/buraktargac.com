@@ -1,3 +1,6 @@
 node_modules
 /config/runtime.json
 .idea
+
+# temp files
+.DS_Store
