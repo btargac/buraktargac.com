@@ -1177,6 +1177,9 @@ section.page {
 #contacts .get-in-touch .col.right {
   float: right;
 }
+#contacts .get-in-touch button {
+  height: 56px;
+}
 #contacts .get-in-touch button:hover {
   background-color: #fff;
   color: #000;
@@ -1227,7 +1230,6 @@ section.page {
 #contacts .get-in-touch button {
   display: block;
   width: 100%;
-  height: 56px;
   border: 0;
   background-color: #000;
   color: #fff;
