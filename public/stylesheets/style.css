@@ -1148,7 +1148,6 @@ section.page {
 }
 #contacts .get-in-touch {
   position: absolute;
-  top: 0;
   right: 0;
   z-index: 4;
   width: 450px;
@@ -1178,7 +1177,7 @@ section.page {
   float: right;
 }
 #contacts .get-in-touch button {
-  height: 56px;
+  height: 76px;
 }
 #contacts .get-in-touch button:hover {
   background-color: #fff;
