@@ -139,6 +139,14 @@ This file contains all styles for responsive layout
 	#footer .hide-mobile {display:none;}
 	
 	#map {height:540px;}
+
+	#contacts .g-recaptcha > div > div {
+		max-width: 100%;
+	}
+
+	#contacts .g-recaptcha > div > div > iframe {
+		max-width: 100%;
+	}
 	
 	.post .vimeo-frame {height:175px;}
 	
@@ -175,8 +183,7 @@ This file contains all styles for responsive layout
 	#portfolio li {width:100%;}
 
 	#contacts .get-in-touch .col.right {
-		clear: both;
-		float: left;
+		float: right;
 		margin-left: 0;
 	}
 }
@@ -219,8 +226,15 @@ This file contains all styles for responsive layout
 	#youtube-controls {margin:0;}
 
 	#contacts .get-in-touch .col.right {
-		clear: both;
-		float: left;
+		float: right;
 		margin-left: 0;
+	}
+
+	#contacts .g-recaptcha > div > div {
+		max-width: 100%;
+	}
+
+	#contacts .g-recaptcha > div > div > iframe {
+		max-width: 100%;
 	}
 }
