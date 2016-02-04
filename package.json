@@ -20,6 +20,7 @@
     "mongoose": "4.1.6",
     "morgan": "~1.6.1",
     "multer": "^1.0.1",
+    "newrelic": "^1.25.1",
     "sendgrid": "^1.9.2",
     "serve-favicon": "~2.3.0",
     "stylus": "0.42.3"

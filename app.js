@@ -2,6 +2,8 @@
  * Module dependencies.
  */
 
+require('newrelic');
+
 var fs = require('fs'),
     express = require('express'),
     path = require('path'),
