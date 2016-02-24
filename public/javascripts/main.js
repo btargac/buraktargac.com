@@ -511,7 +511,7 @@ var App = {
 						$('input, textarea', $getInTouch).removeClass('error').val('');
 
 						$getInTouch.slideUp(800,function () {
-							$getInTouch.html('<h2 class="page-title">Thank you for your message</h2><br /><h2>I will reply you e-mailaddres as soon as I get online.</h2>').slideDown(800)
+							$getInTouch.html('<h2 class="page-title">Thank you for your message</h2><br /><h2>I will reply you as soon as I get online.</h2>').slideDown(800)
 						});
 					}else{
 						$('input, textarea', $getInTouch).removeClass('error');
