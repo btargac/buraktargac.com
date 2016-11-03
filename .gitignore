@@ -1,6 +1,7 @@
-node_modules
+node_modules/
 /config/runtime.json
-.idea
+.idea/
+public/stylesheets/style.css
 
 # temp files
 .DS_Store
