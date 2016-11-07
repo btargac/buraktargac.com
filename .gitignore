@@ -5,3 +5,6 @@ public/stylesheets/style.css
 
 # temp files
 .DS_Store
+
+# log outputs
+*.log
