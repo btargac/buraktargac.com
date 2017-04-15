@@ -1,29 +1,29 @@
 {
   "name": "buraktargac",
-  "version": "0.0.2",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "body-parser": "~1.15.0",
+    "body-parser": "~1.17.0",
     "compression": "^1.5.2",
     "config": "^1.15.0",
     "cookie-parser": "~1.4.1",
-    "debug": "~2.2.0",
+    "debug": "~2.6.0",
     "ejs": "1.0.0",
-    "express": "~4.13.1",
+    "express": "~4.15.2",
     "express-recaptcha": "^2.0.0",
     "express-session": "^1.11.3",
     "formidable": "^1.0.17",
     "method-override": "^2.3.5",
-    "mongoose": "4.4.5",
-    "morgan": "~1.7.0",
+    "mongoose": "4.9.4",
+    "morgan": "~1.8.0",
     "multer": "^1.0.1",
     "newrelic": "^1.25.1",
-    "sendgrid": "^2.0.0",
-    "serve-favicon": "~2.3.0",
-    "stylus": "~0.53.0"
+    "sendgrid": "^5.0.0",
+    "serve-favicon": "~2.4.0",
+    "stylus": "~0.54.0"
   },
   "author": {
     "name": "Burak Targaç",
@@ -31,7 +31,7 @@
     "twitter": "burkitargino"
   },
   "engines": {
-    "node": "6.8.1",
-    "npm": "3.10.8"
+    "node": "7.8.0",
+    "npm": "4.2.0"
   }
 }
