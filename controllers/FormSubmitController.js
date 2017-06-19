@@ -41,7 +41,7 @@ FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
                             </body></html>`);
                         var mail = new helper.Mail(fromEmail, subject, toEmail, content);
 
-                        var request = sg.emptyRequest({
+                        var request = sendgrid.emptyRequest({
                             method: 'POST',
                             path: '/v3/mail/send',
                             body: mail.toJSON()
