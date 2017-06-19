@@ -77,7 +77,9 @@ FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
                 else {
 
                     // reCaptcha error
-                    res.send({success: false, returndata: {
+                    res.send({
+                        success: false,
+                        returndata: {
                             reCaptcha: 'error',
                             err: error
                         }
