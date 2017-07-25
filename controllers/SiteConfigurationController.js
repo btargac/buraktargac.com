@@ -35,7 +35,7 @@ SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
                     return curr;
                 }, null);
 
-                //render the portfolio template with the required data coming from the mapped results
+                //render the portfolio template with the required data coming from the filtered results
                 res.render("portfolio", {
                     portfolio: result
                 });
