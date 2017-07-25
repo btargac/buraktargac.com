@@ -28,7 +28,7 @@ recaptcha.init(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA_SECRET, {
 });
 
 // Database
-var mongoose = utils.connectToDatabase(mongoose, config.db);
+var mongooseInstance = utils.connectToDatabase(mongoose, config.db);
 var app = express();
 
 // view engine setup
@@ -53,13 +53,13 @@ app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Defining models
-require('./models/SiteConfiguration')(mongoose);
-require('./models/User')(mongoose);
+require('./models/SiteConfiguration')(mongooseInstance);
+require('./models/User')(mongooseInstance);
 
 // Register Controllers and routes
 var controllerPath = path.join(__dirname, '/controllers');
 fs.readdirSync( controllerPath ).forEach( function ( file ) {
-    if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongoose, config, sendgrid, recaptcha );
+    if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongooseInstance, config, sendgrid, recaptcha );
 });
 
 // catch 404 and forward to error handler
