@@ -7,21 +7,21 @@
   },
   "dependencies": {
     "body-parser": "~1.17.0",
-    "compression": "^1.5.2",
+    "compression": "^1.7.0",
     "config": "^1.15.0",
     "cookie-parser": "~1.4.1",
     "debug": "~2.6.0",
     "ejs": "1.0.0",
     "express": "~4.15.2",
     "express-recaptcha": "^2.0.0",
-    "express-session": "^1.11.3",
+    "express-session": "^1.15.4",
     "formidable": "^1.0.17",
     "method-override": "^2.3.5",
-    "mongoose": "4.10.6",
+    "mongoose": "^4.11.4",
     "morgan": "~1.8.0",
     "multer": "^1.0.1",
-    "newrelic": "^1.25.1",
-    "sendgrid": "^5.0.0",
+    "newrelic": "^2.0.0",
+    "sendgrid": "^5.2.0",
     "serve-favicon": "~2.4.0",
     "stylus": "~0.54.0"
   },
@@ -31,7 +31,7 @@
     "twitter": "burkitargino"
   },
   "engines": {
-    "node": "8.1.x",
+    "node": "8.2.x",
     "npm": "5.0.x"
   }
 }
