@@ -1,6 +1,3 @@
-var SiteConfiguration = require('../models/SiteConfiguration');
-
-
 SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
 
     var SiteConfiguration = mongoose.model('SiteConfiguration');
@@ -31,14 +28,16 @@ SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
             if (err) {
                 res.send({error:true, result: false, message: "Error occured: " + err});
             } else if (data) {
-                var result = data.portfolios.map(function(portfolio) {
-                    if (portfolio.detailPageUrl == id) {
-                        //render the portfolio template with the required data coming from the mapped results
-                        res.render("portfolio", {
-                            portfolio: portfolio
-                        });
+                
+                var result = data.portfolios.filter(function(portfolio) {
+                    return portfolio.detailPageUrl === id;
+                }).reduce(function (prev, curr) {
+                    return curr;
+                }, null);
 
-                    }                 
+                //render the portfolio template with the required data coming from the mapped results
+                res.render("portfolio", {
+                    portfolio: result
                 });
                 
             } else {
