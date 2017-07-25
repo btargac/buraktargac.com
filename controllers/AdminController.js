@@ -1,7 +1,4 @@
-var SiteConfiguration = require('../models/SiteConfiguration'),
-    User = require('../models/User'),
-    formidable = require('formidable');
-
+var formidable = require('formidable');
 
 AdminController = function (app, mongoose, config, sendgrid, recaptcha) {
 
@@ -10,8 +7,8 @@ AdminController = function (app, mongoose, config, sendgrid, recaptcha) {
 
     app.get("/admin", function(req, res, next) {
         res.render("admin", {
-                        title: 'Login Page'
-                    });   
+            title: 'Login Page'
+        });
     });
 
     app.post("/login", function(req, res, next) {

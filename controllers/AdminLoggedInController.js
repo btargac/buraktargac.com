@@ -1,9 +1,6 @@
-var SiteConfiguration = require('../models/SiteConfiguration'),
-    User = require('../models/User'),
-    path = require('path'),
+var path = require('path'),
     fs = require('fs'),
     formidable = require('formidable');
-
 
 AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha) {
 
@@ -11,17 +8,18 @@ AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha) 
         User = mongoose.model('User'),
         base64data = [];
 
-        
     app.get("/adminloggedin", function(req, res, next) {
-        if(req.session.user)
-        SiteConfiguration.findOne({}, function(err, data) {
-            res.render("adminloggedin", {
-                //these parameters can vary accourding to your sites needs
-                data:data
+        if(req.session.user){
+            SiteConfiguration.findOne({}, function(err, data) {
+                res.render("adminloggedin", {
+                    //these parameters can vary according to your sites needs
+                    data:data
+                });
             });
-        });
-        else
+        }
+        else {
             res.redirect('/admin');
+        }
     });
 
     app.post("/siteconf/create", function(req, res, next) {
@@ -31,6 +29,7 @@ AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha) 
         form.parse(req, function(err, fields, files) {
 
             var siteConfiguration = new SiteConfiguration(fields);
+
             siteConfiguration.save(function(err) {
                 if (err) {
                     res.json({error:true, result: false, message: "Error occured: " + err});
@@ -59,7 +58,6 @@ AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha) 
                         author: fields.author,
                         text: fields.text
                     });
-
 
                     data.save(function(err) {
                         if (err) {
@@ -128,7 +126,6 @@ AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha) 
         var tmp_path,
             type,
             file;
-
 
         var form = new formidable.IncomingForm();
 
