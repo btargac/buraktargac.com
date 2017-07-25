@@ -678,11 +678,11 @@ App.portfolio = {
 								
 									$('#portfolio-box .inner').fadeIn();
 
-									$('#portfolio-box').css('overflow-y', 'scroll');
+									$('#portfolio-box').css('overflow-y', 'auto');
 
 									$('#portfolio-box').find('.spinner').css('opacity', 0);
 
-									App.owlCarousel();	
+									App.owlCarousel();
 								}
 								else if (data.error) {
 									App.portfolio.close();
