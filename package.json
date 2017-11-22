@@ -1,6 +1,6 @@
 {
   "name": "buraktargac",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -31,7 +31,7 @@
     "twitter": "burkitargino"
   },
   "engines": {
-    "node": "8.2.x",
-    "npm": "5.3.x"
+    "node": "9.2.x",
+    "npm": "5.5.x"
   }
 }
