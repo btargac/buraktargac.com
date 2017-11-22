@@ -1,6 +1,6 @@
 SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
 
-    var SiteConfiguration = mongoose.model('SiteConfiguration');
+    const SiteConfiguration = mongoose.model('SiteConfiguration');
 
     app.get("/", recaptcha.middleware.render, function(req, res, next) {
         SiteConfiguration.findOne({}, function(err, data) {
@@ -22,7 +22,7 @@ SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
 
     app.get("/portfolio/:id", function(req, res, next) {
         
-        var id = req.params.id;
+        const id = req.params.id;
         
         SiteConfiguration.findOne({'portfolios.detailPageUrl': id}, function(err, data) {
                 
@@ -30,7 +30,7 @@ SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
                 res.send({error:true, result: false, message: "Error occured: " + err});
             } else if (data) {
                 
-                var result = data.portfolios.filter(function(portfolio) {
+                const result = data.portfolios.filter(function(portfolio) {
                     return portfolio.detailPageUrl === id;
                 }).reduce(function (prev, curr) {
                     return curr;
