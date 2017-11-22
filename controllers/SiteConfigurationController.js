@@ -7,6 +7,7 @@ SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
             res.render("index", {
                 //these parameters can vary accourding to your sites needs
                 title: data.title,
+                githublink: data.githublink,
                 fblink: data.fblink,
                 twlink: data.twlink,
                 gplink: data.gplink,

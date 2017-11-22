@@ -252,6 +252,7 @@ AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha) 
                     res.json({error:true, result: false, message: "Error occured: " + err});
                 } else {
                     data.title = fields.title;
+                    data.githublink = fields.githublink;
                     data.fblink = fields.fblink;
                     data.twlink = fields.twlink;
                     data.gplink = fields.gplink;
