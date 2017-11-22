@@ -15,7 +15,7 @@ SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
                 ytlink: data.ytlink,
                 portfolios: data.portfolios,
                 testimonials: data.testimonials,
-                captcha: req.recaptcha
+                captcha: res.recaptcha
             });
         });   
     });
