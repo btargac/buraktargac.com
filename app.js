@@ -2,7 +2,7 @@
  * Module dependencies.
  */
 
-var newrelic = require('newrelic'),
+const newrelic = require('newrelic'),
     fs = require('fs'),
     express = require('express'),
     path = require('path'),
@@ -18,18 +18,19 @@ var newrelic = require('newrelic'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
-    recaptcha = require('express-recaptcha'),
+    Recaptcha = require('express-recaptcha'),
     mongoose = require('mongoose');
 
 // init reCAPTCHA
-recaptcha.init(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA_SECRET, {
-  theme: 'dark',
-  hl: 'en'
+
+const recaptcha = new Recaptcha(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA_SECRET, {
+    theme: 'dark',
+    hl: 'en'
 });
 
 // Database
-var mongooseInstance = utils.connectToDatabase(mongoose, config.db);
-var app = express();
+const mongooseInstance = utils.connectToDatabase(mongoose, config.db);
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -57,14 +58,14 @@ require('./models/SiteConfiguration')(mongooseInstance);
 require('./models/User')(mongooseInstance);
 
 // Register Controllers and routes
-var controllerPath = path.join(__dirname, '/controllers');
+const controllerPath = path.join(__dirname, '/controllers');
 fs.readdirSync( controllerPath ).forEach( function ( file ) {
     if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongooseInstance, config, sendgrid, recaptcha );
 });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
