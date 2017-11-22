@@ -31,7 +31,7 @@
     "twitter": "burkitargino"
   },
   "engines": {
-    "node": "9.2.x",
+    "node": "9.0.x",
     "npm": "5.5.x"
   }
 }
