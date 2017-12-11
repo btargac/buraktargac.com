@@ -16,7 +16,6 @@ const newrelic = require('newrelic'),
     logger = require('morgan'),
     compression = require('compression'),
     cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
     session = require('express-session'),
     Recaptcha = require('express-recaptcha'),
     mongoose = require('mongoose');
@@ -38,7 +37,7 @@ app.set('view engine', 'ejs');
 app.use(favicon(path.join(__dirname, 'public/img/favicon.png')));
 app.use(compression());
 app.use(logger('dev'));
-app.use(bodyParser.json({
+app.use(express.json({
     extended: true,
     keepExtensions: true,
     uploadDir: path.join(__dirname, '/public/img/portfolio'),
