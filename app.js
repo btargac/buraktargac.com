@@ -17,11 +17,10 @@ const newrelic = require('newrelic'),
     compression = require('compression'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
-    Recaptcha = require('express-recaptcha'),
+    Recaptcha = require('express-recaptcha').Recaptcha,
     mongoose = require('mongoose');
 
 // init reCAPTCHA
-
 const recaptcha = new Recaptcha(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA_SECRET, {
     theme: 'dark',
     hl: 'en'
