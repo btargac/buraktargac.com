@@ -10,8 +10,6 @@ const newrelic = require('newrelic'),
     utils = require('./lib/utils'),
     ENV = process.env.NODE_ENV || 'development',
     sendgrid  = require('sendgrid')(process.env.SENDGRID_API_KEY),
-    multer = require('multer'),
-    methodOverride = require('method-override'),
     favicon = require('serve-favicon'),
     logger = require('morgan'),
     compression = require('compression'),
@@ -26,8 +24,19 @@ const recaptcha = new Recaptcha(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA
     hl: 'en'
 });
 
-// Database
-const mongooseInstance = utils.connectToDatabase(mongoose, config.db);
+// Database connection
+utils.connectToDatabase(mongoose, config.db);
+
+const db = mongoose.connection;
+
+db.on('error', (err) => {
+    console.error('MongoDB connection error:', err);
+});
+
+db.once('open', () => {
+    console.info('connected to mongodb');
+});
+
 const app = express();
 
 // view engine setup
@@ -52,13 +61,13 @@ app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Defining models
-require('./models/SiteConfiguration')(mongooseInstance);
-require('./models/User')(mongooseInstance);
+require('./models/SiteConfiguration')(mongoose);
+require('./models/User')(mongoose);
 
 // Register Controllers and routes
 const controllerPath = path.join(__dirname, '/controllers');
 fs.readdirSync( controllerPath ).forEach( function ( file ) {
-    if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongooseInstance, config, sendgrid, recaptcha );
+    if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongoose, config, sendgrid, recaptcha );
 });
 
 // catch 404 and forward to error handler
@@ -83,7 +92,7 @@ if (app.get('env') === 'development') {
 }
 
 // production error handler
-// no stacktraces leaked to user
+// no stacktrace leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
