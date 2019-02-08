@@ -17,6 +17,7 @@ const newrelic = require('newrelic'),
     memjs = require('memjs'),
     MemcachedStore = require('connect-memjs')(session),
     Recaptcha = require('express-recaptcha').Recaptcha,
+    redirectSSL = require('redirect-ssl'),
     mongoose = require('mongoose');
 
 const mc = memjs.Client.create(process.env.MEMCACHIER_SERVERS, {
@@ -45,6 +46,9 @@ db.once('open', () => {
 });
 
 const app = express();
+
+// middleware to enforce https
+app.use(redirectSSL);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

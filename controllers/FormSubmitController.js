@@ -38,7 +38,7 @@ FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha, mc) {
                             <p><span style="${textStyle}">Message: ${data.message}</span></p>
                             <p><em><span style="${textStyle}">Kindly Regards.</span></em></p>
                             <hr /><p><span style="${textStyle}">Burak Targaç</span></p>
-                            <p><span style="${textStyle}"><a href="http://www.buraktargac.com" target="_blank" style="text-decoration:none;"><span style="color:#FF8C00;">www.buraktargac.com</span></a></span></p>
+                            <p><span style="${textStyle}"><a href="https://www.buraktargac.com" target="_blank" style="text-decoration:none;"><span style="color:#FF8C00;">www.buraktargac.com</span></a></span></p>
                             </body></html>`);
                         const mail = new helper.Mail(fromEmail, subject, toEmail, content);
 
