@@ -13,10 +13,17 @@ const newrelic = require('newrelic'),
     favicon = require('serve-favicon'),
     logger = require('morgan'),
     compression = require('compression'),
-    cookieParser = require('cookie-parser'),
     session = require('express-session'),
+    memjs = require('memjs'),
+    MemcachedStore = require('connect-memjs')(session),
     Recaptcha = require('express-recaptcha').Recaptcha,
     mongoose = require('mongoose');
+
+const mc = memjs.Client.create(process.env.MEMCACHIER_SERVERS, {
+    failover: true,
+    timeout: 1,
+    keepAlive: true
+});
 
 // init reCAPTCHA
 const recaptcha = new Recaptcha(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA_SECRET, {
@@ -51,11 +58,14 @@ app.use(express.json({
     uploadDir: path.join(__dirname, '/public/img/portfolio'),
     limit: '2mb'
   }));
-app.use(cookieParser('buraktargac'));
 app.use(session({
     secret: 'buraktargac',
-    saveUninitialized: true,
-    resave: true
+    resave: 'false',
+    saveUninitialized: 'false',
+    store: new MemcachedStore({
+        servers: [process.env.MEMCACHIER_SERVERS],
+        prefix: '_session_'
+    })
 }));
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -67,7 +77,7 @@ require('./models/User')(mongoose);
 // Register Controllers and routes
 const controllerPath = path.join(__dirname, '/controllers');
 fs.readdirSync( controllerPath ).forEach( function ( file ) {
-    if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongoose, config, sendgrid, recaptcha );
+    if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongoose, config, sendgrid, recaptcha, mc );
 });
 
 // catch 404 and forward to error handler

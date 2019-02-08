@@ -1,26 +1,47 @@
-SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
+const cacheViewFactory = require('../middlewares/cache.middleware');
+const _generateResponseData = (res, data) => ({
+    title: data.title,
+    githublink: data.githublink,
+    fblink: data.fblink,
+    twlink: data.twlink,
+    gplink: data.gplink,
+    lilink: data.lilink,
+    ytlink: data.ytlink,
+    portfolios: data.portfolios,
+    testimonials: data.testimonials,
+    captcha: res.recaptcha
+});
+
+SiteController = function (app, mongoose, config, sendgrid, recaptcha, mc) {
 
     const SiteConfiguration = mongoose.model('SiteConfiguration');
 
     app.get("/", recaptcha.middleware.render, function(req, res, next) {
-        SiteConfiguration.findOne({}, function(err, data) {
-            res.render("index", {
-                //these parameters can vary accourding to your sites needs
-                title: data.title,
-                githublink: data.githublink,
-                fblink: data.fblink,
-                twlink: data.twlink,
-                gplink: data.gplink,
-                lilink: data.lilink,
-                ytlink: data.ytlink,
-                portfolios: data.portfolios,
-                testimonials: data.testimonials,
-                captcha: res.recaptcha
-            });
-        });   
+
+        const cache_key = '_db_cache_SiteConfiguration';
+
+        // Look in cache
+        mc.get(cache_key, function(err, data) {
+            if(!err && data) {
+                res.render('index', _generateResponseData(res, JSON.parse(data)));
+            }
+            else {
+                SiteConfiguration.findOne({}, function(err, data) {
+
+                    // this mongo request takes long time so the result should be cached
+                    mc.set(cache_key, JSON.stringify(data), {expires: 0}, function(err, val){
+                        if(err) {
+                            console.log('err occurred while caching the mongo db response', err);
+                        }
+                    });
+
+                    res.render('index', _generateResponseData(res, data));
+                });
+            }
+        })
     });
 
-    app.get("/portfolio/:id", function(req, res, next) {
+    app.get("/portfolio/:id", cacheViewFactory(mc), function(req, res, next) {
         
         const id = req.params.id;
         
@@ -42,7 +63,7 @@ SiteController = function (app, mongoose, config, sendgrid, recaptcha) {
                 });
                 
             } else {
-                res.send({error:true, result: false, message: "Error occured: " + err});
+                res.send({error:true, result: false, message: "Error occurred: " + err});
             }
         });
   

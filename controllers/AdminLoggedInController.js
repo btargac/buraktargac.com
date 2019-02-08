@@ -2,7 +2,7 @@ var path = require('path'),
     fs = require('fs'),
     formidable = require('formidable');
 
-AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha) {
+AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha, mc) {
 
     var SiteConfiguration = mongoose.model('SiteConfiguration'),
         User = mongoose.model('User'),

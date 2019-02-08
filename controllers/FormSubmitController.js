@@ -1,7 +1,7 @@
 var formidable = require('formidable');
 var helper = require('sendgrid').mail;
 
-FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
+FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha, mc) {
 
     app.post("/submitform", function(req, res, next) {
 
@@ -23,25 +23,26 @@ FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
 
                         //sendgrid integration
 
-                        var fromEmail = new helper.Email('btargac@gmail.com');
-                        var toEmail = new helper.Email('btargac@gmail.com');
-                        var subject = 'Buraktargac.com Web Form Message';
-                        var content = new helper.Content('text/html', `<html><head><title></title></head><body>
-                            <p><span style="font-family:verdana,geneva,sans-serif;">Hello <strong>Burak</strong>,</span></p>
-                            <p><span style="font-family:verdana,geneva,sans-serif;">This message is sent to you from buraktargac.com, it seems that someone is interested in your contact form.</span></p>
-                            <p><span style="font-family:verdana,geneva,sans-serif;">Here are the details of incoming message.</span></p>
-                            <p><span style="font-family:verdana,geneva,sans-serif;"></span></p>
-                            <p><span style="font-family:verdana,geneva,sans-serif;">Name: ${data.name}</span></p>
-                            <p><span style="font-family:verdana,geneva,sans-serif;">Email: ${data.email}</span></p>
-                            <p><span style="font-family:verdana,geneva,sans-serif;">Company: ${data.company}</span></p>
-                            <p><span style="font-family:verdana,geneva,sans-serif;">Message: ${data.message}</span></p>
-                            <p><em><span style="font-family:verdana,geneva,sans-serif;">Kindly Regards.</span></em></p>
-                            <hr /><p><span style="font-family:verdana,geneva,sans-serif;">Burak Targaç</span></p>
-                            <p><span style="font-family:verdana,geneva,sans-serif;"><a href="http://www.buraktargac.com" target="_blank" style="text-decoration:none;"><span style="color:#FF8C00;">www.buraktargac.com</span></a></span></p>
+                        const fromEmail = new helper.Email('btargac@gmail.com');
+                        const toEmail = new helper.Email('btargac@gmail.com');
+                        const subject = 'Buraktargac.com Web Form Message';
+                        const textStyle = 'font-family:verdana,geneva,sans-serif;';
+                        const content = new helper.Content('text/html', `<html><head><title></title></head><body>
+                            <p><span style="${textStyle}">Hello <strong>Burak</strong>,</span></p>
+                            <p><span style="${textStyle}">This message is sent to you from buraktargac.com, it seems that someone is interested in your contact form.</span></p>
+                            <p><span style="${textStyle}">Here are the details of incoming message.</span></p>
+                            <p><span style="${textStyle}"></span></p>
+                            <p><span style="${textStyle}">Name: ${data.name}</span></p>
+                            <p><span style="${textStyle}">Email: ${data.email}</span></p>
+                            <p><span style="${textStyle}">Company: ${data.company}</span></p>
+                            <p><span style="${textStyle}">Message: ${data.message}</span></p>
+                            <p><em><span style="${textStyle}">Kindly Regards.</span></em></p>
+                            <hr /><p><span style="${textStyle}">Burak Targaç</span></p>
+                            <p><span style="${textStyle}"><a href="http://www.buraktargac.com" target="_blank" style="text-decoration:none;"><span style="color:#FF8C00;">www.buraktargac.com</span></a></span></p>
                             </body></html>`);
-                        var mail = new helper.Mail(fromEmail, subject, toEmail, content);
+                        const mail = new helper.Mail(fromEmail, subject, toEmail, content);
 
-                        var request = sendgrid.emptyRequest({
+                        const request = sendgrid.emptyRequest({
                             method: 'POST',
                             path: '/v3/mail/send',
                             body: mail.toJSON()

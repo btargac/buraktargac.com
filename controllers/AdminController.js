@@ -1,6 +1,6 @@
 var formidable = require('formidable');
 
-AdminController = function (app, mongoose, config, sendgrid, recaptcha) {
+AdminController = function (app, mongoose, config, sendgrid, recaptcha, mc) {
 
     var SiteConfiguration = mongoose.model('SiteConfiguration');
     var User = mongoose.model('User');
