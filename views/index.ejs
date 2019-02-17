@@ -116,9 +116,9 @@
 			<div class="inner">
 				<ul id="rb-grid" class="list rb-grid clearfix">
 					
-					<% portfolios.forEach(function(portfolio,index){ %>
+					<% portfolios.forEach(function(portfolio, index){ %>
 					<li class="<%= ( index < 4 ) ? '' : 'hidden' %>">
-						<a class="item" href="<%= portfolio.detailPageUrl %>">
+						<a class="item" href="<%= '/portfolio/' + portfolio.detailPageUrl %>">
 							<img src="<%= portfolio.detailPageImages[0] %>" alt="">
 							<div class="over">
 								<h2 class="page-title"><%= portfolio.company %><span class="border"></span></h2>

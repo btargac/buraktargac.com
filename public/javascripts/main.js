@@ -668,7 +668,7 @@ App.portfolio = {
 					onComplete : function() {
 						
 						$.ajax({
-							url: '/portfolio/'+c.attr('href'),
+							url: c.attr('href'),
 							context: document.body,
 							success: function(data) {
 								
@@ -688,8 +688,6 @@ App.portfolio = {
 									App.portfolio.close();
 								}
 
-								
-								
 							}
 						});
 					}
