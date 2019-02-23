@@ -323,12 +323,16 @@ var App = {
 	
 					$portfolio.addClass('ajaxed');
 				
-					$('.inner', $portfolio).animate({'height': $portfolio.height() + $('.item', $portfolio).height()}, 900, 'easeInOutQuint', function() {
+					$('.inner', $portfolio).animate(
+						{
+							height: $portfolio.height() + $('.item', $portfolio).height()
+						}, 900, 'easeInOutQuint', function() {
 						//$('li.hidden', $portfolio).slideDown('400');
 						$portfolio.height('auto');
 						
 						$('li.hidden', $portfolio).each(function(index) {
 							var $this = $(this);
+
 							if(index<=3) {
 								setTimeout(function() {
 									$this.slideDown('400').removeClass('hidden');
@@ -347,16 +351,6 @@ var App = {
 				}
 			});
 
-			// $.ajax({
-			// 	url: 'html/_portfolio.html',
-			// 	context: document.body,
-			// 	success: function(data) {
-					
-			// 		//the events were here before i editted the code, but we don't need to get the data via ajax anymore
-			// 		//because its already in the dom but just hidden with a hidden class.
-					
-			// 	}
-			// });
 		}
 		else{
 			$('.more', $portfolio).hide();
@@ -591,24 +585,25 @@ App.portfolio = {
 	},
 	
 	bind: function() {
-		
-		$("#portfolio").on("click", '.item', function() {
-			if($("html").hasClass("open") || App.portfolio.open($(this))) {
+
+		$("#portfolio").on('click', '.item', function () {
+			if ($('html').hasClass('open') || App.portfolio.open($(this))) {
 				return true;
-			}
-			else {
+			} else {
 				return false;
 			}
 		});
 		
-		$(document).on("click", ".close-project", function() {
+		$(document).on('click', '.close-project', function() {
 			App.portfolio.close();
 		});
 
-		$(document).on("click", ".next-project,.prev-project", function() {
+		$(document).on('click', '.next-project,.prev-project', function() {
 			App.portfolio.close();
+
 			$this=$(this);
 			$portfolioSwitcher = $('.activeItem');
+
 			setTimeout(function() {
 				($this.hasClass('prev-project')) && $portfolioSwitcher.closest('li').prev('li').find('a.item').trigger('click');
 				($this.hasClass('next-project')) && $portfolioSwitcher.closest('li').next('li').find('a.item').trigger('click');
@@ -674,13 +669,18 @@ App.portfolio = {
 								
 								if (!data.error) {
 
-									$('#portfolio-box .inner').empty().append(data);
+									gtag('config', 'UA-3627721-7', {'page_path': c.attr('href')});
+
+									var innerBox = $('#portfolio-box .inner'),
+										box = $('#portfolio-box');
+
+									innerBox.empty().append(data);
 								
-									$('#portfolio-box .inner').fadeIn();
+									innerBox.fadeIn();
 
-									$('#portfolio-box').css('overflow-y', 'auto');
+									box.css('overflow-y', 'auto');
 
-									$('#portfolio-box').find('.spinner').css('opacity', 0);
+									box.find('.spinner').css('opacity', 0);
 
 									App.owlCarousel();
 								}
@@ -754,6 +754,9 @@ App.portfolio = {
 						}, 300);
 					}
 				});
+
+				gtag('config', 'UA-3627721-7', {'page_path': '/'});
+
 			});
 		}
 	}
