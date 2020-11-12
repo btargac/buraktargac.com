@@ -33,22 +33,23 @@ const recaptcha = new Recaptcha(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA
 });
 
 // Database connection
-utils.connectToDatabase(mongoose, config.db);
+utils.connectToDatabase(mongoose, config.db).then(connection => {
 
-const db = mongoose.connection;
+    connection.on('error', (err) => {
+        console.error('MongoDB connection error:', err);
+    });
 
-db.on('error', (err) => {
-    console.error('MongoDB connection error:', err);
-});
-
-db.once('open', () => {
-    console.info('connected to mongodb');
+    connection.once('open', () => {
+        console.info('connected to mongodb');
+    });
 });
 
 const app = express();
 
 // middleware to enforce https
-app.use(redirectSSL);
+app.use(redirectSSL.create({
+    enabled: process.env.NODE_ENV === 'production'
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -81,7 +82,9 @@ require('./models/User')(mongoose);
 // Register Controllers and routes
 const controllerPath = path.join(__dirname, '/controllers');
 fs.readdirSync( controllerPath ).forEach( function ( file ) {
-    if ( ~file.indexOf( "Controller.js" ) ) require( controllerPath + "/" + file )( app, mongoose, config, sendgrid, recaptcha, mc );
+    if ( file.includes("Controller.js") ) {
+        require( controllerPath + "/" + file )( app, mongoose, config, sendgrid, recaptcha, mc );
+    }
 });
 
 // catch 404 and forward to error handler
