@@ -1,11 +1,9 @@
-var path = require('path'),
-    fs = require('fs'),
+var fs = require('fs'),
     formidable = require('formidable');
 
-AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha, mc) {
+AdminLoggedInController = function (app, mongoose) {
 
     var SiteConfiguration = mongoose.model('SiteConfiguration'),
-        User = mongoose.model('User'),
         base64data = [];
 
     app.get("/adminloggedin", function(req, res, next) {
@@ -85,7 +83,6 @@ AdminLoggedInController = function (app, mongoose, config, sendgrid, recaptcha, 
                 if (err) {
                     res.json({error:true, result: false, message: "Error occured: " + err});
                 } else {
-
                     res.json({error:false, result: true, message: "Testimonial successfully removed."});
                 }
             });

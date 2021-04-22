@@ -1,7 +1,7 @@
 var formidable = require('formidable');
 var helper = require('sendgrid').mail;
 
-FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha, mc) {
+FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
 
     app.post("/submitform", function(req, res, next) {
 
@@ -58,9 +58,6 @@ FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha, mc) {
                                 });
                             }
 
-                            console.log(response.statusCode);
-                            console.log(response.body);
-                            console.log(response.headers);
                             res.send({
                                 success: true,
                                 returndata: response,

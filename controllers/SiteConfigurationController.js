@@ -16,7 +16,7 @@ SiteController = function (app, mongoose, config, sendgrid, recaptcha, mc) {
 
     const SiteConfiguration = mongoose.model('SiteConfiguration');
 
-    app.get("/", recaptcha.middleware.render, function(req, res, next) {
+    app.get("/", recaptcha.middleware.render, function(req, res) {
 
         const cache_key = '_db_cache_SiteConfiguration';
 
@@ -41,7 +41,7 @@ SiteController = function (app, mongoose, config, sendgrid, recaptcha, mc) {
         })
     });
 
-    app.get("/portfolio/:id", cacheViewFactory(mc), function(req, res, next) {
+    app.get("/portfolio/:id", cacheViewFactory(mc), function(req, res) {
         
         const id = req.params.id;
         

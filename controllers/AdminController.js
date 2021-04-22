@@ -1,23 +1,22 @@
 var formidable = require('formidable');
 
-AdminController = function (app, mongoose, config, sendgrid, recaptcha, mc) {
+AdminController = function (app, mongoose) {
 
-    var SiteConfiguration = mongoose.model('SiteConfiguration');
     var User = mongoose.model('User');
 
-    app.get("/admin", function(req, res, next) {
+    app.get("/admin", function(req, res) {
         res.render("admin", {
             title: 'Login Page'
         });
     });
 
-    app.post("/login", function(req, res, next) {
+    app.post("/login", function(req, res) {
 
         var form = new formidable.IncomingForm(),
             username,
             password;
 
-        form.parse(req, function(err, fields, files) {
+        form.parse(req, function(err, fields) {
             username = fields.username;
             password = fields.password;
 
