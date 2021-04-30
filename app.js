@@ -48,6 +48,7 @@ const app = express();
 
 // middleware to enforce https
 app.use(redirectSSL.create({
+    exclude: ['localhost'],
     enabled: process.env.NODE_ENV === 'production'
 }));
 
