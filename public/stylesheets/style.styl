@@ -4,6 +4,10 @@ $orangeText = #ef6661;
 $grayText = #929292;
 
 // -----------------------------------------------------
+body,html {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+}
 
 body {
   #carousel {
@@ -27,11 +31,6 @@ body {
       }
     }
   }
-}
-
-body,html {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
 }
 
 a {
@@ -113,7 +112,7 @@ section {
 }
 
 .hidden {
-  display: none
+  display: none;
 }
 
 .page-title {
@@ -258,10 +257,12 @@ section {
   0% { 
     transform: perspective(120px) rotateX(0deg) rotateY(0deg);
     -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
-  } 50% { 
+  }
+  50% {
     transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
     -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
-  } 100% { 
+  }
+  100% {
     transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
     -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
   }
@@ -277,7 +278,6 @@ section {
   top: 0;
   height: 100%;
   overflow: hidden;
-  height: 300px;
   .carousel-holder {
     position: absolute;
     display: block;
@@ -299,15 +299,6 @@ section {
   .bg-img-2 {
     background-image: url(../img/carousel/slide-2.jpg);
   }
-  .bg-img-3 {
-    background-image: url(../img/carousel/slide-3.jpg);
-  }
-  .bg-img-4 {
-    background-image: url(../img/carousel/slide-11.jpg);
-  }
-  .bg-img-5 {
-    background-image: url(../img/carousel/slide-333.jpg);
-  }
 }
 
 .prev {
@@ -323,7 +314,7 @@ section {
   left: 150px;
   width: 41px;
   height: 81px;
-  z-index: 100000;
+  z-index: 10000;
 }
 
 .next {
@@ -339,7 +330,7 @@ section {
   right: 150px;
   width: 41px;
   height: 81px;
-  z-index: 100000;
+  z-index: 10000;
 }
 
 .prev:hover, .next:hover {
@@ -353,6 +344,7 @@ section {
 .slide-text {
   position: relative;
   top: 0;
+
   li {
     height: 21px;
     line-height: 25px;
@@ -367,20 +359,17 @@ section {
   background-image: url(../img/pattern.png);
   position: absolute;
   opacity: 0.8;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   right: 0;
   bottom: 0;
-  width: 100%;
-  height: 100%;
   z-index: 1;
 }
 
 .main-text {
+  color: #ededed;
   position: absolute;
   top: 50%;
-  margin-top: -55px;
-  width: 100%;
   font-family: 'Raleway', sans-serif;
   text-shadow: 0 0 15px rgba(0,0,0,0.3);
   text-transform: uppercase;
@@ -388,15 +377,15 @@ section {
   font-weight: 700;
   font-size: 70px;
   line-height: 70px;
-  color: #ededed;
+  transform: translateY(-50%);
+  width: 100%;
   z-index: 20;
 }
 
 .sub-text {
+  color: #fff;
   position: absolute;
   top: 50%;
-  margin-top: 30px;
-  width: 100%;
   height: 21px;
   overflow: hidden;
   font-family: 'Raleway', sans-serif;
@@ -406,7 +395,8 @@ section {
   font-weight: 400;
   font-size: 20px;
   line-height: 20px;
-  color: #fff;
+  transform: translateY(35px);
+  width: 100%;
   z-index: 20;
 }
 
@@ -440,19 +430,6 @@ section {
   90% { bottom:50px; }
   100% { bottom:40px; }
 }
-@-webkit-keyframes arrows {
-  0% { bottom:40px; }
-  10% { bottom:50px; }
-  20% { bottom:40px; }
-  30% { bottom:50px; }
-  40% { bottom:30px; }
-  50% { bottom:50px; }
-  60% { bottom:40px; }
-  70% { bottom:50px; }
-  80% { bottom:30px; }
-  90% { bottom:50px; }
-  100% { bottom:40px; }
-}
 
 .scroll-btn {
   -webkit-animation: arrows 3.8s infinite;
@@ -461,7 +438,6 @@ section {
   animation-delay: 1s;
   cursor: pointer;
 }
-
 
 
 //Customers
