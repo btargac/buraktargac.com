@@ -112,12 +112,12 @@
 		
 		<section id="portfolio">
 			<div class="inner">
-				<ul id="rb-grid" class="list rb-grid clearfix">
+				<ul class="clearfix">
 					
 					<% portfolios.forEach(function(portfolio, index){ %>
 					<li class="<%= ( index < 4 ) ? '' : 'hidden' %>">
 						<a class="item" href="<%= '/portfolio/' + portfolio.detailPageUrl %>">
-							<img src="<%= portfolio.detailPageImages[0] %>" alt="">
+							<img src="<%= portfolio.detailPageImages[0] %>" alt="<%= portfolio.company %>" loading="lazy" decoding="async">
 							<div class="over">
 								<h2 class="page-title"><%= portfolio.company %><span class="border"></span></h2>
 								<h3 class="page-subtitle">
