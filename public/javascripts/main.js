@@ -53,41 +53,6 @@ var App = {
 			App.screens();
 		}
 		
-		// i don't need facts about me right now
-		// if($('.facts').is_on_screen()) {
-		// 	App.facts();
-		// }
-		
-	},
-	
-	coreValues: function() {
-		
-		$('.core-values li').each(function(index) {
-			var $this = $(this);
-			setTimeout(function() {
-				$('.core', $this).delay(index * 100).addClass('rotate');
-			}, index * 100);
-		});
-		
-	},
-	
-	customers: function() {
-		
-		$('.customers li').each(function(index) {
-			$(this).delay(index * 100).animate({'opacity': 1}, 1300);
-		});
-		
-	},
-	
-	facts: function() {
-		
-		var $eleNumber;
-		
-		$('.facts li:not(.break)').each(function() {
-			$eleNumber = $(this).find('strong');
-			$eleNumber.animateNumbers($eleNumber.attr('data-number'));
-		});
-		
 	},
 	
 	screens: function() {
@@ -157,10 +122,11 @@ var App = {
 	},
 	
 	sliderInit: function() {
+		const carouselElement = $('#carousel');
+
+		carouselElement.height($(window).height());
 		
-		$('#carousel').height($(window).height());
-		
-		if($('#carousel').length) {
+		if(carouselElement.length) {
 			$.mbBgndGallery.buildGallery({
 				containment:"#carousel",
 				timer:2000,
@@ -500,22 +466,18 @@ var App = {
 				success: function(data) {
 					
 					if(data.success) {
-						var $captchaImage = $('.captcha-img', $getInTouch);
-						
 						$('input, textarea', $getInTouch).removeClass('error').val('');
 
 						$getInTouch.slideUp(800,function () {
 							$getInTouch.html('<h2 class="page-title">Thanks for your message</h2><br /><h2>I will reply as soon as I get online.</h2>').slideDown(800)
 						});
-					}else{
+					} else {
 						$('input, textarea', $getInTouch).removeClass('error');
 						
-						for (key in data.returndata) {
-     						if (data.returndata[key] === null || data.returndata[key] === 'undefined' || data.returndata[key] === '')
-     						{	
+						for (const value of Object.values(data.returndata)) {
+     						if (!value) {
      							$('input[name="' + key + '"]:not("[name=company]"), textarea[name="' + key + '"]', $getInTouch ).addClass('error');
      						}
-     						else{}
     					}
 
 						// highlighting the reCaptcha area
@@ -565,14 +527,6 @@ var App = {
 				
 			}
 		});
-	},
-	
-	mobileMenu: function() {
-		
-		if($('#navigation').hasClass('visible')) {
-			$('#navigation').removeClass('visible');
-		}
-		
 	},
 };
 

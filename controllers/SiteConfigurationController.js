@@ -4,7 +4,6 @@ const _generateResponseData = (res, data) => ({
     githublink: data.githublink,
     fblink: data.fblink,
     twlink: data.twlink,
-    gplink: data.gplink,
     lilink: data.lilink,
     ytlink: data.ytlink,
     portfolios: data.portfolios,

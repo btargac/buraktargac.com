@@ -45,10 +45,6 @@ module.exports = mongoose => {
             type: String,
             required: true
         },
-        gplink: {
-            type: String,
-            required: true
-        },
         lilink: {
             type: String,
             required: true

@@ -252,7 +252,6 @@ AdminLoggedInController = function (app, mongoose) {
                     data.githublink = fields.githublink;
                     data.fblink = fields.fblink;
                     data.twlink = fields.twlink;
-                    data.gplink = fields.gplink;
                     data.lilink = fields.lilink;
                     data.ytlink = fields.ytlink;
                     data.portfolio = fields.portfolio;
