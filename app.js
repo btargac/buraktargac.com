@@ -2,8 +2,7 @@
  * Module dependencies.
  */
 
-const newrelic = require('newrelic'),
-    fs = require('fs'),
+const fs = require('fs'),
     express = require('express'),
     path = require('path'),
     config = require('config'),
@@ -49,7 +48,7 @@ const app = express();
 // middleware to enforce https
 app.use(redirectSSL.create({
     exclude: ['localhost'],
-    enabled: process.env.NODE_ENV === 'production'
+    enabled: ENV === 'production'
 }));
 
 // view engine setup
@@ -99,7 +98,7 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+if (ENV === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
