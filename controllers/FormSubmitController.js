@@ -1,17 +1,17 @@
-var formidable = require('formidable');
-var helper = require('sendgrid').mail;
+const formidable = require('formidable');
+const helper = require('sendgrid').mail;
 
-FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
+const FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
 
     app.post("/submitform", function(req, res, next) {
 
-        var form = new formidable.IncomingForm(),
-            data;
+        const form = new formidable.IncomingForm();
 
-        form.parse(req, function(err, fields, files) {
-            data = fields;
-            // req.body is an empty object because of the formidable module so we need to set body's recaptcha response manually before
-            // validating it with the express-recaptcha module
+        form.parse(req, function(err, fields) {
+            let data = fields;
+
+            // req.body is an empty object because of the formidable module so we need to set body's recaptcha response
+            // manually before validating it with the express-recaptcha module
             req.body['g-recaptcha-response'] = data['g-recaptcha-response'];
 
             recaptcha.verify(req, function(error){
@@ -23,7 +23,7 @@ FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
 
                         //sendgrid integration
 
-                        const fromEmail = new helper.Email('btargac@gmail.com');
+                        const fromEmail = new helper.Email('hello@buraktargac.com');
                         const toEmail = new helper.Email('btargac@gmail.com');
                         const subject = 'Buraktargac.com Web Form Message';
                         const textStyle = 'font-family:verdana,geneva,sans-serif;';
@@ -50,17 +50,17 @@ FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
 
                         sendgrid.API(request, function (error, response) {
                             if (error) {
-                                console.log('Error response received');
-                                return res.send({
+                                console.log('Error response received', error);
+                                return res.json({
                                     success: false,
-                                    returndata: error,
+                                    data: error,
                                     sendgridError: true
                                 });
                             }
 
-                            res.send({
+                            res.json({
                                 success: true,
-                                returndata: response,
+                                data: response,
                                 sendgridError: false
                             });
                         });
@@ -68,16 +68,16 @@ FormSubmitter = function (app, mongoose, config, sendgrid, recaptcha) {
                     }
 
                     else{
-                        res.send({success: false, returndata: data});
+                        res.json({success: false, data: data});
                     }
                 }
 
                 else {
 
                     // reCaptcha error
-                    res.send({
+                    res.json({
                         success: false,
-                        returndata: {
+                        data: {
                             reCaptcha: 'error',
                             err: error
                         }

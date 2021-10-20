@@ -463,9 +463,9 @@ var App = {
 				type: $getInTouch.attr('method'),
 				dataType: 'json',
 				data: $getInTouch.serialize(),
-				success: function(data) {
+				success: function(response) {
 					
-					if(data.success) {
+					if(response.success) {
 						$('input, textarea', $getInTouch).removeClass('error').val('');
 
 						$getInTouch.slideUp(800,function () {
@@ -474,26 +474,26 @@ var App = {
 					} else {
 						$('input, textarea', $getInTouch).removeClass('error');
 						
-						for (const value of Object.values(data.returndata)) {
+						for (const value of Object.values(response.data)) {
      						if (!value) {
      							$('input[name="' + key + '"]:not("[name=company]"), textarea[name="' + key + '"]', $getInTouch ).addClass('error');
      						}
     					}
 
 						// highlighting the reCaptcha area
-						if (data.returndata.reCaptcha === 'error') {
- 							//resetting Captcha validation
+						if (response.data.reCaptcha === 'error') {
+ 							// reset Captcha validation
  							grecaptcha.reset();
 							$('#captchaContainer').addClass('error');
  						}
 
- 						if ( data.sendgridError ) {
- 							//check if there is already an error for sendgrid or not
+ 						if ( response.sendgridError ) {
+ 							// check if there is already an error for sendgrid or not
  							( !$('.sendgridError', $getInTouch ).length ) && ( $getInTouch.append('<h2 class="sendgridError clear">Ooops, seems like there is an error with the Sendgrid API, please call me instead</h2>').find('.sendgridError').hide().slideDown(800) );
  						}
- 						// maybe Sendgrid was returnin an error but now it's ok so we neew to remove the error div that we appended before
- 						else if ( !data.sendgridError ) {
- 							//check if there is already an error for sendgrid or not
+ 						// maybe Sendgrid was returning an error but now it's ok so we need to remove the error div that we appended before
+ 						else if ( !response.sendgridError ) {
+ 							// check if there is already an error for sendgrid or not
  							( $('.sendgridError', $getInTouch ).length ) && ( $getInTouch.find('.sendgridError').remove() );
  						}
 
