@@ -29,7 +29,7 @@ const mc = memjs.Client.create(process.env.MEMCACHIER_SERVERS, {
 const recaptcha = new Recaptcha(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA_SECRET, {
     theme: 'dark',
     hl: 'en',
-    callback: 'cb'
+    callback: 'App.recaptchaCallback'
 });
 
 // Database connection

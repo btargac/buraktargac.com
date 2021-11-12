@@ -507,6 +507,16 @@ var App = {
 		});
 		
 	},
+
+	recaptchaCallback: (token) => {
+		const $getInTouch = $('.get-in-touch form');
+		const input = document.createElement('input');
+
+		input.setAttribute('type', 'hidden');
+		input.setAttribute('name', 'g-recaptcha-response');
+		input.setAttribute('value', token);
+		$getInTouch.append(input);
+	},
 	
 	anchorScroll: function() {
 		
