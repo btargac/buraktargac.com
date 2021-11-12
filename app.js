@@ -15,7 +15,7 @@ const fs = require('fs'),
     session = require('express-session'),
     memjs = require('memjs'),
     MemcachedStore = require('connect-memjs')(session),
-    Recaptcha = require('express-recaptcha').Recaptcha,
+    Recaptcha = require('express-recaptcha').RecaptchaV3,
     redirectSSL = require('redirect-ssl'),
     mongoose = require('mongoose');
 
@@ -28,7 +28,8 @@ const mc = memjs.Client.create(process.env.MEMCACHIER_SERVERS, {
 // init reCAPTCHA
 const recaptcha = new Recaptcha(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA_SECRET, {
     theme: 'dark',
-    hl: 'en'
+    hl: 'en',
+    callback: 'cb'
 });
 
 // Database connection
