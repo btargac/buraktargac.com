@@ -452,7 +452,7 @@ var App = {
 	
 	getInTouch: function() {
 		
-		var $getInTouch = $('.get-in-touch form');
+		const $getInTouch = $('.get-in-touch form');
 		
 		$('button', $getInTouch).bind('click', function(e) {
 			
@@ -473,10 +473,11 @@ var App = {
 						});
 					} else {
 						$('input, textarea', $getInTouch).removeClass('error');
-						
-						for (const value of Object.values(response.data)) {
-     						if (!value) {
-     							$('input[name="' + key + '"]:not("[name=company]"), textarea[name="' + key + '"]', $getInTouch ).addClass('error');
+						const requiredFields = ['name', 'email', 'message'];
+
+						for (const [key,value] of Object.entries(response.data)) {
+     						if (!value && requiredFields.includes(key)) {
+     							$(`input[name="${key}"], textarea[name="${key}"]`, $getInTouch ).addClass('error');
      						}
     					}
 
