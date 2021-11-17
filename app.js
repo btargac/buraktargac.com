@@ -1,11 +1,7 @@
-/**
- * Module dependencies.
- */
-
 const fs = require('fs'),
     express = require('express'),
     path = require('path'),
-    config = require('config'),
+    dotenv = require('dotenv'),
     utils = require('./lib/utils'),
     ENV = process.env.NODE_ENV || 'development',
     sendgrid  = require('sendgrid')(process.env.SENDGRID_API_KEY),
@@ -15,9 +11,12 @@ const fs = require('fs'),
     session = require('express-session'),
     memjs = require('memjs'),
     MemcachedStore = require('connect-memjs')(session),
-    Recaptcha = require('express-recaptcha').RecaptchaV3,
+    { RecaptchaEnterpriseServiceClient } = require('@google-cloud/recaptcha-enterprise'),
     redirectSSL = require('redirect-ssl'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    recaptchaRoute = require('./routes/recaptcha-validation');
+
+const {parsed: config} = dotenv.config();
 
 const mc = memjs.Client.create(process.env.MEMCACHIER_SERVERS, {
     failover: true,
@@ -25,15 +24,22 @@ const mc = memjs.Client.create(process.env.MEMCACHIER_SERVERS, {
     keepAlive: true
 });
 
-// init reCAPTCHA
-const recaptcha = new Recaptcha(process.env.reCAPTCHA_KEY, process.env.reCAPTCHA_SECRET, {
-    theme: 'dark',
-    hl: 'en',
-    callback: 'App.recaptchaCallback'
+// create and init reCAPTCHA client
+const client = new RecaptchaEnterpriseServiceClient({
+    credentials: {
+        client_email: process.env.GOOGLE_RECAPTCHA_EMAIL,
+        // https://github.com/auth0/node-jsonwebtoken/issues/642#issuecomment-585173594
+        private_key: process.env.GOOGLE_RECAPTCHA_PRIVATE_KEY.replace(/\\n/gm, '\n')
+    },
+    projectId: process.env.GOOGLE_RECAPTCHA_PROJECT_ID,
 });
 
+// since using commonjs module system instead of es6 modules we cannot use await in the top level
+// await client.initialize();
+client.initialize();
+
 // Database connection
-utils.connectToDatabase(mongoose, config.db).then(connection => {
+utils.connectToDatabase(mongoose, config).then(connection => {
 
     connection.on('error', (err) => {
         console.error('MongoDB connection error:', err);
@@ -55,6 +61,11 @@ app.use(redirectSSL.create({
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.set('captcha', {
+    client: client,
+    key: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
+    projectId: process.env.GOOGLE_RECAPTCHA_PROJECT_ID
+});
 app.use(favicon(path.join(__dirname, 'public/img/favicon.png')));
 app.use(compression());
 app.use(logger('dev'));
@@ -84,9 +95,11 @@ require('./models/User')(mongoose);
 const controllerPath = path.join(__dirname, '/controllers');
 fs.readdirSync( controllerPath ).forEach( function ( file ) {
     if ( file.includes("Controller.js") ) {
-        require( controllerPath + "/" + file )( app, mongoose, config, sendgrid, recaptcha, mc );
+        require( controllerPath + "/" + file )( app, mongoose, config, sendgrid, mc );
     }
 });
+// recaptcha validation router
+app.use('/recaptcha-validation', recaptchaRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,8 +1,8 @@
-var formidable = require('formidable');
+const formidable = require('formidable');
 
 AdminController = function (app, mongoose) {
 
-    var User = mongoose.model('User');
+    const User = mongoose.model('User');
 
     app.get("/admin", function(req, res) {
         res.render("admin", {
@@ -12,7 +12,7 @@ AdminController = function (app, mongoose) {
 
     app.post("/login", function(req, res) {
 
-        var form = new formidable.IncomingForm(),
+        let form = new formidable.IncomingForm(),
             username,
             password;
 
@@ -22,8 +22,8 @@ AdminController = function (app, mongoose) {
 
             User.findOne({username: username, password: password}, function(err, userInfo) {
                 if (err) {
-                    res.status(500);
-                    res.send('500', {
+                    res.status(500)
+                        .send({
                         err: err,
                         url: req.url
                     });

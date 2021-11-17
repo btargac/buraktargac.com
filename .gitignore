@@ -1,5 +1,4 @@
 node_modules/
-/config/runtime.json
 .idea/
 public/stylesheets/style.css
 
@@ -8,3 +7,6 @@ public/stylesheets/style.css
 
 # log outputs
 *.log
+
+# environment variables
+*.env

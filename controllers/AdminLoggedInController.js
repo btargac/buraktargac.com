@@ -1,9 +1,9 @@
-var fs = require('fs'),
-    formidable = require('formidable');
+const fs = require('fs');
+const formidable = require('formidable');
 
-AdminLoggedInController = function (app, mongoose) {
+AdminLoggedInController = (app, mongoose) => {
 
-    var SiteConfiguration = mongoose.model('SiteConfiguration'),
+    let SiteConfiguration = mongoose.model('SiteConfiguration'),
         base64data = [];
 
     app.get("/adminloggedin", function(req, res, next) {
@@ -30,7 +30,7 @@ AdminLoggedInController = function (app, mongoose) {
 
             siteConfiguration.save(function(err) {
                 if (err) {
-                    res.json({error:true, result: false, message: "Error occured: " + err});
+                    res.json({error:true, result: false, message: "Error occurred: " + err});
                 } else {
                     res.json({error:false, result: true, message: "Successfully created!"});
                 }
@@ -49,7 +49,7 @@ AdminLoggedInController = function (app, mongoose) {
             SiteConfiguration.findOne({_id: fields._id}, function(err, data) {
 
                 if (err) {
-                    res.json({error:true, result: false, message: "Error occured: " + err});
+                    res.json({error:true, result: false, message: "Error occurred: " + err});
                 } else {
 
                     data.testimonials.push({
@@ -59,7 +59,7 @@ AdminLoggedInController = function (app, mongoose) {
 
                     data.save(function(err) {
                         if (err) {
-                            res.json({error:true, result: false, message: "Error occured: " + err});
+                            res.json({error:true, result: false, message: "Error occurred: " + err});
                         }
                         else {
                             res.json({error:false, result: true, message: "Testimonial successfully added."});

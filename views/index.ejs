@@ -37,6 +37,14 @@
 	<!-- google maps api -->
 	<script async src="//maps.googleapis.com/maps/api/js?key=AIzaSyBw1vOGi1FAeVvn0PYW7qRyC_wZpLExbGE" type="text/javascript"></script>
 
+	<!-- google recaptcha api -->
+	<script src="//www.google.com/recaptcha/enterprise.js?render=<%= recaptchaKey %>"></script>
+	<script>
+		// define this variable in order to reach from any js context
+		// var is used intentional not to have it scoped within this script tags
+		var GOOGLE_RECAPTCHA_SITE_KEY = '<%= recaptchaKey %>';
+	</script>
+
 </head>
 
 <body>
@@ -389,8 +397,7 @@
 					<input type="text" name="company" value="" placeholder="Company" spellcheck="false">
 					<textarea name="message" placeholder="Message *" spellcheck="false"></textarea>
 					<div class="col" id="captchaContainer">
-						<!-- google reCAPTCHA will be loaded here from the router by the middleware-->
-						<%- captcha %>
+					<!-- Google reCAPTCHA will be loaded here by means of running recaptcha methods on the client side -->
 					</div>
 					<div class="col right"><button type="submit">Send</button></div>
 				</form>
