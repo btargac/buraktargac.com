@@ -1,7 +1,7 @@
 const fs = require('fs'),
     express = require('express'),
     path = require('path'),
-    dotenv = require('dotenv'),
+    dotenv = require('dotenv').config(),
     utils = require('./lib/utils'),
     ENV = process.env.NODE_ENV || 'development',
     sendgrid  = require('sendgrid')(process.env.SENDGRID_API_KEY),
@@ -15,8 +15,6 @@ const fs = require('fs'),
     redirectSSL = require('redirect-ssl'),
     mongoose = require('mongoose'),
     recaptchaRoute = require('./routes/recaptcha-validation');
-
-const {parsed: config} = dotenv.config();
 
 const mc = memjs.Client.create(process.env.MEMCACHIER_SERVERS, {
     failover: true,
@@ -38,10 +36,8 @@ const client = new RecaptchaEnterpriseServiceClient({
 // await client.initialize();
 client.initialize();
 
-// TODO: remove below line after seeing on prod
-console.log('config', config);
 // Database connection
-utils.connectToDatabase(mongoose, config).then(connection => {
+utils.connectToDatabase(mongoose).then(connection => {
 
     connection.on('error', (err) => {
         console.error('MongoDB connection error:', err);
@@ -97,7 +93,7 @@ require('./models/User')(mongoose);
 const controllerPath = path.join(__dirname, '/controllers');
 fs.readdirSync( controllerPath ).forEach( function ( file ) {
     if ( file.includes("Controller.js") ) {
-        require( controllerPath + "/" + file )( app, mongoose, config, sendgrid, mc );
+        require( controllerPath + "/" + file )( app, mongoose, sendgrid, mc );
     }
 });
 // recaptcha validation router

@@ -1,15 +1,12 @@
 const formidable = require('formidable');
 const helper = require('sendgrid').mail;
 
-const FormSubmitter = function (app, mongoose, config, sendgrid) {
+const FormSubmitter = function (app, mongoose, sendgrid) {
 
-    app.post("/submitform", function(req, res, next) {
-
+    app.post("/submitform", (req, res) => {
         const form = new formidable.IncomingForm();
 
-        form.parse(req, function(err, fields) {
-            let data = fields;
-
+        form.parse(req, function(err, data) {
             //validation must be improved
             if(data.name && data.email && data.message) {
 

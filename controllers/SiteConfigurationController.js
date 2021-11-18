@@ -11,7 +11,7 @@ const _generateResponseData = data => ({
     recaptchaKey: data.recaptchaKey
 });
 
-SiteController = function (app, mongoose, config, sendgrid, mc) {
+SiteController = function (app, mongoose, sendgrid, mc) {
 
     const SiteConfiguration = mongoose.model('SiteConfiguration');
 
@@ -27,7 +27,7 @@ SiteController = function (app, mongoose, config, sendgrid, mc) {
             else {
                 try {
                     const siteData = await SiteConfiguration.findOne().lean();
-                    const enhancedData = {...siteData, recaptchaKey: config.GOOGLE_RECAPTCHA_SITE_KEY}
+                    const enhancedData = {...siteData, recaptchaKey: process.env.GOOGLE_RECAPTCHA_SITE_KEY}
 
                     // this mongo request takes long time so the result should be cached
                     mc.set(cache_key, JSON.stringify(enhancedData),
