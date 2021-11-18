@@ -451,13 +451,6 @@ var App = {
 	},
 	
 	getInTouch: function() {
-
-		grecaptcha.enterprise.ready(function() {
-			grecaptcha.enterprise.render('captchaContainer', {
-				'sitekey' : GOOGLE_RECAPTCHA_SITE_KEY,
-			});
-		});
-		
 		const $getInTouch = $('.get-in-touch form');
 		
 		$('button', $getInTouch).bind('click', function(e) {
@@ -546,6 +539,15 @@ var App = {
 			($(this).hasClass('error')) && ($(this).removeClass('error'))
 		});
 		
+	},
+
+	// called from index.ejs async script load callback
+	recaptchaLoadCallback: () => {
+		grecaptcha.enterprise.ready(() => {
+			grecaptcha.enterprise.render('captchaContainer', {
+				'sitekey' : GOOGLE_RECAPTCHA_SITE_KEY,
+			});
+		});
 	},
 	
 	anchorScroll: function() {

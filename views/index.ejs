@@ -38,12 +38,12 @@
 	<script async src="//maps.googleapis.com/maps/api/js?key=AIzaSyBw1vOGi1FAeVvn0PYW7qRyC_wZpLExbGE" type="text/javascript"></script>
 
 	<!-- google recaptcha api -->
-	<script src="//www.google.com/recaptcha/enterprise.js?render=<%= recaptchaKey %>"></script>
 	<script>
 		// define this variable in order to reach from any js context
 		// var is used intentional not to have it scoped within this script tags
 		var GOOGLE_RECAPTCHA_SITE_KEY = '<%= recaptchaKey %>';
 	</script>
+	<script src="https://www.google.com/recaptcha/enterprise.js?onload=App.recaptchaLoadCallback&render=explicit" async defer></script>
 
 </head>
 
