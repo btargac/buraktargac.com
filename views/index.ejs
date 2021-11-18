@@ -42,8 +42,17 @@
 		// define this variable in order to reach from any js context
 		// var is used intentional not to have it scoped within this script tags
 		var GOOGLE_RECAPTCHA_SITE_KEY = '<%= recaptchaKey %>';
+
+		var recaptchaLoadCallback = () => {
+			grecaptcha.enterprise.ready(() => {
+				grecaptcha.enterprise.render('captchaContainer', {
+					sitekey: GOOGLE_RECAPTCHA_SITE_KEY,
+					theme: 'dark'
+				});
+			});
+		};
 	</script>
-	<script src="https://www.google.com/recaptcha/enterprise.js?onload=App.recaptchaLoadCallback&render=explicit" async defer></script>
+	<script src="https://www.google.com/recaptcha/enterprise.js?onload=recaptchaLoadCallback&render=explicit" async defer></script>
 
 </head>
 

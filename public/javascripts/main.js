@@ -453,86 +453,79 @@ var App = {
 	getInTouch: function() {
 		const $getInTouch = $('.get-in-touch form');
 		
-		$('button', $getInTouch).bind('click', function(e) {
+		$('button', $getInTouch).bind('click', async function(e) {
 			
 			e.preventDefault();
+			const token = $('#g-recaptcha-response').val();
 
-			let action = 'form_submit';
+			let payload = {
+				token: token,
+				action: 'submit-form',
+			}
 
-			grecaptcha.enterprise.ready(() => {
-				grecaptcha.enterprise
-					.execute(GOOGLE_RECAPTCHA_SITE_KEY, {action: action})
-					.then(async token => {
-						let payload = {
-							token: token,
-							action: action,
-						}
+			try {
+				const response =  await fetch('/recaptcha-validation', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(payload)
+				});
 
-						try {
-							const response =  await fetch('/recaptcha-validation', {
-								method: 'POST',
-								headers: {
-									'Content-Type': 'application/json'
-								},
-								body: JSON.stringify(payload)
-							});
+				if (response.status === 200) {
+					// request succeeded
+					// start sending data via ajax
+					// TODO: get rid of ajax calls and switch to fetch instead
+					$.ajax({
+						url: $getInTouch.attr('action'),
+						type: $getInTouch.attr('method'),
+						dataType: 'json',
+						data: $getInTouch.serialize(),
+						success: function(response) {
 
-							if (response.status === 200) {
-								// request succeeded
-								// start sending data via ajax
-								// TODO: get rid of ajax calls and switch to fetch instead
-								$.ajax({
-									url: $getInTouch.attr('action'),
-									type: $getInTouch.attr('method'),
-									dataType: 'json',
-									data: $getInTouch.serialize(),
-									success: function(response) {
+							if(response.success) {
+								$('input, textarea', $getInTouch).removeClass('error').val('');
 
-										if(response.success) {
-											$('input, textarea', $getInTouch).removeClass('error').val('');
-
-											$getInTouch.slideUp(800,function () {
-												$getInTouch.html('<h2 class="page-title">Thanks for your message</h2><br /><h2>I will reply as soon as I get online.</h2>').slideDown(800)
-											});
-										} else {
-											$('input, textarea', $getInTouch).removeClass('error');
-											const requiredFields = ['name', 'email', 'message'];
-
-											for (const [key,value] of Object.entries(response.data)) {
-												if (!value && requiredFields.includes(key)) {
-													$(`input[name="${key}"], textarea[name="${key}"]`, $getInTouch ).addClass('error');
-												}
-											}
-
-											if ( response.sendgridError ) {
-												// check if there is already an error for sendgrid or not
-												( !$('.sendgridError', $getInTouch ).length ) && ( $getInTouch.append('<h2 class="sendgridError clear">Ooops, seems like there is an error with the Sendgrid API, please call me instead</h2>').find('.sendgridError').hide().slideDown(800) );
-											}
-											// maybe Sendgrid was returning an error but now it's ok so we need to remove the error div that we appended before
-											else if ( !response.sendgridError ) {
-												// check if there is already an error for sendgrid or not
-												( $('.sendgridError', $getInTouch ).length ) && ( $getInTouch.find('.sendgridError').remove() );
-											}
-
-										}
-									}
+								$getInTouch.slideUp(800,function () {
+									$getInTouch.html('<h2 class="page-title">Thanks for your message</h2><br /><h2>I will reply as soon as I get online.</h2>').slideDown(800)
 								});
-								// end ajax operation and callbacks
 							} else {
-								const data = await response.json();
-								
-								if (data) {
-									// server request fail
-									console.error('data', data);
-									$('#captchaContainer').addClass('error');
+								$('input, textarea', $getInTouch).removeClass('error');
+								const requiredFields = ['name', 'email', 'message'];
+
+								for (const [key,value] of Object.entries(response.data)) {
+									if (!value && requiredFields.includes(key)) {
+										$(`input[name="${key}"], textarea[name="${key}"]`, $getInTouch ).addClass('error');
+									}
 								}
+
+								if ( response.sendgridError ) {
+									// check if there is already an error for sendgrid or not
+									( !$('.sendgridError', $getInTouch ).length ) && ( $getInTouch.append('<h2 class="sendgridError clear">Ooops, seems like there is an error with the Sendgrid API, please call me instead</h2>').find('.sendgridError').hide().slideDown(800) );
+								}
+								// maybe Sendgrid was returning an error but now it's ok so we need to remove the error div that we appended before
+								else if ( !response.sendgridError ) {
+									// check if there is already an error for sendgrid or not
+									( $('.sendgridError', $getInTouch ).length ) && ( $getInTouch.find('.sendgridError').remove() );
+								}
+
 							}
-						} catch (error) {
-							// client request fail
-							console.error('recaptcha validation error', error)
 						}
 					});
-			});
+					// end ajax operation and callbacks
+				} else {
+					const data = await response.json();
+
+					if (data) {
+						// server request fail
+						console.error('data', data);
+						$('#captchaContainer').addClass('error');
+					}
+				}
+			} catch (error) {
+				// client request fail
+				console.error('recaptcha validation error', error)
+			}
 		});
 
 		$('input,textarea').on('keyup paste textchange',function () {
@@ -541,15 +534,6 @@ var App = {
 		
 	},
 
-	// called from index.ejs async script load callback
-	recaptchaLoadCallback: () => {
-		grecaptcha.enterprise.ready(() => {
-			grecaptcha.enterprise.render('captchaContainer', {
-				'sitekey' : GOOGLE_RECAPTCHA_SITE_KEY,
-			});
-		});
-	},
-	
 	anchorScroll: function() {
 		
 		$(".anchor").click(function(event) {

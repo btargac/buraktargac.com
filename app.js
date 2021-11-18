@@ -32,10 +32,6 @@ const client = new RecaptchaEnterpriseServiceClient({
     projectId: process.env.GOOGLE_RECAPTCHA_PROJECT_ID,
 });
 
-// since using commonjs module system instead of es6 modules we cannot use await in the top level
-// await client.initialize();
-client.initialize();
-
 // Database connection
 utils.connectToDatabase(mongoose).then(connection => {
 
@@ -61,7 +57,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('captcha', {
     client: client,
-    key: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
+    siteKey: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
     projectId: process.env.GOOGLE_RECAPTCHA_PROJECT_ID
 });
 app.use(favicon(path.join(__dirname, 'public/img/favicon.png')));

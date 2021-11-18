@@ -7,8 +7,6 @@ let routeRecaptcha = async (req, res) => {
             event: {
                 token: req.body.token,
                 siteKey: captcha.siteKey,
-                userAgent: req.headers['user-agent'],
-                userIpAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
                 expectedAction: expectedAction
             }
         },
