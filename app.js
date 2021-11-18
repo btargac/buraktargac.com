@@ -38,6 +38,8 @@ const client = new RecaptchaEnterpriseServiceClient({
 // await client.initialize();
 client.initialize();
 
+// TODO: remove below line after seeing on prod
+console.log('config', config);
 // Database connection
 utils.connectToDatabase(mongoose, config).then(connection => {
 
