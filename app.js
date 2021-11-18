@@ -11,7 +11,6 @@ const fs = require('fs'),
     session = require('express-session'),
     memjs = require('memjs'),
     MemcachedStore = require('connect-memjs')(session),
-    { RecaptchaEnterpriseServiceClient } = require('@google-cloud/recaptcha-enterprise'),
     redirectSSL = require('redirect-ssl'),
     mongoose = require('mongoose'),
     recaptchaRoute = require('./routes/recaptcha-validation');
@@ -20,16 +19,6 @@ const mc = memjs.Client.create(process.env.MEMCACHIER_SERVERS, {
     failover: true,
     timeout: 1,
     keepAlive: true
-});
-
-// create and init reCAPTCHA client
-const client = new RecaptchaEnterpriseServiceClient({
-    credentials: {
-        client_email: process.env.GOOGLE_RECAPTCHA_EMAIL,
-        // https://github.com/auth0/node-jsonwebtoken/issues/642#issuecomment-585173594
-        private_key: process.env.GOOGLE_RECAPTCHA_PRIVATE_KEY.replace(/\\n/gm, '\n')
-    },
-    projectId: process.env.GOOGLE_RECAPTCHA_PROJECT_ID,
 });
 
 // Database connection
@@ -55,11 +44,7 @@ app.use(redirectSSL.create({
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('captcha', {
-    client: client,
-    siteKey: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
-    projectId: process.env.GOOGLE_RECAPTCHA_PROJECT_ID
-});
+
 app.use(favicon(path.join(__dirname, 'public/img/favicon.png')));
 app.use(compression());
 app.use(logger('dev'));

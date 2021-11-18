@@ -1,19 +1,29 @@
-let routeRecaptcha = async (req, res) => {
-    let captcha = req.app.get('captcha');
+const { RecaptchaEnterpriseServiceClient } = require('@google-cloud/recaptcha-enterprise');
 
+// create and init reCAPTCHA client
+const client = new RecaptchaEnterpriseServiceClient({
+    credentials: {
+        client_email: process.env.GOOGLE_RECAPTCHA_EMAIL,
+        // https://github.com/auth0/node-jsonwebtoken/issues/642#issuecomment-585173594
+        private_key: process.env.GOOGLE_RECAPTCHA_PRIVATE_KEY.replace(/\\n/gm, '\n')
+    },
+    projectId: process.env.GOOGLE_RECAPTCHA_PROJECT_ID,
+});
+
+let routeRecaptcha = async (req, res) => {
     const expectedAction = req.body.action;
     const request = {
         assessment: {
             event: {
                 token: req.body.token,
-                siteKey: captcha.siteKey,
+                siteKey: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
                 expectedAction: expectedAction
             }
         },
-        parent: captcha.client.projectPath(captcha.projectId)
+        parent: client.projectPath(process.env.GOOGLE_RECAPTCHA_PROJECT_ID)
     };
 
-    captcha.client.createAssessment(request, (error, response) => {
+    client.createAssessment(request, (error, response) => {
         if (error) {
             // send 500 response here and log the error
             console.error(error);
