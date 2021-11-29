@@ -1,6 +1,6 @@
 /**
  * @name InfoBox
- * @version 1.1.13 [March 19, 2014]
+ * @version 1.1.19 [April 6, 2018]
  * @author Gary Little (inspired by proof-of-concept code from Pamela Fox of Google)
  * @copyright Copyright 2010 Gary Little [gary at luxcentral.com]
  * @fileoverview InfoBox extends the Google Maps JavaScript API V3 <tt>OverlayView</tt> class.
@@ -49,6 +49,7 @@
  *  are removed from the InfoBox before the new style values are applied.
  * @property {string} closeBoxMargin The CSS margin style value for the close box.
  *  The default is "2px" (a 2-pixel margin on all sides).
+ * @property {string} closeBoxTitle The tool tip for the close box. The default is " Close ".
  * @property {string} closeBoxURL The URL of the image representing the close box.
  *  Note: The default is the URL for Google's standard close box.
  *  Set this property to "" if no close box is required.
@@ -98,6 +99,7 @@ function InfoBox(opt_opts) {
     if (opt_opts.closeBoxURL === "") {
         this.closeBoxURL_ = "";
     }
+    this.closeBoxTitle_ = opt_opts.closeBoxTitle || " Close ";
     this.infoBoxClearance_ = opt_opts.infoBoxClearance || new google.maps.Size(1, 1);
 
     if (typeof opt_opts.visible === "undefined") {
@@ -116,7 +118,6 @@ function InfoBox(opt_opts) {
     this.div_ = null;
     this.closeListener_ = null;
     this.moveListener_ = null;
-    this.mapListener_ = null;
     this.contextListener_ = null;
     this.eventListeners_ = null;
     this.fixedWidthSet_ = null;
@@ -251,6 +252,7 @@ InfoBox.prototype.getCloseBoxImg_ = function () {
         img  = "<img";
         img += " src='" + this.closeBoxURL_ + "'";
         img += " align=right"; // Do this because Opera chokes on style='float: right;'
+        img += " title='" + this.closeBoxTitle_ + "'";
         img += " style='";
         img += " position: relative;"; // Required by MSIE
         img += " cursor: pointer;";
@@ -331,44 +333,62 @@ InfoBox.prototype.panBox_ = function (disablePan) {
                 map.setCenter(this.position_);
             }
 
-            bounds = map.getBounds();
-
-            var mapDiv = map.getDiv();
-            var mapWidth = mapDiv.offsetWidth;
-            var mapHeight = mapDiv.offsetHeight;
             var iwOffsetX = this.pixelOffset_.width;
             var iwOffsetY = this.pixelOffset_.height;
             var iwWidth = this.div_.offsetWidth;
             var iwHeight = this.div_.offsetHeight;
             var padX = this.infoBoxClearance_.width;
             var padY = this.infoBoxClearance_.height;
-            var pixPosition = this.getProjection().fromLatLngToContainerPixel(this.position_);
 
-            if (pixPosition.x < (-iwOffsetX + padX)) {
-                xOffset = pixPosition.x + iwOffsetX - padX;
-            } else if ((pixPosition.x + iwWidth + iwOffsetX + padX) > mapWidth) {
-                xOffset = pixPosition.x + iwWidth + iwOffsetX + padX - mapWidth;
-            }
-            if (this.alignBottom_) {
-                if (pixPosition.y < (-iwOffsetY + padY + iwHeight)) {
-                    yOffset = pixPosition.y + iwOffsetY - padY - iwHeight;
-                } else if ((pixPosition.y + iwOffsetY + padY) > mapHeight) {
-                    yOffset = pixPosition.y + iwOffsetY + padY - mapHeight;
+            if (map.panToBounds.length == 2) {
+                // Using projection.fromLatLngToContainerPixel to compute the infowindow position
+                // does not work correctly anymore for JS Maps API v3.32 and above if there is a
+                // previous synchronous call that causes the map to animate (e.g. setCenter when
+                // the position is not within bounds). Hence, we are using panToBounds with
+                // padding instead, which works synchronously.
+                var padding = {left: 0, right: 0, top: 0, bottom: 0};
+                padding.left = -iwOffsetX + padX;
+                padding.right = iwOffsetX + iwWidth + padX;
+                if (this.alignBottom_) {
+                    padding.top = -iwOffsetY + padY + iwHeight;
+                    padding.bottom = iwOffsetY + padY;
+                } else {
+                    padding.top = -iwOffsetY + padY;
+                    padding.bottom = iwOffsetY + iwHeight + padY;
                 }
+                map.panToBounds(new google.maps.LatLngBounds(this.position_), padding);
             } else {
-                if (pixPosition.y < (-iwOffsetY + padY)) {
-                    yOffset = pixPosition.y + iwOffsetY - padY;
-                } else if ((pixPosition.y + iwHeight + iwOffsetY + padY) > mapHeight) {
-                    yOffset = pixPosition.y + iwHeight + iwOffsetY + padY - mapHeight;
+                var mapDiv = map.getDiv();
+                var mapWidth = mapDiv.offsetWidth;
+                var mapHeight = mapDiv.offsetHeight;
+                var pixPosition = this.getProjection().fromLatLngToContainerPixel(this.position_);
+
+                if (pixPosition.x < (-iwOffsetX + padX)) {
+                    xOffset = pixPosition.x + iwOffsetX - padX;
+                } else if ((pixPosition.x + iwWidth + iwOffsetX + padX) > mapWidth) {
+                    xOffset = pixPosition.x + iwWidth + iwOffsetX + padX - mapWidth;
                 }
-            }
+                if (this.alignBottom_) {
+                    if (pixPosition.y < (-iwOffsetY + padY + iwHeight)) {
+                        yOffset = pixPosition.y + iwOffsetY - padY - iwHeight;
+                    } else if ((pixPosition.y + iwOffsetY + padY) > mapHeight) {
+                        yOffset = pixPosition.y + iwOffsetY + padY - mapHeight;
+                    }
+                } else {
+                    if (pixPosition.y < (-iwOffsetY + padY)) {
+                        yOffset = pixPosition.y + iwOffsetY - padY;
+                    } else if ((pixPosition.y + iwHeight + iwOffsetY + padY) > mapHeight) {
+                        yOffset = pixPosition.y + iwHeight + iwOffsetY + padY - mapHeight;
+                    }
+                }
 
-            if (!(xOffset === 0 && yOffset === 0)) {
+                if (!(xOffset === 0 && yOffset === 0)) {
 
-                // Move the map to the shifted center.
-                //
-                var c = map.getCenter();
-                map.panBy(xOffset, yOffset);
+                    // Move the map to the shifted center.
+                    //
+                    var c = map.getCenter();
+                    map.panBy(xOffset, yOffset);
+                }
             }
         }
     }
@@ -403,7 +423,11 @@ InfoBox.prototype.setBoxStyle_ = function () {
 
         // Fix for iOS disappearing InfoBox problem.
         // See http://stackoverflow.com/questions/9229535/google-maps-markers-disappear-at-certain-zoom-level-only-on-iphone-ipad
-        this.div_.style.WebkitTransform = "translateZ(0)";
+        // Required: use "matrix" technique to specify transforms in order to avoid this bug.
+        if ((typeof this.div_.style.WebkitTransform === "undefined") || (this.div_.style.WebkitTransform.indexOf("translateZ") === -1 && this.div_.style.WebkitTransform.indexOf("matrix") === -1)) {
+
+            this.div_.style.WebkitTransform = "translateZ(0)";
+        }
 
         // Fix up opacity style for benefit of MSIE:
         //
@@ -504,9 +528,9 @@ InfoBox.prototype.draw = function () {
 
 /**
  * Sets the options for the InfoBox. Note that changes to the <tt>maxWidth</tt>,
- *  <tt>closeBoxMargin</tt>, <tt>closeBoxURL</tt>, and <tt>enableEventPropagation</tt>
- *  properties have no affect until the current InfoBox is <tt>close</tt>d and a new one
- *  is <tt>open</tt>ed.
+ *  <tt>closeBoxMargin</tt>, <tt>closeBoxTitle</tt>, <tt>closeBoxURL</tt>, and
+ *  <tt>enableEventPropagation</tt> properties have no affect until the current
+ *  InfoBox is <tt>close</tt>d and a new one is <tt>open</tt>ed.
  * @param {InfoBoxOptions} opt_opts
  */
 InfoBox.prototype.setOptions = function (opt_opts) {
@@ -555,6 +579,10 @@ InfoBox.prototype.setOptions = function (opt_opts) {
     if (typeof opt_opts.closeBoxURL !== "undefined") {
 
         this.closeBoxURL_ = opt_opts.closeBoxURL;
+    }
+    if (typeof opt_opts.closeBoxTitle !== "undefined") {
+
+        this.closeBoxTitle_ = opt_opts.closeBoxTitle;
     }
     if (typeof opt_opts.infoBoxClearance !== "undefined") {
 
@@ -731,6 +759,34 @@ InfoBox.prototype.getVisible = function () {
 };
 
 /**
+ * Returns the width of the InfoBox in pixels.
+ * @returns {number}
+ */
+InfoBox.prototype.getWidth = function () {
+    var width = null;
+
+    if (this.div_) {
+        width = this.div_.offsetWidth;
+    }
+
+    return width;
+};
+
+/**
+ * Returns the height of the InfoBox in pixels.
+ * @returns {number}
+ */
+InfoBox.prototype.getHeight = function () {
+    var height = null;
+
+    if (this.div_) {
+        height = this.div_.offsetHeight;
+    }
+
+    return height;
+};
+
+/**
  * Shows the InfoBox. [Deprecated; use <tt>setVisible</tt> instead.]
  */
 InfoBox.prototype.show = function () {
@@ -766,13 +822,9 @@ InfoBox.prototype.open = function (map, anchor) {
 
     if (anchor) {
 
-        this.position_ = anchor.getPosition();
+        this.setPosition(anchor.getPosition()); // BUG FIX 2/17/2018: needed for v3.32
         this.moveListener_ = google.maps.event.addListener(anchor, "position_changed", function () {
             me.setPosition(this.getPosition());
-        });
-
-        this.mapListener_ = google.maps.event.addListener(anchor, "map_changed", function() {
-            me.setMap(this.map);
         });
     }
 
@@ -780,7 +832,7 @@ InfoBox.prototype.open = function (map, anchor) {
 
     if (this.div_) {
 
-        this.panBox_();
+        this.panBox_(this.disableAutoPan_); // BUG FIX 2/17/2018: add missing parameter
     }
 };
 
@@ -810,12 +862,6 @@ InfoBox.prototype.close = function () {
 
         google.maps.event.removeListener(this.moveListener_);
         this.moveListener_ = null;
-    }
-
-    if (this.mapListener_) {
-
-        google.maps.event.removeListener(this.mapListener_);
-        this.mapListener_ = null;
     }
 
     if (this.contextListener_) {

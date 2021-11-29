@@ -349,21 +349,23 @@ var App = {
 	
 	map: function() {
 		
-		var btn_zoom_in = document.getElementById('zoomin');
+		const btn_zoom_in = document.getElementById('zoomin');
+
 		if (btn_zoom_in !== null) {
 			google.maps.event.addDomListener(btn_zoom_in, 'click', function() {
 				mapObject.setZoom(mapObject.getZoom() + 1 );
 			});
 		}
 
-		var btn_zoom_out = document.getElementById('zoomout');
+		const btn_zoom_out = document.getElementById('zoomout');
+
 		if (btn_zoom_out !== null) {
 			google.maps.event.addDomListener(btn_zoom_out, 'click', function() {
 				mapObject.setZoom(mapObject.getZoom() - 1 );
 			});
 		}
 		
-		var mapContainer = document.getElementById('map');
+		const mapContainer = document.getElementById('map');
 		
 		if (mapContainer !== null) {
 			App.create_map(mapContainer);
@@ -374,7 +376,7 @@ var App = {
 	
 	create_map: function(mapContainer) {
 
-		var mapOptions = {
+		const mapOptions = {
 			center: new google.maps.LatLng(40.972354, 29.167994), //37.36456, -121.92852
 			zoom: 13,
 			navigationControl: false,
@@ -386,14 +388,21 @@ var App = {
 		
 		mapObject = new google.maps.Map(mapContainer, mapOptions);
 
-		var mapStyle = [
+		const mapStyle = [
 			{
-				"stylers": [
-					{ "saturation": -100 },
-					{ "gamma": 1.40 },
-					{ "lightness": 25 }
+				stylers: [
+					{ saturation: -100 },
+					{ gamma: 1.40 },
+					{ lightness: 25 }
 				]
-			},{featureType: "poi",elementType: "labels",stylers: [{visibility:"off"}]}
+			},
+			{
+				featureType: "poi",
+				elementType: "labels",
+				stylers: [
+					{ visibility: "off" }
+				]
+			}
 		];
 		
 		mapObject.setOptions({styles: mapStyle});
@@ -401,11 +410,11 @@ var App = {
 	
 	create_marker: function() {
 		
-		var pinImage = new google.maps.MarkerImage('img/marker.png'),
-		myPin = new google.maps.LatLng(40.952354, 29.107994);
+		const pinImage = new google.maps.MarkerImage('img/marker.png');
+		const pinPosition = new google.maps.LatLng(40.952354, 29.107994);
 		
 		marker = new google.maps.Marker({
-			position: myPin,
+			position: pinPosition,
 			map: mapObject,
 			title: 'Hello World!',
 			icon: pinImage
@@ -415,20 +424,19 @@ var App = {
 	
 	create_info: function() {
 		
-		var boxText = document.createElement("div");
-		boxText.style.cssText = "color:#fff;";
-		/*jshint multistr: true*/
-		boxText.innerHTML = "\
-			<div class='marker-label'>\
-				Somewhere around<br>\
-				Altıntepe<br>\
-				Küçükyalı<br>\
-				Turkey <br>\
-				btargac@gmail.com<br>\
-				</div>\
-			";
+		const boxText = document.createElement("div");
 
-		var infoOptions = {
+		boxText.style.cssText = "color:#fff;";
+		boxText.innerHTML = `
+			<div class='marker-label'>
+				Somewhere around<br>
+				Idealtepe<br>
+				Maltepe<br>
+				Turkey <br>
+				btargac@gmail.com<br>
+			</div>`;
+
+		const infoOptions = {
 			content: boxText,
 			disableAutoPan: true,
 			maxWidth: 0,
@@ -445,9 +453,8 @@ var App = {
 			enableEventPropagation: true
 		};
 		
-		var ib = new InfoBox(infoOptions);
+		const ib = new InfoBox(infoOptions);
 		ib.open(mapObject, marker);
-		
 	},
 	
 	getInTouch: function() {
@@ -566,11 +573,11 @@ App.portfolio = {
 	
 	bind: function() {
 
-		$("#portfolio").on('click', '.item', function () {
-			if ($('html').hasClass('open') || App.portfolio.open($(this))) {
-				return true;
-			} else {
-				return false;
+		$("#portfolio").on('click', '.item', function (e) {
+			e.preventDefault();
+
+			if (!$('html').hasClass('open')) {
+				App.portfolio.open($(this))
 			}
 		});
 		
