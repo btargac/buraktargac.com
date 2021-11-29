@@ -798,3 +798,6 @@ function navHighlight() {
 		}
 	}
 }
+
+// initialize the app
+App.start();
