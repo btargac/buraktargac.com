@@ -2,6 +2,8 @@
   "name": "buraktargac",
   "version": "1.2.0",
   "private": true,
+  "description": "Burak Targaç's personal portfolio page",
+  "homepage": "https://www.buraktargac.com",
   "scripts": {
     "start": "node ./bin/www",
     "debug": "DEBUG=express:*,buraktargac:server node ./bin/www"
@@ -24,12 +26,12 @@
     "redirect-ssl": "^3.0.0",
     "sendgrid": "~5.2.3",
     "serve-favicon": "~2.5.0",
-    "stylus": "^0.55.0"
+    "stylus": "~0.56.0"
   },
   "author": {
     "name": "Burak Targaç",
     "email": "btargac@gmail.com",
-    "twitter": "burkitargino"
+    "url": "https://www.buraktargac.com"
   },
   "engines": {
     "node": "16.13.x",
