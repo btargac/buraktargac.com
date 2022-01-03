@@ -402,21 +402,36 @@
 		$('a.remove').on('click',function () {
 			$('a.remove').removeClass('selected');
 			$(this).addClass('selected');
-			($(this).data('item-type') === 'testimonial') && $('.modal#removeTestimonialModal p.confirmationText').text($(this).data('confirm-message'));
-			($(this).data('item-type') === 'portfolio') && $('.modal#removePortfolioModal p.confirmationText').text($(this).data('confirm-message'));
+			const itemType = $(this).data('item-type');
+
+			if(itemType === 'testimonial') {
+				$('.modal#removeTestimonialModal p.confirmationText').text($(this).data('confirm-message'));
+			}
+
+			if(itemType === 'portfolio') {
+				$('.modal#removePortfolioModal p.confirmationText').text($(this).data('confirm-message'));
+			}
 		});
 
 		$('a.update').on('click',function () {
 			$('a.update').removeClass('selected');
 			$(this).addClass('selected');
-			($(this).data('item-type') === 'testimonial') && $('.modal#updateTestimonialModal p.confirmationText').text($(this).data('confirm-message'));
-			($(this).data('item-type') === 'portfolio') && $('.modal#updatePortfolioModal p.confirmationText').text($(this).data('confirm-message'));
+			const itemType = $(this).data('item-type');
+
+			if(itemType === 'testimonial') {
+				$('.modal#updateTestimonialModal p.confirmationText').text($(this).data('confirm-message'))
+			}
+
+			if(itemType === 'portfolio') {
+				$('.modal#updatePortfolioModal p.confirmationText').text($(this).data('confirm-message'));
+			}
 		});
 
 
 		//confirmation modal is opened 
-		$('a.updateConfig,a.addTestimonial,a.remove,a.update').click(function(event) {
+		$('a.updateConfig, a.addTestimonial, a.remove, a.update').on('click', function(event) {
 			event.preventDefault();
+
 			$(this).modal({
 			fadeDuration: 600,
 			fadeDelay: 0.30
