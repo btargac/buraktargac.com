@@ -29,20 +29,18 @@ let routeRecaptcha = async (req, res) => {
     };
 
     try {
-        const response = await client.createAssessment(request);
+        const [assesment] = await client.createAssessment(request);
 
-        if (response.tokenProperties?.valid === false) {
-            console.log('response', response);
-            console.error('invalid reason: response.tokenProperties.invalidReason');
-            res.status(500).json({error: response.tokenProperties.invalidReason});
+        if (assesment.tokenProperties?.valid === false) {
+            res.status(500).json({error: assesment.tokenProperties.invalidReason});
         } else {
-            if (response.event.expectedAction === expectedAction) {
-                if (parseFloat(response.riskAnalysis.score) >= 0.7) {
+            if (assesment.event.expectedAction === expectedAction) {
+                if (assesment.riskAnalysis.score >= 0.7) {
                     // successful captcha, run any code you want here now and send 200 response
                     res.json({status: 'success'});
                 } else {
                     // send 400 response and possibly reason: response.riskAnalysis.reasons
-                    res.status(400).json({error: response.riskAnalysis.reasons});
+                    res.status(400).json({error: assesment.riskAnalysis.reasons});
                 }
             } else {
                 // send 400 response
