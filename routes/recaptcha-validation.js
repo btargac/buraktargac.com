@@ -12,6 +12,11 @@ const client = new RecaptchaEnterpriseServiceClient({
 
 let routeRecaptcha = async (req, res) => {
     const expectedAction = req.body.action;
+
+    if (!req.body.token) {
+        return res.status(500).end();
+    }
+
     const request = {
         assessment: {
             event: {
@@ -23,15 +28,11 @@ let routeRecaptcha = async (req, res) => {
         parent: client.projectPath(process.env.GOOGLE_RECAPTCHA_PROJECT_ID)
     };
 
-    client.createAssessment(request, (error, response) => {
-        if (error) {
-            // send 500 response here and log the error
-            console.error(error);
-            res.status(500).json({error});
-            return;
-        }
+    try {
+        const response = await client.createAssessment(request);
 
-        if (response.tokenProperties.valid === false) {
+        if (response.tokenProperties?.valid === false) {
+            console.log('response', response);
             console.error('invalid reason: response.tokenProperties.invalidReason');
             res.status(500).json({error: response.tokenProperties.invalidReason});
         } else {
@@ -48,7 +49,10 @@ let routeRecaptcha = async (req, res) => {
                 res.status(400).end();
             }
         }
-    });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({error});
+    }
 };
 
 module.exports = routeRecaptcha;
