@@ -2,10 +2,10 @@
 
 const cacheViewFactory = (mc) => {
     return (req, res, next) => {
-        const view_key = '_view_cache_' + req.originalUrl || req.url;
+        const view_key = `_view_cache_${req.originalUrl || req.url}`;
 
         mc.get(view_key, function(err, val) {
-            if(err == null && val != null) {
+            if(!err && !!val) {
                 res.send(val.toString('utf8'));
                 return;
             }
