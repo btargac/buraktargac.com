@@ -8,7 +8,7 @@ const FormSubmitter = function (app, mongoose, sendgrid) {
 
         form.parse(req, function(err, data) {
             //validation must be improved
-            if(data.name && data.email && data.message) {
+            if(data.name && data.email && data.message && data.company !== 'google') {
 
                 //sendgrid integration
 
