@@ -14,7 +14,7 @@ let routeRecaptcha = async (req, res) => {
     const expectedAction = req.body.action;
 
     if (!req.body.token) {
-        return res.status(500).end();
+        return res.status(500).json({error: 'Missing recaptcha token'});
     }
 
     const request = {
@@ -29,22 +29,22 @@ let routeRecaptcha = async (req, res) => {
     };
 
     try {
-        const [assesment] = await client.createAssessment(request);
+        const [assessment] = await client.createAssessment(request);
 
-        if (assesment.tokenProperties?.valid === false) {
-            res.status(500).json({error: assesment.tokenProperties.invalidReason});
+        if (assessment.tokenProperties?.valid === false) {
+            res.status(500).json({error: assessment.tokenProperties.invalidReason});
         } else {
-            if (assesment.event.expectedAction === expectedAction) {
-                if (assesment.riskAnalysis.score >= 0.7) {
+            if (assessment.event.expectedAction === expectedAction) {
+                if (assessment.riskAnalysis.score >= 0.7) {
                     // successful captcha, run any code you want here now and send 200 response
                     res.json({status: 'success'});
                 } else {
                     // send 400 response and possibly reason: response.riskAnalysis.reasons
-                    res.status(400).json({error: assesment.riskAnalysis.reasons});
+                    res.status(400).json({error: assessment.riskAnalysis.reasons});
                 }
             } else {
                 // send 400 response
-                res.status(400).end();
+                res.status(400).json({error: 'Invalid action'});
             }
         }
     } catch (error) {
