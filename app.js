@@ -4,7 +4,7 @@ const fs = require('fs'),
     dotenv = require('dotenv').config(),
     utils = require('./lib/utils'),
     ENV = process.env.NODE_ENV || 'development',
-    sendgrid  = require('sendgrid')(process.env.SENDGRID_API_KEY),
+    sendgrid  = require('@sendgrid/mail'),
     favicon = require('serve-favicon'),
     logger = require('morgan'),
     compression = require('compression'),
@@ -14,6 +14,8 @@ const fs = require('fs'),
     redirectSSL = require('redirect-ssl'),
     mongoose = require('mongoose'),
     recaptchaRoute = require('./routes/recaptcha-validation');
+
+sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 const mc = memjs.Client.create(process.env.MEMCACHIER_SERVERS, {
     failover: true,

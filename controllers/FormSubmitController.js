@@ -1,22 +1,21 @@
 const formidable = require('formidable');
-const helper = require('sendgrid').mail;
 
 const FormSubmitter = function (app, mongoose, sendgrid) {
 
     app.post("/submitform", (req, res) => {
         const form = new formidable.IncomingForm();
 
-        form.parse(req, function(err, data) {
+        form.parse(req, async (err, data) => {
             //validation must be improved
             if(data.name && data.email && data.message && data.company !== 'google') {
 
                 //sendgrid integration
 
-                const fromEmail = new helper.Email('hello@buraktargac.com');
-                const toEmail = new helper.Email('btargac@gmail.com');
-                const subject = 'Buraktargac.com Web Form Message';
+                const from = 'hello@buraktargac.com';
+                const to = 'btargac@gmail.com';
+                const subject = 'BurakTargac Web Form Message';
                 const textStyle = 'font-family:verdana,geneva,sans-serif;';
-                const content = new helper.Content('text/html', `
+                const html = `
                     <html>
                         <head>
                             <title></title>
@@ -40,31 +39,35 @@ const FormSubmitter = function (app, mongoose, sendgrid) {
                                 </span>
                             </p>
                         </body>
-                    </html>`);
-                const mail = new helper.Mail(fromEmail, subject, toEmail, content);
+                    </html>`;
+                const mail = {
+                    from,
+                    to,
+                    subject,
+                    text: data.message,
+                    html
+                };
 
-                const request = sendgrid.emptyRequest({
-                    method: 'POST',
-                    path: '/v3/mail/send',
-                    body: mail.toJSON()
-                });
-
-                sendgrid.API(request, function (error, response) {
-                    if (error) {
-                        console.log('Error response received', error);
-                        return res.json({
-                            success: false,
-                            data: error,
-                            sendgridError: true
-                        });
-                    }
+                try {
+                    await sendgrid.send(mail);
 
                     res.json({
                         success: true,
-                        data: response,
                         sendgridError: false
                     });
-                });
+                } catch (error) {
+                    console.error(error);
+
+                    if (error.response) {
+                        console.error(error.response.body);
+
+                        res.json({
+                            success: false,
+                            data: error.response.body,
+                            sendgridError: true
+                        });
+                    }
+                }
 
             }
 
